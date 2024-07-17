@@ -1,9 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as J from "../styles/StyledJoin";
+import axios from "axios";
 
 const Join = () => {
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("username:", username);
+    console.log("Password:", password);
+    console.log("Password2:", password2);
+    console.log("name:", name);
+    console.log("nickname:", nickname);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/register/",
+        {
+          username: username,
+          password: password,
+          password2: password2,
+          name: name,
+          nickname: nickname,
+        }
+      );
+      setMessage("회원가입 성공!");
+      navigate("/login");
+    } catch (error) {
+      setMessage("회원가입 실패: " + error.message);
+    }
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -37,62 +69,90 @@ const Join = () => {
           </J.NavContent>
         </J.Nav>
       </header>
-      <J.Content>
-        <J.Title>
-          <div id="detail">회원가입</div>
-        </J.Title>
-        <J.Essential>
-          <J.Id>
-            <div id="detail">아이디*</div>
-            <J.IdBox>
-              <input id="detail" type="id" placeholder="아이디를 입력하세요" />
-            </J.IdBox>
-          </J.Id>
-          <J.Pw>
-            <div id="detail">비밀번호*</div>
-            <J.PwBox>
-              <input
-                id="detail"
-                type="password"
-                placeholder="8자 이상 20자 이하 영문, 특수문자 포함"
-              />
-            </J.PwBox>
-          </J.Pw>
-          <J.RePw>
-            <div id="detail">비밀번호 확인*</div>
-            <J.ReBox>
-              <input
-                id="detail"
-                type="password"
-                placeholder="비밀번호를 다시 입력해 주세요"
-              />
-            </J.ReBox>
-          </J.RePw>
-          <J.Name>
-            <div id="detail">보호자 이름*</div>
-            <J.NameBox>
-              <input
-                id="detail"
-                type="text"
-                placeholder="이름을 입력해 주세요"
-              />
-            </J.NameBox>
-          </J.Name>
-          <J.Nickname>
-            <div id="detail">닉네임*</div>
-            <J.NickBox>
-              <input
-                id="detail"
-                type="text"
-                placeholder="닉네임을 입력해 주세요"
-              />
-            </J.NickBox>
-          </J.Nickname>
-        </J.Essential>
-        <J.Button>
-          <div id="detail">회원가입하기</div>
-        </J.Button>
-      </J.Content>
+      <form onSubmit={handleSubmit}>
+        <J.Content>
+          <J.Title>
+            <div id="detail">회원가입</div>
+          </J.Title>
+          <J.Essential>
+            <J.Id>
+              <div id="id">아이디*</div>
+              <J.IdBox>
+                <input
+                  id="id"
+                  type="id"
+                  placeholder="아이디를 입력하세요"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  autocomplete="username"
+                />
+              </J.IdBox>
+            </J.Id>
+            <J.Pw>
+              <div id="pw">비밀번호*</div>
+              <J.PwBox>
+                <input
+                  id="pw"
+                  type="password"
+                  placeholder="8자 이상 20자 이하 영문, 특수문자 포함"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autocomplete="new-password"
+                />
+              </J.PwBox>
+            </J.Pw>
+            <J.RePw>
+              <div id="checkpw">비밀번호 확인*</div>
+              <J.ReBox>
+                <input
+                  id="checkpw"
+                  type="password"
+                  placeholder="비밀번호를 다시 입력해 주세요"
+                  value={password2}
+                  onChange={(e) => setPassword2(e.target.value)}
+                  required
+                  autocomplete="new-password"
+                />
+              </J.ReBox>
+            </J.RePw>
+            <J.Name>
+              <div id="name">보호자 이름*</div>
+              <J.NameBox>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="이름을 입력해 주세요"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  autocomplete="name"
+                />
+              </J.NameBox>
+            </J.Name>
+            <J.Nickname>
+              <div id="nickname">닉네임*</div>
+              <J.NickBox>
+                <input
+                  id="nickname"
+                  type="text"
+                  placeholder="닉네임을 입력해 주세요"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  required
+                  autocomplete="nickname"
+                />
+              </J.NickBox>
+            </J.Nickname>
+          </J.Essential>
+          <J.Button type="submit">
+            <div id="detail" type="submit">
+              회원가입하기
+            </div>
+          </J.Button>
+        </J.Content>
+      </form>
       <footer>
         <J.Footer>
           <J.Introduction>
@@ -108,6 +168,7 @@ const Join = () => {
           </J.Introduction>
         </J.Footer>
       </footer>
+      {message && <p>{message}</p>}
     </J.Container>
   );
 };

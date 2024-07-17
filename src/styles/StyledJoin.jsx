@@ -127,7 +127,7 @@ export const Id = styled.div`
   display: flex;
   flex-direction: row;
 
-  #detail {
+  #id {
     margin-top: 30px;
     float: left;
     color: #fff;
@@ -149,7 +149,7 @@ export const IdBox = styled.div`
   border-radius: 10px;
   background: #ebeaea;
 
-  #detail {
+  #id {
     border: none;
     background: transparent;
     color: #999797;
@@ -169,7 +169,7 @@ export const Pw = styled.div`
   display: flex;
   flex-direction: row;
 
-  #detail {
+  #pw {
     margin-top: 30px;
     float: left;
     color: #fff;
@@ -191,7 +191,7 @@ export const PwBox = styled.div`
   border-radius: 10px;
   background: #ebeaea;
 
-  #detail {
+  #pw {
     color: #999797;
     font-family: "Pretendard Variable";
     font-size: 25px;
@@ -212,7 +212,7 @@ export const RePw = styled.div`
   flex-direction: row;
   gap: 93px;
 
-  #detail {
+  #checkpw {
     margin-top: 30px;
     float: left;
     color: #fff;
@@ -234,7 +234,7 @@ export const ReBox = styled.div`
   margin-left: auto;
   background: #ebeaea;
 
-  #detail {
+  #checkpw {
     color: #999797;
     font-family: "Pretendard Variable";
     font-size: 25px;
@@ -254,7 +254,7 @@ export const Name = styled.div`
   display: flex;
   flex-direction: row;
 
-  #detail {
+  #name {
     float: left;
     margin-top: 30px;
     color: #fff;
@@ -276,7 +276,7 @@ export const NameBox = styled.div`
   margin-left: auto;
   background: #ebeaea;
 
-  #detail {
+  #name {
     color: #999797;
     font-family: "Pretendard Variable";
     font-size: 25px;
@@ -296,7 +296,7 @@ export const Nickname = styled.div`
   display: flex;
   flex-direction: row;
 
-  #detail {
+  #nickname {
     float: left;
     margin-top: 30px;
     color: #fff;
@@ -318,7 +318,7 @@ export const NickBox = styled.div`
   margin-left: auto;
   background: #ebeaea;
 
-  #detail {
+  #nickname {
     color: #999797;
     font-family: "Pretendard Variable";
     font-size: 25px;
