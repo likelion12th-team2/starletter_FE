@@ -68,7 +68,7 @@ export const NewBook = styled.div`
   gap: 64px;
 `;
 export const BookCover = styled.div`
-  width: 415px;
+  width: 386px;
   height: 522px;
   flex-shrink: 0;
   border-radius: 13.353px;
@@ -112,6 +112,11 @@ export const BookCoverImg = styled.div`
   width: 415px;
   height: 200.066px;
   flex-shrink: 0;
+  #MycoverImg {
+    width: 386px;
+    height: 200.066px;
+    flex-shrink: 0;
+  }
 `;
 export const BookDetail = styled.div`
   width: 515px;
@@ -174,6 +179,7 @@ export const WriteNewPage = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 55px;
+  margin-bottom: 100px;
 
   #writeNewPage {
     width: 221px;
@@ -196,6 +202,47 @@ export const WriteNewPage = styled.div`
       box-shadow: 0px 0px 10px 5px rgba(260, 230, 120, 0.6);
     }
   }
+`;
+
+export const Section = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 70px;
+  #section {
+    width: 1190px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--Color-4, #37506e);
+  }
+`;
+
+export const PostitWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 140px;
+`;
+export const PostitList = styled.div`
+  display: flex;
+  width: 1190px;
+  gap: 40px;
+  }
+`;
+
+export const Postit = styled.div`
+  width: 206px;
+  height: 225px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: #c4def8;
+  padding: 18px;
+
+  color: #000;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 export const Logo = styled.div`

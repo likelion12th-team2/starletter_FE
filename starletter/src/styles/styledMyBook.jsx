@@ -96,7 +96,68 @@ export const Account = styled.div`
     cursor: pointer;
   }
 `;
+// body
+export const bodyContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  background: var(--Color-1, #002951);
+`;
 
+export const Book = styled.div`
+  width: 386px;
+  height: 522px;
+  flex-shrink: 0;
+  flex-shrink: 0;
+  border-radius: 13.353px;
+  border: linear-gradient(1px, #85858580 50%, #79a3c680 50%);
+  background: #87a8cf;
+  margin-top: 144px;
+  margin-bottom: 144px;
+
+  display: flex;
+  flex-direction: column;
+  align-item: center;
+`;
+export const BookCoverText = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  margin-top: 54px;
+  margin-bottom: 11.45px;
+  gap: 4px;
+
+  #title {
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  #writer {
+    color: var(--gray-10, #ebeaea);
+    text-align: center;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+`;
+export const BookCoverImg = styled.div`
+  width: 415px;
+  height: 200.066px;
+  flex-shrink: 0;
+
+  #MycoverImg {
+    width: 386px;
+    height: 200.066px;
+    flex-shrink: 0;
+  }
+`;
 export const Footer = styled.div`
   bottom: 0;
   height: 222px;

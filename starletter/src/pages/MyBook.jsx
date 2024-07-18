@@ -13,6 +13,14 @@ const MyBook = () => {
     navigate(`/join`);
   };
 
+  const goMyBook = () => {
+    navigate(`/MyBook`);
+  };
+
+  const goMyBookDetail = () => {
+    navigate(`/MyBookDetail`);
+  };
+
   return (
     <M.Container>
       <header>
@@ -26,7 +34,9 @@ const MyBook = () => {
               />
             </M.Logo>
             <M.MovingContent>
-              <div id="library">내 서재</div>
+              <div id="library" onClick={goMyBook}>
+                내 서재
+              </div>
               <div id="bookroom">책방</div>
               <div id="comparison">장례식장 비교</div>
               <div id="market">마켓</div>
@@ -44,7 +54,23 @@ const MyBook = () => {
         </M.Nav>
       </header>
       {/*  */}
-      <body></body>
+      <body>
+        <M.bodyContainer>
+          <M.Book onClick={goMyBookDetail}>
+            <M.BookCoverText>
+              <div id="title">보고 싶은 김쪼꼬</div>
+              <div id="writer">김별</div>
+            </M.BookCoverText>
+            <M.BookCoverImg>
+              <img
+                id="MycoverImg"
+                src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                alt="Mycover1"
+              />
+            </M.BookCoverImg>
+          </M.Book>
+        </M.bodyContainer>
+      </body>
       {/*  */}
       <footer>
         <M.Footer>

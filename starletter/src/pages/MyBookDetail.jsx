@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as MB from "../styles/styledMyBookDetail";
+import Modal from "react-modal";
 
 const MyBookDetail = () => {
   const navigate = useNavigate();
@@ -11,6 +12,21 @@ const MyBookDetail = () => {
 
   const goJoin = () => {
     navigate(`/join`);
+  };
+
+  const goMyBook = () => {
+    navigate(`/MyBook`);
+  };
+
+  // 모달창 상태
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   return (
@@ -26,7 +42,9 @@ const MyBookDetail = () => {
               />
             </MB.Logo>
             <MB.MovingContent>
-              <div id="library">내 서재</div>
+              <div id="library" onClick={goMyBook}>
+                내 서재
+              </div>
               <div id="bookroom">책방</div>
               <div id="comparison">장례식장 비교</div>
               <div id="market">마켓</div>
@@ -55,7 +73,7 @@ const MyBookDetail = () => {
               <MB.BookCoverImg>
                 <img
                   id="MycoverImg"
-                  src={`${process.env.PUBLIC_URL}/images/Mycover1.png`}
+                  src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
                   alt="Mycover1"
                 />
               </MB.BookCoverImg>
@@ -65,11 +83,9 @@ const MyBookDetail = () => {
               <div id="writer">김별</div>
               <div id="writtendate">마지막 수정일: 2024.07.17</div>
               <div id="ps">
-                제작년 봄이었나? 날이 풀려서 쪼꼬랑 노들섬 피크닉 갔던 날 엄마가
-                사준 손수건 두르고 여기저기 뛰어다녔다 바구니에 자꾸 들어가려고
-                해서 처음에는 안 된다고 했는데 귀여워서 냅뒀다.. 쪼꼬는 귀여워서
-                모든게 용서되는듯 그니까 언니 놔두고 간 것두 용서할게 쪼꼬
-                영.사.해. 영원히 사랑한다는 뜻
+                쪼꼬는 12살 푸들할머니 그래도 내 눈에는 영원히 애기 산책나가면
+                인기 짱 많은 아파트 인싸 강아지 12년간 이곳저곳 놀러다녔던
+                기억을 모아🌈🐕
               </div>
             </MB.BookDetail>
           </MB.NewBook>
@@ -80,6 +96,16 @@ const MyBookDetail = () => {
           <MB.WriteNewPage>
             <button id="writeNewPage">새 페이지 쓰기</button>
           </MB.WriteNewPage>
+          <MB.Section>
+            <div id="section"></div>
+          </MB.Section>
+          <MB.PostitWrap>
+            <MB.PostitList>
+              <MB.Postit onClick={openModal} id="postit1">
+                쪼꼬야 이모도 보고싶다
+              </MB.Postit>
+            </MB.PostitList>
+          </MB.PostitWrap>
         </MB.BodyContainer>
       </body>
       {/*  */}
