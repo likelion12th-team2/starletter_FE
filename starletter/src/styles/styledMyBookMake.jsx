@@ -145,6 +145,7 @@ export const Book = styled.div`
   #img {
     width: 228px;
     height: 228px;
+    object-fit: cover;
     flex-shrink: 0;
     border-radius: 228px;
     background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;

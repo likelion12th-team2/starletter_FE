@@ -16,7 +16,8 @@ const MyBookAddPet = () => {
   };
 
   // 생일 날짜 선택
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [birthDate, setBirthDate] = useState(null);
+  const [fixedDate, setFixedDate] = useState(null);
 
   return (
     <AP.Container>
@@ -68,8 +69,8 @@ const MyBookAddPet = () => {
                   dateFormat="yyyy.MM.dd" // 날짜 형태
                   shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                   maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                  selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  selected={birthDate}
+                  onChange={(date) => setBirthDate(date)}
                   customInput={<AP.DatePickerInput />} // styled-components로 감싼 커스텀>
                   placeholderText="연도-월-일"
                 />
@@ -87,8 +88,8 @@ const MyBookAddPet = () => {
                   dateFormat="yyyy.MM.dd" // 날짜 형태
                   shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                   maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                  selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  selected={fixedDate}
+                  onChange={(date) => setFixedDate(date)}
                   customInput={<AP.DatePickerInput />} // styled-components로 감싼 커스텀>
                   placeholderText="연도-월-일"
                 />
