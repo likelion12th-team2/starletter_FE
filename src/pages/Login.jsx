@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as L from "../styles/StyledLogin";
 import axios from "axios";
 
@@ -21,16 +21,18 @@ const Login = () => {
           password: password,
         }
       );
-      // 로그인 성공 시 토큰 정보를 로컬 스토리지에 저장
-      localStorage.setItem("authToken", response.data.token);
-      setMessage("로그인 성공!");
-      // 토큰 정보가 있는 경우 다음 페이지로 이동
+      console.log("로그인 성공!");
+
+      // 로그인 성공 시 토큰을 로컬 스토리지에 저장
+      localStorage.setItem("token", response.data.token);
+
+      // 메인 페이지로 이동
       navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setMessage("잘못된 아이디 또는 비밀번호입니다.");
+        console.log("잘못된 아이디 또는 비밀번호입니다.");
       } else {
-        setMessage("로그인 실패: " + error.message);
+        setMessage("아이디와 비밀번호를 확인해주세요.");
       }
     }
   };
@@ -83,6 +85,7 @@ const Login = () => {
               <input
                 id="id"
                 type="id"
+                name="username"
                 placeholder="아이디를 입력하세요"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -93,6 +96,7 @@ const Login = () => {
               <input
                 id="pw"
                 type="password"
+                name="password"
                 placeholder="비밀번호를 입력하세요"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -100,10 +104,10 @@ const Login = () => {
               ></input>
             </L.Pw>
           </L.Login>
+          {message && <L.Message>{message}</L.Message>}
           <L.Button type="submit">
-            <div id="detail" type="submit">
-              로그인
-            </div>
+            <button id="detail">로그인</button>
+            {/* <div id="detail">로그인</div> */}
           </L.Button>
           <L.Condition>
             <div id="join" onClick={goJoin}>
@@ -130,7 +134,6 @@ const Login = () => {
           </L.Introduction>
         </L.Footer>
       </footer>
-      {message && <p>{message}</p>}
     </L.Container>
   );
 };

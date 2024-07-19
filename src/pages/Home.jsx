@@ -1,9 +1,24 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import MyPageModal from "./MyPageModal";
 import * as H from "../styles/StyledHome";
+import { Nickname } from "../styles/StyledJoin";
 
-const Home = () => {
+const Home = ({ nickname }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const myPageRef = useRef(null);
+
+  useEffect(() => {
+    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("로그인 되어있음");
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const goLogin = () => {
     navigate(`/login`);
@@ -11,6 +26,25 @@ const Home = () => {
 
   const goJoin = () => {
     navigate(`/join`);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // 예시로 localStorage에 저장된 토큰을 삭제
+    setIsLoggedIn(false);
+    navigate(`/`);
+  };
+
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   return (
@@ -33,16 +67,35 @@ const Home = () => {
             </H.MovingContent>
             <div id="bar"> | </div>
             <H.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join" onClick={goJoin}>
-                회원가입
-              </div>
+              {isLoggedIn ? (
+                <>
+                  <div id="mypage" onClick={openModal} ref={myPageRef}>
+                    마이페이지
+                  </div>
+                  <div id="logout" onClick={handleLogout}>
+                    로그아웃
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div id="login" onClick={goLogin}>
+                    로그인
+                  </div>
+                  <div id="join" onClick={goJoin}>
+                    회원가입
+                  </div>
+                </>
+              )}
             </H.Account>
           </H.NavContent>
         </H.Nav>
       </header>
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <H.Body>
         <H.Detail>
           <div id="detail">
