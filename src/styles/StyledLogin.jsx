@@ -153,6 +153,10 @@ export const Id = styled.div`
     font-weight: 500;
     line-height: normal;
   }
+
+  #id:focus {
+    outline: none;
+  }
 `;
 
 export const Pw = styled.div`
@@ -177,6 +181,22 @@ export const Pw = styled.div`
     font-weight: 500;
     line-height: normal;
   }
+
+  #pw:focus {
+    outline: none;
+  }
+`;
+
+export const Message = styled.div`
+  color: #ff6161;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 0;
+  // margin-left: 81px;
+  margin-top: 50px;
 `;
 
 export const Button = styled.div`
@@ -195,6 +215,8 @@ export const Button = styled.div`
   }
 
   #detail {
+    border: none;
+    background: transparent;
     margin-top: 25px;
     color: #000;
     text-align: center;

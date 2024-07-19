@@ -5,15 +5,22 @@ import axios from "axios";
 
 const Join = () => {
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
+  const [message1, setMessage1] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password !== password2) {
+      setMessage1("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+      return;
+    }
+
     console.log("username:", username);
     console.log("Password:", password);
     console.log("Password2:", password2);
@@ -25,15 +32,25 @@ const Join = () => {
         {
           username: username,
           password: password,
-          password2: password2,
           name: name,
           nickname: nickname,
         }
       );
-      setMessage("회원가입 성공!");
       navigate("/login");
     } catch (error) {
-      setMessage("회원가입 실패: " + error.message);
+      if (error.response && error.response.data) {
+        if (error.response.data.username) {
+          setMessage(error.response.data.message);
+        }
+        if (error.response.data.nickname) {
+          setMessage(error.response.data.message);
+        }
+        if (!error.response.data.username && !error.response.data.nickname) {
+          setMessage(error.response.data.message);
+        }
+      } else {
+        setMessage(`회원가입 실패: ${error.message}`);
+      }
     }
   };
 
@@ -85,7 +102,6 @@ const Join = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  autocomplete="username"
                 />
               </J.IdBox>
             </J.Id>
@@ -99,7 +115,6 @@ const Join = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  autocomplete="new-password"
                 />
               </J.PwBox>
             </J.Pw>
@@ -113,10 +128,10 @@ const Join = () => {
                   value={password2}
                   onChange={(e) => setPassword2(e.target.value)}
                   required
-                  autocomplete="new-password"
                 />
               </J.ReBox>
             </J.RePw>
+            {message1 && <J.Message>{message1}</J.Message>}
             <J.Name>
               <div id="name">보호자 이름*</div>
               <J.NameBox>
@@ -127,7 +142,6 @@ const Join = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  autocomplete="name"
                 />
               </J.NameBox>
             </J.Name>
@@ -141,15 +155,13 @@ const Join = () => {
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   required
-                  autocomplete="nickname"
                 />
               </J.NickBox>
             </J.Nickname>
           </J.Essential>
+          {message && <J.Message>{message}</J.Message>}
           <J.Button type="submit">
-            <div id="detail" type="submit">
-              회원가입하기
-            </div>
+            <button id="detail">회원가입하기</button>
           </J.Button>
         </J.Content>
       </form>
@@ -168,7 +180,6 @@ const Join = () => {
           </J.Introduction>
         </J.Footer>
       </footer>
-      {message && <p>{message}</p>}
     </J.Container>
   );
 };

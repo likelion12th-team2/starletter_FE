@@ -92,6 +92,14 @@ export const Account = styled.div`
   #join {
     cursor: pointer;
   }
+
+  #mypage {
+    cursor: pointer;
+  }
+
+  #logout {
+    cursor: pointer;
+  }
 `;
 
 export const Body = styled.div`
@@ -370,6 +378,10 @@ export const Search = styled.div`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+  }
+
+  #text:focus {
+    outline: none;
   }
 `;
 

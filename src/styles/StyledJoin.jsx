@@ -119,7 +119,6 @@ export const Title = styled.div`
 export const Essential = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
   margin-top: 112px;
 `;
 
@@ -163,10 +162,15 @@ export const IdBox = styled.div`
     width: 550px;
     margin-top: 0px;
   }
+
+  #id:focus {
+    outline: none;
+  }
 `;
 
 export const Pw = styled.div`
   display: flex;
+  margin-top: 40px;
   flex-direction: row;
 
   #pw {
@@ -205,12 +209,19 @@ export const PwBox = styled.div`
     background: transparent;
     width: 550px;
   }
+
+  #pw:focus {
+    outline: none;
+  }
 `;
 
 export const RePw = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 40px;
   gap: 93px;
+  align-items: flex-start;
+  text-align: left;
 
   #checkpw {
     margin-top: 30px;
@@ -248,10 +259,45 @@ export const ReBox = styled.div`
     background: transparent;
     width: 550px;
   }
+
+  #checkpw:focus {
+    outline: none;
+  }
+`;
+
+export const Message1 = styled.div`
+  color: #ff6161;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 0;
+  margin-left: 81px;
+`;
+export const Message = styled.div`
+  margin-top: 50px;
+  color: #ff6161;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+export const Message3 = styled.div`
+  color: #ff6161;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 0;
+  margin-left: 70px;
 `;
 
 export const Name = styled.div`
   display: flex;
+  margin-top: 40px;
   flex-direction: row;
 
   #name {
@@ -290,11 +336,16 @@ export const NameBox = styled.div`
     background: transparent;
     width: 550px;
   }
+
+  #name:focus {
+    outline: none;
+  }
 `;
 
 export const Nickname = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 40px;
 
   #nickname {
     float: left;
@@ -332,6 +383,10 @@ export const NickBox = styled.div`
     background: transparent;
     width: 550px;
   }
+
+  #nickname:focus {
+    outline: none;
+  }
 `;
 
 export const Button = styled.div`
@@ -348,6 +403,8 @@ export const Button = styled.div`
   }
 
   #detail {
+    border: none;
+    background: transparent;
     margin-top: 25px;
     color: #000;
     text-align: center;
