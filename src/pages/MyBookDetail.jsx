@@ -16,7 +16,7 @@ const MyBookDetail = ({ pages = [] }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/MyBook`);
+    navigate(`/mybook`);
   };
 
   // 모달창 상태
