@@ -1,9 +1,7 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as P from "../styles/StyledPluspet";
-import { Nickname } from "../styles/StyledJoin";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
@@ -18,21 +16,24 @@ const Pluspet = ({ nickname }) => {
   const myPageRef = useRef(null);
 
   const [pet_name, setPet_Name] = useState("");
-  const [pet_birth1, setPet_Birth] = useState("");
-  const [pet_anniv1, setPet_Anniv] = useState("");
+  const [pet_birth1, setPet_Birth] = useState(null);
+  const [pet_anniv1, setPet_Anniv] = useState(null);
   const [token, setToken] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
+    if (storedToken) {
+      setToken(storedToken);
+      setIsLoggedIn(true);
+    }
   }, []);
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
-      setIsLoggedIn(true);
+    // localStorage에 저장된 모든 항목을 콘솔에 출력
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+      console.log(`Key: ${key}, Value: ${value}`);
     }
   }, []);
 
@@ -51,6 +52,7 @@ const Pluspet = ({ nickname }) => {
             month: "2-digit",
             day: "2-digit",
           })
+          .replace(/\./g, "-")
           .replace(/ /g, "")
           .replace(/-$/, "")
       : "";
@@ -62,14 +64,10 @@ const Pluspet = ({ nickname }) => {
             month: "2-digit",
             day: "2-digit",
           })
+          .replace(/\./g, "-")
           .replace(/ /g, "")
           .replace(/-$/, "")
       : "";
-
-    console.log("Token:", token);
-    console.log(pet_name);
-    console.log(pet_birth);
-    console.log(pet_anniv);
 
     try {
       const response = await axios.post(
@@ -81,11 +79,15 @@ const Pluspet = ({ nickname }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Token ${token}`,
           },
         }
       );
-      console.log("Response:", response.data);
+
+      // 로그인 성공 시 토큰을 로컬 스토리지에 저장
+      localStorage.setItem("token", response.data.key);
+      console.log("토큰 저장 성공:", response.data.key);
+      navigate(`/mypage/managepet`);
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
     }
@@ -111,14 +113,30 @@ const Pluspet = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // 예시로 localStorage에 저장된 토큰을 삭제
-    setIsLoggedIn(false);
-    navigate(`/`);
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
 
@@ -249,7 +267,7 @@ const Pluspet = ({ nickname }) => {
                       selected={pet_anniv1}
                       onChange={(date1) => {
                         setPet_Anniv(date1);
-                        setShowDatePicker1(false); // 날짜 선택 시 달력 닫기
+                        setShowDatePicker1(false);
                       }}
                       inline
                     />
@@ -258,7 +276,7 @@ const Pluspet = ({ nickname }) => {
               </P.MemorialBox>
             </P.Memorial>
           </P.Profile>
-          <P.Button type="submit">
+          <P.Button>
             <button type="submit" id="btn">
               추가하기
             </button>

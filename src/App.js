@@ -6,6 +6,7 @@ import Join from "./pages/Join";
 import Pluspet from "./pages/Pluspet";
 import Managepet from "./pages/Managepet";
 import Activity from "./pages/Activity";
+import Funeral from "./pages/Funeral";
 
 import MyBook from "./pages/MyBook";
 import MyBookAddPet from "./pages/MyBookAddPet";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/mypage/pluspet" element={<Pluspet />} />
         <Route path="/mypage/managepet" element={<Managepet />} />
         <Route path="/mypage/bookroom" element={<Activity />} />
+        <Route path="/funeral" element={<Funeral />} />
 
         <Route path="/mybook" element={<MyBook />}></Route>
         <Route path="/mybook/addpet" element={<MyBookAddPet />}></Route>

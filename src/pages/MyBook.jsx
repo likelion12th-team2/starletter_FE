@@ -18,7 +18,7 @@ const MyBook = () => {
   };
 
   const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
+    navigate(`/MyBookDetail`);
   };
 
   return (
