@@ -15,7 +15,7 @@ const MyBookMake = () => {
   };
 
   const goMyBook = () => {
-    navigate(`/MyBook`);
+    navigate(`/mybook`);
   };
   //책 슬라이드
   const books = [

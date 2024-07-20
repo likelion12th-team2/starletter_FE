@@ -14,11 +14,11 @@ const MyBook = () => {
   };
 
   const goMyBook = () => {
-    navigate(`/MyBook`);
+    navigate(`/mybook`);
   };
 
   const goMyBookDetail = () => {
-    navigate(`/MyBookDetail`);
+    navigate(`/mybook/detail`);
   };
 
   return (
