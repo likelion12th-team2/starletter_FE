@@ -11,7 +11,7 @@ export const ModalOverlay = styled.div`
   position: fixed;
   pointer-events: auto;
   top: 100px;
-  left: 1700px;
+  right: 80px;
 `;
 
 export const CloseButton = styled.div`
