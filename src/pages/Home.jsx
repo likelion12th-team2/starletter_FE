@@ -3,22 +3,32 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as H from "../styles/StyledHome";
-import { Nickname } from "../styles/StyledJoin";
+import axios from "axios";
 
 const Home = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
+    console.log("Stored Token:", token);
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
   }, []);
+
+  // useEffect(() => {
+  //   // localStorage에 저장된 모든 항목을 콘솔에 출력
+  //   for (let i = 0; i < localStorage.length; i++) {
+  //     const key = localStorage.key(i);
+  //     const value = localStorage.getItem(key);
+  //     console.log(`Key: ${key}, Value: ${value}`);
+  //   }
+  // }, []);
 
   const goLogin = () => {
     navigate(`/login`);
@@ -36,10 +46,35 @@ const Home = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // 예시로 localStorage에 저장된 토큰을 삭제
-    setIsLoggedIn(false);
-    navigate(`/`);
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
   };
 
   const profile = {
@@ -62,8 +97,12 @@ const Home = ({ nickname }) => {
             <H.MovingContent>
               <div id="library">서재</div>
               <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
+              <div id="comparison" onClick={goFun}>
+                장례식장 비교
+              </div>
+              <div id="market" onClick={goMarket}>
+                마켓
+              </div>
             </H.MovingContent>
             <div id="bar"> | </div>
             <H.Account>
