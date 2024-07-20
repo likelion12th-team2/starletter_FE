@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
-import * as MB from "../styles/StyledMB";
+import * as A from "../styles/StyledMB";
 import { Nickname } from "../styles/StyledJoin";
 
-const Mybook = ({ nickname }) => {
+const Activity = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,25 +52,25 @@ const Mybook = ({ nickname }) => {
   };
 
   return (
-    <MB.Container>
+    <A.Container>
       <header>
-        <MB.Nav>
-          <MB.NavContent>
-            <MB.Logo onClick={goHome}>
+        <A.Nav>
+          <A.NavContent>
+            <A.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
                 alt="logo"
               />
-            </MB.Logo>
-            <MB.MovingContent>
+            </A.Logo>
+            <A.MovingContent>
               <div id="library">서재</div>
               <div id="bookroom">책방</div>
               <div id="comparison">장례식장 비교</div>
               <div id="market">마켓</div>
-            </MB.MovingContent>
+            </A.MovingContent>
             <div id="bar"> | </div>
-            <MB.Account>
+            <A.Account>
               {isLoggedIn ? (
                 <>
                   <div id="mypage" onClick={openModal} ref={myPageRef}>
@@ -90,9 +90,9 @@ const Mybook = ({ nickname }) => {
                   </div>
                 </>
               )}
-            </MB.Account>
-          </MB.NavContent>
-        </MB.Nav>
+            </A.Account>
+          </A.NavContent>
+        </A.Nav>
       </header>
       <MyPageModal
         isOpen={isModalOpen}
@@ -100,54 +100,54 @@ const Mybook = ({ nickname }) => {
         profile={profile}
         anchorRef={myPageRef}
       />
-      <MB.Body>
-        <MB.Title>내 활동</MB.Title>
-        <MB.Act>
-          <MB.Sympathy>
-            <MB.Heart>
+      <A.Body>
+        <A.Title>내 활동</A.Title>
+        <A.Act>
+          <A.Sympathy>
+            <A.Heart>
               <img
                 id="img"
                 src={`${process.env.PUBLIC_URL}/images/Heart.svg`}
                 alt="이미지"
               />
               <div id="heart">공감</div>
-            </MB.Heart>
-            <MB.Symlist>
-              <MB.Book>
+            </A.Heart>
+            <A.Symlist>
+              <A.Book>
                 <img
                   id="bookcover"
                   src={`${process.env.PUBLIC_URL}/images/Bookcover.svg`}
                   alt="표지"
                 />
                 <div id="title">보고 싶은 우리집 아기돼지</div>
-              </MB.Book>
-            </MB.Symlist>
-          </MB.Sympathy>
-          <MB.Comment>
-            <MB.Detail>
+              </A.Book>
+            </A.Symlist>
+          </A.Sympathy>
+          <A.Comment>
+            <A.Detail>
               <img
                 id="img"
                 src={`${process.env.PUBLIC_URL}/images/Comment.svg`}
                 alt="이미지"
               />
               <div id="comment">댓글</div>
-            </MB.Detail>
-            <MB.Comlist>
-              <MB.Post>
+            </A.Detail>
+            <A.Comlist>
+              <A.Post>
                 <div id="detail">
                   아기돼지야 너 정말 귀엽구나 너 덕분에 나도 행복해 고마워
                 </div>
-                <MB.Del>
+                <A.Del>
                   <button id="btn">삭제</button>
-                </MB.Del>
-              </MB.Post>
-            </MB.Comlist>
-          </MB.Comment>
-        </MB.Act>
-      </MB.Body>
+                </A.Del>
+              </A.Post>
+            </A.Comlist>
+          </A.Comment>
+        </A.Act>
+      </A.Body>
       <footer>
-        <MB.Footer>
-          <MB.Introduction>
+        <A.Footer>
+          <A.Introduction>
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
@@ -157,11 +157,11 @@ const Mybook = ({ nickname }) => {
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
             <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
             <div id="sns">인스타 아이디</div>
-          </MB.Introduction>
-        </MB.Footer>
+          </A.Introduction>
+        </A.Footer>
       </footer>
-    </MB.Container>
+    </A.Container>
   );
 };
 
-export default Mybook;
+export default Activity;

@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import Pluspet from "./pages/Pluspet";
 import Managepet from "./pages/Managepet";
-import Mybook from "./pages/MyBook";
+import Activity from "./pages/Activity";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Route path="/join" element={<Join />} />
         <Route path="/mypage/pluspet" element={<Pluspet />} />
         <Route path="/mypage/managepet" element={<Managepet />} />
-        <Route path="/mypage/bookroom" element={<Mybook />} />
+        <Route path="/mypage/bookroom" element={<Activity />} />
       </Routes>
     </BrowserRouter>
   );
