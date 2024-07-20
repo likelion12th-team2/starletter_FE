@@ -6,8 +6,6 @@ export const Container = styled.div`
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Nav = styled.div`
@@ -33,11 +31,12 @@ export const Logo = styled.div`
 `;
 
 export const NavContent = styled.div`
+  width: 100vw;
+  margin-left: auto;
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: right;
   gap: 60px;
   margin-top: 20px;
 
@@ -46,8 +45,15 @@ export const NavContent = styled.div`
   }
 `;
 
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
 export const MovingContent = styled.div`
-  margin-left: 439px;
+  justify-content: flex-end;
+  float: right;
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -73,6 +79,35 @@ export const MovingContent = styled.div`
   }
 
   #market {
+    cursor: pointer;
+  }
+`;
+
+export const Account = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  color: #fff;
+  gap: 60px;
+  line-height: normal;
+  margin-right: 63px;
+
+  #login {
+    cursor: pointer;
+  }
+
+  #join {
+    cursor: pointer;
+  }
+
+  #mypage {
+    cursor: pointer;
+  }
+
+  #logout {
     cursor: pointer;
   }
 `;
@@ -248,26 +283,6 @@ export const WriteButton = styled.div`
     &:hover {
       box-shadow: 0px 0px 10px 5px rgba(260, 230, 120, 0.6);
     }
-  }
-`;
-
-export const Account = styled.div`
-  display: flex;
-  flex-direction: row;
-  font-family: "Pretendard Variable";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  color: #fff;
-  gap: 60px;
-  line-height: normal;
-
-  #login {
-    cursor: pointer;
-  }
-
-  #join {
-    cursor: pointer;
   }
 `;
 

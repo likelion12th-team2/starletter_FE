@@ -7,8 +7,6 @@ export const Container = styled.div`
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Nav = styled.div`
@@ -34,11 +32,12 @@ export const Logo = styled.div`
 `;
 
 export const NavContent = styled.div`
+  width: 100vw;
+  margin-left: auto;
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: right;
   gap: 60px;
   margin-top: 20px;
 
@@ -47,8 +46,15 @@ export const NavContent = styled.div`
   }
 `;
 
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
 export const MovingContent = styled.div`
-  margin-left: 439px;
+  justify-content: flex-end;
+  float: right;
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -88,12 +94,21 @@ export const Account = styled.div`
   color: #fff;
   gap: 60px;
   line-height: normal;
+  margin-right: 63px;
 
   #login {
     cursor: pointer;
   }
 
   #join {
+    cursor: pointer;
+  }
+
+  #mypage {
+    cursor: pointer;
+  }
+
+  #logout {
     cursor: pointer;
   }
 `;
@@ -349,7 +364,7 @@ export const CoverText = styled.div`
   font-weight: 400;
   line-height: normal;
 
-  margin-top: 22.47px;
+  margin-top: 25px;
   margin-bottom: 5px;
 `;
 export const CoverImg = styled.div`
@@ -407,6 +422,7 @@ export const DescriptionTitle = styled.div`
   display: flex;
   align-items: center;
   margin-top: 25px;
+  margin-bottom: 5px;
   #desTitle {
     color: var(--gray-0, #999);
     font-family: "Pretendard Variable";
@@ -442,8 +458,42 @@ export const DescriptionText = styled.div`
   }
 `;
 
-export const Keyward = styled.div``;
-export const KeywardTitle = styled.div``;
+export const Keyword = styled.div`
+  margin-top: 25px;
+`;
+export const KeywordTitle = styled.div`
+  color: #767676;
+  font-family: "Pretendard Variable";
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+export const KeywordButtons = styled.div`
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+
+  .keyword {
+    width: 66px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #c4def8;
+    border: none;
+
+    color: var(--Color-1, #002951);
+    font-family: "Pretendard Variable";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .keyword.selected {
+    background-color: #87a8cf;
+    color: white;
+  }
+`;
 
 export const Create = styled.div`
   display: flex;

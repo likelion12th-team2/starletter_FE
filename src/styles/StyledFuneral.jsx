@@ -75,6 +75,7 @@ export const MovingContent = styled.div`
 
   #comparison {
     cursor: pointer;
+    color: #efd26a;
   }
 
   #market {

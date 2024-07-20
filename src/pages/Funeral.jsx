@@ -100,7 +100,7 @@ const Funeral = ({ nickname }) => {
             <F.Menu>
               <F.MovingContent>
                 <div id="library" onClick={goMyBook}>
-                  서재
+                  내 서재
                 </div>
                 <div id="bookroom" onClick={goLib}>
                   책방
