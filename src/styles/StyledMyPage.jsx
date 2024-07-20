@@ -60,6 +60,7 @@ export const Button = styled.div`
 `;
 
 export const Pluspet = styled.div`
+  cursor: pointer;
   width: 300px;
   height: 60px;
   flex-shrink: 0;
@@ -91,6 +92,7 @@ export const Pluspet = styled.div`
 `;
 
 export const Managepet = styled.div`
+  cursor: pointer;
   width: 300px;
   height: 60px;
   flex-shrink: 0;
@@ -122,6 +124,7 @@ export const Managepet = styled.div`
 `;
 
 export const Bookact = styled.div`
+  cursor: pointer;
   width: 300px;
   height: 60px;
   flex-shrink: 0;
