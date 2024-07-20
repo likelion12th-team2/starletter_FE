@@ -32,6 +32,22 @@ const Activity = ({ nickname }) => {
     navigate(`/join`);
   };
 
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMyBook = () => {
+    navigate(`/mybook`);
+  };
+
+  const goLib = () => {
+    navigate(`/library`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -63,34 +79,44 @@ const Activity = ({ nickname }) => {
                 alt="logo"
               />
             </A.Logo>
-            <A.MovingContent>
-              <div id="library">서재</div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </A.MovingContent>
-            <div id="bar"> | </div>
-            <A.Account>
-              {isLoggedIn ? (
-                <>
-                  <div id="mypage" onClick={openModal} ref={myPageRef}>
-                    마이페이지
-                  </div>
-                  <div id="logout" onClick={handleLogout}>
-                    로그아웃
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div id="login" onClick={goLogin}>
-                    로그인
-                  </div>
-                  <div id="join" onClick={goJoin}>
-                    회원가입
-                  </div>
-                </>
-              )}
-            </A.Account>
+            <A.Menu>
+              <A.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </A.MovingContent>
+              <div id="bar"> | </div>
+              <A.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </A.Account>
+            </A.Menu>
           </A.NavContent>
         </A.Nav>
       </header>

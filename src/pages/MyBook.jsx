@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
 import axios from "axios";
 import MyPageModal from "./MyPageModal";
@@ -33,6 +34,18 @@ const MyBook = ({ nickname }) => {
     navigate(`/join`);
   };
 
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -42,19 +55,19 @@ const MyBook = ({ nickname }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
-  };
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
-  };
-
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleLogout = async () => {
@@ -80,13 +93,11 @@ const MyBook = ({ nickname }) => {
     }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
-  const goMarket = () => {
-    navigate(`/market`);
-  };
   return (
     <M.Container>
       <header>
@@ -164,6 +175,12 @@ const MyBook = ({ nickname }) => {
         </M.bodyContainer>
       </body>
       {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <M.Footer>
           <M.Introduction>

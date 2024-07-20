@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import React, { useState } from "react";
 import GlobalStyle from "./pages/GlobalStyles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -7,6 +8,7 @@ import Pluspet from "./pages/Pluspet";
 import Managepet from "./pages/Managepet";
 import Activity from "./pages/Activity";
 import Funeral from "./pages/Funeral";
+import Market from "./pages/Market";
 
 import MyBook from "./pages/MyBook";
 import MyBookAddPet from "./pages/MyBookAddPet";
@@ -15,17 +17,36 @@ import MyBookDetail from "./pages/MyBookDetail";
 import MyBookWrite from "./pages/MyBookWrite";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/" />
+            ) : (
+              <Login handleLogin={handleLogin} />
+            )
+          }
+        />
         <Route path="/join" element={<Join />} />
         <Route path="/mypage/pluspet" element={<Pluspet />} />
         <Route path="/mypage/managepet" element={<Managepet />} />
         <Route path="/mypage/bookroom" element={<Activity />} />
         <Route path="/funeral" element={<Funeral />} />
+        <Route path="/market" element={<Market />} />
 
         <Route path="/mybook" element={<MyBook />}></Route>
         <Route path="/mybook/addpet" element={<MyBookAddPet />}></Route>

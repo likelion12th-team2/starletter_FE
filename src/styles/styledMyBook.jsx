@@ -21,6 +21,7 @@ export const Nav = styled.div`
 `;
 
 export const Logo = styled.div`
+  cursor: pointer;
   margin-left: 80px;
 
   #logo {

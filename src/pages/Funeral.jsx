@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as F from "../styles/StyledFuneral";
+import FuneralModal from "./FuneralModal";
 import axios from "axios";
 
 const Funeral = ({ nickname }) => {
@@ -11,6 +12,16 @@ const Funeral = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
+
+  const [show, setShow] = useState(false);
+
+  const showModal = () => {
+    setShow(true);
+  };
+
+  const hideModal = () => {
+    setShow(false);
+  };
 
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
@@ -144,6 +155,52 @@ const Funeral = ({ nickname }) => {
         profile={profile}
         anchorRef={myPageRef}
       />
+      <F.Body>
+        <F.Search>
+          <input
+            id="detail"
+            type="text"
+            placeholder="지역이나 키워드를 검색해 보세요"
+          />
+          <img
+            id="search"
+            src={`${process.env.PUBLIC_URL}/images/Search.svg`}
+            alt="검색"
+          />
+        </F.Search>
+        <F.Ad></F.Ad>
+        <F.Title>수도권 반려동물 전문 장례식장을 보여드릴게요</F.Title>
+        <F.FunList>
+          <F.Fun1 onClick={showModal}>
+            <img
+              id="img1"
+              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
+              alt="장례식장"
+            />
+            <div id="name1">더포에버</div>
+            <div id="loc1">인천 서구 설원로 79</div>
+          </F.Fun1>
+          <F.Fun2>
+            <img
+              id="img2"
+              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
+              alt="장례식장"
+            />
+            <div id="name2">더포에버</div>
+            <div id="loc2">인천 서구 설원로 79</div>
+          </F.Fun2>
+          <F.Fun3>
+            <img
+              id="img3"
+              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
+              alt="장례식장"
+            />
+            <div id="name3">더포에버</div>
+            <div id="loc3">인천 서구 설원로 79</div>
+          </F.Fun3>
+        </F.FunList>
+      </F.Body>
+      <FuneralModal show={show} handleClose={hideModal} />
       <footer>
         <F.Footer>
           <F.Introduction>
