@@ -70,19 +70,21 @@ const Join = () => {
                 alt="logo"
               />
             </J.Logo>
-            <J.MovingContent>
-              <div id="library">서재</div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </J.MovingContent>
-            <div id="bar"> | </div>
-            <J.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join">회원가입</div>
-            </J.Account>
+            <J.Menu>
+              <J.MovingContent>
+                <div id="library">내 서재</div>
+                <div id="bookroom">책방</div>
+                <div id="comparison">장례식장 비교</div>
+                <div id="market">마켓</div>
+              </J.MovingContent>
+              <div id="bar"> | </div>
+              <J.Account>
+                <div id="login" onClick={goLogin}>
+                  로그인
+                </div>
+                <div id="join">회원가입</div>
+              </J.Account>
+            </J.Menu>
           </J.NavContent>
         </J.Nav>
       </header>

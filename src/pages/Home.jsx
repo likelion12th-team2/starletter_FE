@@ -77,6 +77,22 @@ const Home = ({ nickname }) => {
     navigate(`/market`);
   };
 
+  const goMyBook = () => {
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goLib = () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
   const profile = {
     // image: 'path_to_profile_image.jpg',
     name: nickname,
@@ -94,38 +110,44 @@ const Home = ({ nickname }) => {
                 alt="logo"
               />
             </H.Logo>
-            <H.MovingContent>
-              <div id="library">서재</div>
-              <div id="bookroom">책방</div>
-              <div id="comparison" onClick={goFun}>
-                장례식장 비교
-              </div>
-              <div id="market" onClick={goMarket}>
-                마켓
-              </div>
-            </H.MovingContent>
-            <div id="bar"> | </div>
-            <H.Account>
-              {isLoggedIn ? (
-                <>
-                  <div id="mypage" onClick={openModal} ref={myPageRef}>
-                    마이페이지
-                  </div>
-                  <div id="logout" onClick={handleLogout}>
-                    로그아웃
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div id="login" onClick={goLogin}>
-                    로그인
-                  </div>
-                  <div id="join" onClick={goJoin}>
-                    회원가입
-                  </div>
-                </>
-              )}
-            </H.Account>
+            <H.Menu>
+              <H.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </H.MovingContent>
+              <div id="bar"> | </div>
+              <H.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </H.Account>
+            </H.Menu>
           </H.NavContent>
         </H.Nav>
       </header>
@@ -137,22 +159,29 @@ const Home = ({ nickname }) => {
       />
       <H.Body>
         <H.Detail>
-          <div id="detail">
-            별이 된 나의 반려동물과 <br /> 함께한 추억을 별편지에 기록해보세요
-          </div>
-          <div id="detail2">
-            사랑하는 반려동물과의 이별, 가족을 대하는 마음으로 진심을
-            다하겠습니다. <br />
-            함께한 추억을 편지, 책으로 남길 수 있는 서비스를 제공합니다.
-          </div>
+          <img
+            id="img"
+            src={`${process.env.PUBLIC_URL}/images/Slogan.svg`}
+            alt="슬로건"
+          />
         </H.Detail>
         <H.Library>
-          <H.LibBtn>
+          <img
+            id="img1"
+            src={`${process.env.PUBLIC_URL}/images/Main_lib.svg`}
+            alt="내서재"
+          />
+          <H.LibBtn onClick={goMyBook}>
             <div id="detail">내 서재로 가기</div>
           </H.LibBtn>
         </H.Library>
         <H.Bookroom>
-          <H.BookBtn>
+          <img
+            id="img2"
+            src={`${process.env.PUBLIC_URL}/images/Main_book.svg`}
+            alt="책방"
+          />
+          <H.BookBtn onClick={goLib}>
             <div id="detail">책방으로 이동</div>
           </H.BookBtn>
         </H.Bookroom>

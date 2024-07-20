@@ -21,6 +21,7 @@ export const Nav = styled.div`
 `;
 
 export const Logo = styled.div`
+  cursor: pointer;
   margin-left: 80px;
 
   #logo {
@@ -31,11 +32,12 @@ export const Logo = styled.div`
 `;
 
 export const NavContent = styled.div`
+  width: 100vw;
+  margin-left: auto;
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: right;
   gap: 60px;
   margin-top: 20px;
 
@@ -44,8 +46,15 @@ export const NavContent = styled.div`
   }
 `;
 
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
 export const MovingContent = styled.div`
-  margin-left: 1000px;
+  justify-content: flex-end;
+  float: right;
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -84,6 +93,7 @@ export const Account = styled.div`
   color: #fff;
   gap: 60px;
   line-height: normal;
+  margin-right: 63px;
 
   #login {
     cursor: pointer;
@@ -112,33 +122,10 @@ export const Body = styled.div`
 `;
 
 export const Detail = styled.div`
-  height: 450px;
-  width: 100%;
-  background: white;
+  width: 100vw;
 
-  #detail {
-    margin-top: 120px;
-    color: black;
-    text-align: left;
-    font-family: "Pretendard Variable";
-    font-size: 50px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 70px;
-    letter-spacing: 1.5px;
-    margin-left: 280px;
-  }
-
-  #detail2 {
-    margin-top: 20px;
-    color: black;
-    text-align: left;
-    font-family: "Pretendard Variable";
-    font-size: 18px;
-    font-style: normal;
-    line-height: 30px;
-    letter-spacing: 1px;
-    margin-left: 280px;
+  #img {
+    width: 100vw;
   }
 `;
 
@@ -157,6 +144,7 @@ export const LibBtn = styled.div`
   flex-shrink: 0;
   border-radius: 50px;
   background: #efd26a;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0px 0px 4px 5px rgba(239, 210, 106, 0.3);
@@ -189,6 +177,7 @@ export const BookBtn = styled.div`
   flex-shrink: 0;
   border-radius: 50px;
   background: #efd26a;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0px 0px 4px 5px rgba(239, 210, 106, 0.3);

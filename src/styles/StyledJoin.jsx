@@ -21,6 +21,7 @@ export const Nav = styled.div`
 `;
 
 export const Logo = styled.div`
+  cursor: pointer;
   margin-left: 80px;
 
   #logo {
@@ -31,11 +32,12 @@ export const Logo = styled.div`
 `;
 
 export const NavContent = styled.div`
+  width: 100vw;
+  margin-left: auto;
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: right;
   gap: 60px;
   margin-top: 20px;
 
@@ -44,8 +46,15 @@ export const NavContent = styled.div`
   }
 `;
 
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
 export const MovingContent = styled.div`
-  margin-left: 1000px;
+  justify-content: flex-end;
+  float: right;
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -84,14 +93,15 @@ export const Account = styled.div`
   color: #fff;
   gap: 60px;
   line-height: normal;
+  margin-right: 63px;
 
   #login {
     cursor: pointer;
   }
 
   #join {
-    color: #efd26a;
     cursor: pointer;
+    color: #efd26a;
   }
 `;
 

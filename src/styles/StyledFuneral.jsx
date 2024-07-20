@@ -75,6 +75,7 @@ export const MovingContent = styled.div`
 
   #comparison {
     cursor: pointer;
+    color: #efd26a;
   }
 
   #market {
@@ -108,6 +109,200 @@ export const Account = styled.div`
 
   #logout {
     cursor: pointer;
+  }
+`;
+
+export const Body = styled.div`
+  background: #002951;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Search = styled.div`
+  margin-top: 110px;
+  width: 1077px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  background: #ebeaea;
+  display: flex;
+  flex-direction: row;
+
+  #detail {
+    margin-left: 33px;
+    float: left;
+    color: #999;
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: 800px;
+    border: none;
+    background: transparent;
+  }
+
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    // color: #fff;
+  }
+
+  #search {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: 47px;
+    width: 41.443px;
+    height: 40.25px;
+    flex-shrink: 0;
+  }
+`;
+
+export const Ad = styled.div`
+  margin-top: 89px;
+  width: 1076px;
+  height: 205px;
+  flex-shrink: 0;
+  background: #d9d9d9;
+`;
+
+export const Title = styled.div`
+  margin-top: 43px;
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.45px;
+`;
+
+export const FunList = styled.div`
+  margin-top: 60px;
+  display: flex;
+  flex-direction: row;
+  gap: 55px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 230px;
+`;
+
+export const Fun1 = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  #img1 {
+    width: 319px;
+    height: 305px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  }
+
+  #name1 {
+    margin-top: 11px;
+    margin-right: auto;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 22px;
+    margin-left: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #loc1 {
+    margin-top: 10px;
+    margin-right: auto;
+    color: #999;
+    margin-left: 10px;
+    font-family: "Pretendard Variable";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+`;
+
+export const Fun2 = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  #img2 {
+    width: 319px;
+    height: 305px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  }
+
+  #name2 {
+    margin-top: 11px;
+    margin-right: auto;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    margin-left: 10px;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #loc2 {
+    margin-top: 10px;
+    margin-right: auto;
+    color: #999;
+    font-family: "Pretendard Variable";
+    font-size: 18px;
+    font-style: normal;
+    margin-left: 10px;
+    font-weight: 500;
+    line-height: normal;
+  }
+`;
+
+export const Fun3 = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  #img3 {
+    width: 319px;
+    height: 305px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  }
+
+  #name3 {
+    margin-top: 11px;
+    margin-left: 10px;
+    margin-right: auto;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #loc3 {
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: 10px;
+    color: #999;
+    font-family: "Pretendard Variable";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
   }
 `;
 

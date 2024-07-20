@@ -1,9 +1,25 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
+import axios from "axios";
 
-const MyBook = () => {
+const MyBook = ({ nickname }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Stored Token:", token);
+    if (token) {
+      console.log("로그인 되어있음");
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const goLogin = () => {
     navigate(`/login`);
@@ -13,12 +29,68 @@ const MyBook = () => {
     navigate(`/join`);
   };
 
-  const goMyBook = () => {
-    navigate(`/mybook`);
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
   };
 
-  const goMyBookDetail = () => {
-    navigate(`/MyBookDetail`);
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const goMyBook = () => {
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goLib = () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
+
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   return (
@@ -33,23 +105,44 @@ const MyBook = () => {
                 alt="logo"
               />
             </M.Logo>
-            <M.MovingContent>
-              <div id="library" onClick={goMyBook}>
-                내 서재
-              </div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </M.MovingContent>
-            <div id="bar"> | </div>
-            <M.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join" onClick={goJoin}>
-                회원가입
-              </div>
-            </M.Account>
+            <M.Menu>
+              <M.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </M.MovingContent>
+              <div id="bar"> | </div>
+              <M.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </M.Account>
+            </M.Menu>
           </M.NavContent>
         </M.Nav>
       </header>
@@ -71,6 +164,12 @@ const MyBook = () => {
         </M.bodyContainer>
       </body>
       {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <M.Footer>
           <M.Introduction>
