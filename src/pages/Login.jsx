@@ -23,15 +23,26 @@ const Login = () => {
       );
       console.log("로그인 성공!");
 
-      // 로그인 성공 시 토큰을 로컬 스토리지에 저장
-      localStorage.setItem("token", response.data.token);
+      // 서버의 응답 데이터 출력
+      console.log("서버 응답:", response.data);
 
-      // 메인 페이지로 이동
-      navigate("/");
+      const token = response.data.key || response.data.data?.key;
+      if (token) {
+        localStorage.setItem("token", response.data.key);
+        console.log("토큰 저장 성공:", response.data.key);
+
+        // 메인 페이지로 이동'
+        navigate("/");
+      } else {
+        console.log("토큰이 응답 데이터에 없습니다.");
+        setMessage("로그인 응답에 토큰이 없습니다.");
+      }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("잘못된 아이디 또는 비밀번호입니다.");
+        setMessage("잘못된 아이디 또는 비밀번호입니다.");
       } else {
+        console.log("로그인 실패:", error.message);
         setMessage("아이디와 비밀번호를 확인해주세요.");
       }
     }
