@@ -7,6 +7,12 @@ import Pluspet from "./pages/Pluspet";
 import Managepet from "./pages/Managepet";
 import Activity from "./pages/Activity";
 
+import MyBook from "./pages/MyBook";
+import MyBookAddPet from "./pages/MyBookAddPet";
+import MyBookMake from "./pages/MyBookMake";
+import MyBookDetail from "./pages/MyBookDetail";
+import MyBookWrite from "./pages/MyBookWrite";
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,11 +24,12 @@ function App() {
         <Route path="/mypage/pluspet" element={<Pluspet />} />
         <Route path="/mypage/managepet" element={<Managepet />} />
         <Route path="/mypage/bookroom" element={<Activity />} />
-        <Route path="/MyBook" element={<MyBook />} />
-        <Route path="/MyBookAddPet" element={<MyBookAddPet />} />
-        <Route path="/MyBookMake" element={<MyBookMake />} />
-        <Route path="/MyBookDetail" element={<MyBookDetail />} />
-        <Route path="/MyBookWrite" element={<MyBookWrite />} />
+
+        <Route path="/mybook" element={<MyBook />}></Route>
+        <Route path="/mybook/addpet" element={<MyBookAddPet />}></Route>
+        <Route path="/mybook/make" element={<MyBookMake />}></Route>
+        <Route path="/mybook/detail" element={<MyBookDetail />}></Route>
+        <Route path="/mybook/write" element={<MyBookWrite />}></Route>
       </Routes>
     </BrowserRouter>
   );
