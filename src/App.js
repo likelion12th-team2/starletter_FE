@@ -18,6 +18,11 @@ function App() {
         <Route path="/mypage/pluspet" element={<Pluspet />} />
         <Route path="/mypage/managepet" element={<Managepet />} />
         <Route path="/mypage/bookroom" element={<Activity />} />
+        <Route path="/MyBook" element={<MyBook />} />
+        <Route path="/MyBookAddPet" element={<MyBookAddPet />} />
+        <Route path="/MyBookMake" element={<MyBookMake />} />
+        <Route path="/MyBookDetail" element={<MyBookDetail />} />
+        <Route path="/MyBookWrite" element={<MyBookWrite />} />
       </Routes>
     </BrowserRouter>
   );
