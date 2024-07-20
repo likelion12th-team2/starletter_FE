@@ -97,42 +97,44 @@ const Funeral = ({ nickname }) => {
                 alt="logo"
               />
             </F.Logo>
-            <F.MovingContent>
-              <div id="library" onClick={goMyBook}>
-                서재
-              </div>
-              <div id="bookroom" onClick={goLib}>
-                책방
-              </div>
-              <div id="comparison" onClick={goFun}>
-                장례식장 비교
-              </div>
-              <div id="market" onClick={goMarket}>
-                마켓
-              </div>
-            </F.MovingContent>
-            <div id="bar"> | </div>
-            <F.Account>
-              {isLoggedIn ? (
-                <>
-                  <div id="mypage" onClick={openModal} ref={myPageRef}>
-                    마이페이지
-                  </div>
-                  <div id="logout" onClick={handleLogout}>
-                    로그아웃
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div id="login" onClick={goLogin}>
-                    로그인
-                  </div>
-                  <div id="join" onClick={goJoin}>
-                    회원가입
-                  </div>
-                </>
-              )}
-            </F.Account>
+            <F.Menu>
+              <F.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </F.MovingContent>
+              <div id="bar"> | </div>
+              <F.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </F.Account>
+            </F.Menu>
           </F.NavContent>
         </F.Nav>
       </header>
