@@ -34,6 +34,9 @@ const Join = () => {
           password: password,
           name: name,
           nickname: nickname,
+        },
+        {
+          withCredentials: true,
         }
       );
       navigate("/login");

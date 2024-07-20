@@ -3,6 +3,9 @@ import GlobalStyle from "./pages/GlobalStyles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
+import Pluspet from "./pages/Pluspet";
+import Managepet from "./pages/Managepet";
+import Activity from "./pages/Activity";
 
 import MyBook from "./pages/MyBook";
 import MyBookAddPet from "./pages/MyBookAddPet";
@@ -18,12 +21,15 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
+        <Route path="/mypage/pluspet" element={<Pluspet />} />
+        <Route path="/mypage/managepet" element={<Managepet />} />
+        <Route path="/mypage/bookroom" element={<Activity />} />
 
-        <Route path="/MyBook" element={<MyBook />}></Route>
-        <Route path="/MyBookAddPet" element={<MyBookAddPet />}></Route>
-        <Route path="/MyBookMake" element={<MyBookMake />}></Route>
-        <Route path="/MyBookDetail" element={<MyBookDetail />}></Route>
-        <Route path="/MyBookWrite" element={<MyBookWrite />}></Route>
+        <Route path="/mybook" element={<MyBook />}></Route>
+        <Route path="/mybook/addpet" element={<MyBookAddPet />}></Route>
+        <Route path="/mybook/make" element={<MyBookMake />}></Route>
+        <Route path="/mybook/detail" element={<MyBookDetail />}></Route>
+        <Route path="/mybook/write" element={<MyBookWrite />}></Route>
       </Routes>
     </BrowserRouter>
   );

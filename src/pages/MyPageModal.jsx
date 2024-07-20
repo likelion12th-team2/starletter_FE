@@ -1,8 +1,22 @@
 import React, { useEffect, useRef } from "react";
 import * as P from "../styles/StyledMyPage";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
   const modalRef = useRef(null);
+  const navigate = useNavigate();
+
+  const goPlus = () => {
+    navigate(`/mypage/pluspet`);
+  };
+
+  const goManage = () => {
+    navigate(`/mypage/managepet`);
+  };
+
+  const goBook = () => {
+    navigate(`/mypage/bookroom`);
+  };
 
   useEffect(() => {
     if (isOpen && anchorRef.current && modalRef.current) {
@@ -34,7 +48,7 @@ const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
         </P.ProfileImage>
         <P.Greet>안녕하세요, {profile.name}님</P.Greet>
         <P.Button>
-          <P.Pluspet>
+          <P.Pluspet onClick={goPlus}>
             <img
               id="plus"
               src={`${process.env.PUBLIC_URL}/images/Pluspet.svg`}
@@ -42,7 +56,7 @@ const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
             />
             <div id="detplus">반려동물 추가</div>
           </P.Pluspet>
-          <P.Managepet>
+          <P.Managepet onClick={goManage}>
             <img
               id="manage"
               src={`${process.env.PUBLIC_URL}/images/Mypet.svg`}
@@ -50,7 +64,7 @@ const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
             />
             <div id="detman">나의 반려동물 관리</div>
           </P.Managepet>
-          <P.Bookact>
+          <P.Bookact onClick={goBook}>
             <img
               id="bookact"
               src={`${process.env.PUBLIC_URL}/images/Bookroom.svg`}
