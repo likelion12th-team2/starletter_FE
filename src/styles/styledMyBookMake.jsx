@@ -327,7 +327,7 @@ export const BookCoverText = styled.div`
     padding-bottom: 110px;
 
     position: absolute;
-    top: 1px;
+    top: 0px;
     left: 70%;
     // transform: translate(10px, 10px);
   }
@@ -340,35 +340,6 @@ export const BookCoverImg = styled.div`
   margin-top: 120px;
   background: #e7f3ff;
 `;
-// export const Sample = styled.div`
-//   width: 304.745px;
-//   height: 403.078px;
-//   flex-shrink: 0;
-//   border-radius: 11.829px;
-//   border: 0.886px solid rgba(133, 133, 133, 0.5);
-//   background: #87a8cf;
-
-//   #SampleTitle {
-//     color: #000;
-//     text-align: center;
-//     font-family: "Pretendard Variable";
-//     font-size: 17.718px;
-//     font-style: normal;
-//     font-weight: 400;
-//     line-height: normal;
-
-//     margin-top: 36px;
-//     margin-bottom: 30px;
-//   }
-//   #SampleImg {
-//     width: 304.745px;
-//     height: 154.487px;
-//     flex-shrink: 0;
-//     border-right: 0.886px solid var(--gray-0, #999);
-//     border-left: 0.886px solid var(--gray-0, #999);
-//     background: #e7f3ff;
-//   }
-// `;
 export const Cover = styled.div``;
 export const CoverText = styled.div`
   color: var(--gray-0, #999);
@@ -435,7 +406,7 @@ export const ModalTitle = styled.div`
 export const DescriptionTitle = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 55px;
+  margin-top: 25px;
   #desTitle {
     color: var(--gray-0, #999);
     font-family: "Pretendard Variable";
@@ -470,6 +441,10 @@ export const DescriptionText = styled.div`
     line-height: normal;
   }
 `;
+
+export const Keyward = styled.div``;
+export const KeywardTitle = styled.div``;
+
 export const Create = styled.div`
   display: flex;
   justify-content: center;

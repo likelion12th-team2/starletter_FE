@@ -82,6 +82,9 @@ const MyBookMake = () => {
     // });
   };
 
+  //드롭다운 키워드
+  const [view, setView] = useState(false);
+
   return (
     <MM.Container>
       <header>
@@ -289,6 +292,18 @@ const MyBookMake = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </MM.DescriptionText>
+              <MM.Keyward>
+                <MM.KeywardTitle>
+                  <span id="title">키워드 선택</span>
+                  <button id="dropdown">
+                    <img
+                      id="ddImg"
+                      src={`${process.env.PUBLIC_URL}/images/dropdown.png`}
+                      alt=""
+                    />
+                  </button>
+                </MM.KeywardTitle>
+              </MM.Keyward>
             </MM.Text>
           </MM.ModalContent>
           <MM.Create>
