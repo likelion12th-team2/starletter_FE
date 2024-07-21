@@ -1,13 +1,11 @@
 import { styled } from "styled-components";
 
 export const Container = styled.div`
-  background: var(--Color-1, #002951);
+  background: #fff;
   width: 100%;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Nav = styled.div`
@@ -21,9 +19,41 @@ export const Nav = styled.div`
   background: #002951;
   color: #002951;
 `;
-// margin-left 수정
+
+export const Logo = styled.div`
+  margin-left: 80px;
+
+  #logo {
+    margin-top: -20px;
+    width: 140px;
+    height: 48px;
+  }
+`;
+
+export const NavContent = styled.div`
+  width: 100vw;
+  margin-left: auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 60px;
+  margin-top: 20px;
+
+  #bar {
+    color: #fff;
+  }
+`;
+
+export const Menu = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
 export const MovingContent = styled.div`
-  margin-left: 439px;
+  justify-content: flex-end;
+  float: right;
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -53,12 +83,42 @@ export const MovingContent = styled.div`
   }
 `;
 
+export const Account = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  color: #fff;
+  gap: 60px;
+  line-height: normal;
+  margin-right: 63px;
+
+  #login {
+    cursor: pointer;
+  }
+
+  #join {
+    cursor: pointer;
+  }
+
+  #mypage {
+    cursor: pointer;
+  }
+
+  #logout {
+    cursor: pointer;
+  }
+`;
+
 // body
 export const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-direction: center;
   justify-content: center;
+  background: var(--Color-1, #002951);
 `;
 export const NewBook = styled.div`
   margin-top: 107px;
@@ -249,50 +309,6 @@ export const Postit = styled.div`
   line-height: normal;
 
   cursor: pointer;
-`;
-
-export const Logo = styled.div`
-  margin-left: 80px;
-
-  #logo {
-    margin-top: -20px;
-    width: 140px;
-    height: 48px;
-  }
-`;
-
-export const NavContent = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: right;
-  gap: 60px;
-  margin-top: 20px;
-
-  #bar {
-    color: #fff;
-  }
-`;
-
-export const Account = styled.div`
-  display: flex;
-  flex-direction: row;
-  font-family: "Pretendard Variable";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  color: #fff;
-  gap: 60px;
-  line-height: normal;
-
-  #login {
-    cursor: pointer;
-  }
-
-  #join {
-    cursor: pointer;
-  }
 `;
 
 export const Footer = styled.div`

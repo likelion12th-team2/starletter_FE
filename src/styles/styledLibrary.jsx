@@ -21,6 +21,7 @@ export const Nav = styled.div`
 `;
 
 export const Logo = styled.div`
+  cursor: pointer;
   margin-left: 80px;
 
   #logo {
@@ -67,11 +68,11 @@ export const MovingContent = styled.div`
 
   #library {
     cursor: pointer;
-    color: #efd26a;
   }
 
   #bookroom {
     cursor: pointer;
+    color: #efd26a;
   }
 
   #comparison {
@@ -111,181 +112,217 @@ export const Account = styled.div`
     cursor: pointer;
   }
 `;
+
 // body
-export const WriteContainer = styled.div`
-  background: var(--Color-1, #002951);
+export const LibContainer = styled.div`
+  background: #002951;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-bottom: 125px;
-`;
 
-export const WriteWrap = styled.div`
-  width: 1213px;
-  height: 900px;
-  flex-shrink: 0;
-  margin-top: 86px;
+  align-items: center;
 `;
-export const Write = styled.div`
+export const SearchWrap = styled.div`
+  position: relative;
+  margin-top: 90px;
+`;
+export const Search = styled.div`
+  position: absolute;
+  z-index: 2;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 40px;
 
-  width: 1213px;
-  height: 849px;
+  width: 1077px;
+  height: 100px;
   flex-shrink: 0;
-  border-radius: 20px;
+  border-radius: 30px;
   background: var(--gray-10, #ebeaea);
 
-  #writebook {
-    resize: none;
-    width: 95%;
-    height: 80%;
-    margin-top: 43px;
-    margin-bottom: 24px;
+  #searchImg {
+    width: 41.443px;
+    height: 40.25px;
+    flex-shrink: 0;
+    margin-left: 38.74px;
+  }
+  #search {
+    color: #000;
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+    width: 100%;
+    margin-right: 38.74px;
+
     border: none;
     background: var(--gray-10, #ebeaea);
     outline: none;
+  }
+`;
 
-    color: #000;
-    font-family: "Pretendard Variable";
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  # writebook:: placeholder {
-    color: var(--gray-0, #999);
-    font-family: "Pretendard Variable";
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  #line {
-    width: 1168px;
-    height: 1px;
-    background: #999;
-    margin-bottom: 24px;
-  }
-`;
-export const AddImgWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 1144px;
-  margin-bottom: 24px;
-`;
-export const AddImg = styled.button`
-  width: 200px;
-  height: 200px;
+export const SearchPlus = styled.div`
+  z-index: 1;
+
+  width: 1077px;
+  height: 344px;
   flex-shrink: 0;
-  border: none;
-  border-radius: 10px;
-  background: #d9d9d9;
+  border-radius: 30px;
+  background: #fff;
 
-  #addBtn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    margin-top: 20%;
-  }
-
-  #addimg {
-    width: 52px;
-    height: 39px;
-    flex-shrink: 0;
-  }
-  #addImgText {
-    color: var(--gray-0, #999);
-    font-family: "Pretendard Variable";
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-`;
-export const AddedImg = styled.div`
+  padding-top: 120px;
+  padding-left: 120px;
+  padding-right: 120px;
+  padding-bottom: 40px;
   display: flex;
-  gap: 20px;
-
-  #addedImgs {
-    width: 200px;
-    height: 200px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background-size: contain;
-  }
+  flex-direction: column;
+  justify-contents: center;
 `;
-
-export const PublicPrivate = styled.div`
-  display: flex;
-  gap: 20px;
-  margin-top: 18px;
-  margin-left: 28px;
-
-  color: #fff;
+export const RecentTitle = styled.div`
+  margin-bottom: 7px;
+  color: #000;
   font-family: "Pretendard Variable";
-  font-size: 23px;
+  font-size: 25px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+`;
+export const RecentList = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 38px;
 
-  #label {
+  .recent-search {
     display: flex;
+    padding: 5px 15px;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
-  }
-  #public {
-    width: 30px;
-    height: 30px;
-  }
-  #private {
-    width: 30px;
-    height: 30px;
+    gap: 10px;
+    flex-shrink: 0;
+
+    border-radius: 20px;
+    background: var(--gray-10, #ebeaea);
+
+    color: #000;
+    font-family: "Pretendard Variable";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
   }
 `;
-export const WriteButton = styled.div`
+
+export const RecommendTitle = styled.div`
+  margin-bottom: 7px;
+  color: #000;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+export const RecommendList = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  gap: 10px;
 
-  margin-top: 90px;
-  margin-bottom: 16px;
+  .keyword {
+    width: 66px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #c4def8;
+    border: none;
 
-  #writeWarning {
-    color: #fff;
+    color: var(--Color-1, #002951);
     font-family: "Pretendard Variable";
-    font-size: 22px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
   }
-  #writeBtn {
+`;
+
+//
+export const BookList = styled.div`
+  margin-top: 220px;
+  width: 1113.268px;
+  height: 346px;
+  flex-shrink: 0;
+`;
+export const Heart = styled.div``;
+export const HeartWrap = styled.div``;
+export const BookCover = styled.div`
+  width: 184.866px;
+  height: 250px;
+  flex-shrink: 0;
+  border-radius: 13.353px;
+  border: linear-gradient(1px, #85858580 50%, #79a3c680 50%);
+  background: #87a8cf;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-item: center;
+`;
+export const BookCoverText = styled.div`
+  #title {
     color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
-    font-size: 25px;
+    font-size: 7.663px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    border: none;
 
-    width: 185px;
-    height: 72px;
-    flex-shrink: 0;
-    border-radius: 50px;
-    background: var(--Color-2, #efd26a);
-    box-shadow: 0px 0px 4px 5px rgba(239, 210, 106, 0.3);
+    writing-mode: vertical-rl;
 
-    &:hover {
-      box-shadow: 0px 0px 10px 5px rgba(260, 230, 120, 0.6);
-    }
+    background: #fff;
+    padding-top: 5.57px;
+    padding-right: 5.74px;
+    padding-left: 20.21px;
+    padding-bottom: 20px;
+
+    position: absolute;
+    top: 1px;
+    left: 70%;
+    border-radius: 0px 0px 9.28px 9.28px;
+    box-shadow: 0px 7.424px 7.424px 0px rgba(0, 0, 0, 0.25);
   }
 `;
+export const BookCoverImg = styled.div`
+  width: 386px;
+  height: 353px;
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 54.12px;
 
+  #MycoverImg {
+    width: 184.866px;
+    height: 169.061px;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+`;
+export const Week = styled.div``;
+export const WeektWrap = styled.div``;
+export const Title = styled.div`
+  display: flex;
+
+  margin-bottom: 15px;
+
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.45px;
+`;
+
+// footer
 export const Footer = styled.div`
   bottom: 0;
   height: 222px;
