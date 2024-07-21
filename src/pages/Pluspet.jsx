@@ -28,14 +28,14 @@ const Pluspet = ({ nickname }) => {
     }
   }, []);
 
-  useEffect(() => {
-    // localStorage에 저장된 모든 항목을 콘솔에 출력
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key);
-      console.log(`Key: ${key}, Value: ${value}`);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // localStorage에 저장된 모든 항목을 콘솔에 출력
+  //   for (let i = 0; i < localStorage.length; i++) {
+  //     const key = localStorage.key(i);
+  //     const value = localStorage.getItem(key);
+  //     console.log(`Key: ${key}, Value: ${value}`);
+  //   }
+  // }, []);
 
   const handleDateChange = (date) => {
     setPet_Birth(date);
@@ -136,7 +136,7 @@ const Pluspet = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
