@@ -58,12 +58,16 @@ const Join = () => {
     navigate(`/login`);
   };
 
+  const goHome = () => {
+    navigate(`/`);
+  };
+
   return (
     <J.Container>
       <header>
         <J.Nav>
           <J.NavContent>
-            <J.Logo>
+            <J.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}

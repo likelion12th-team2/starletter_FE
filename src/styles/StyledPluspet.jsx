@@ -141,10 +141,21 @@ export const ProImg = styled.div`
   flex-shrink: 0;
   display: flex;
 
+  #profile {
+    width: 183px;
+    height: 183px;
+    flex-shrink: 0;
+    border-radius: 50%;
+  }
+
   #edit {
     position: absolute;
     margin-top: 139px;
-    margin-left: 139px;
+    margin-left: -39px;
+  }
+
+  #fileInput {
+    display: none;
   }
 `;
 
@@ -206,6 +217,93 @@ export const NameBox = styled.div`
   input::placeholder {
     color: #fff;
   }
+`;
+
+export const Type = styled.div`
+  display: flex;
+  gap: 49px;
+  flex-direction: row;
+
+  #type {
+    margin-top: 17px;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+export const TypeBox = styled.div`
+  width: 420.566px;
+  height: 69.048px;
+  flex-shrink: 0;
+  border-radius: 5.724px;
+  background: #79a3c6;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  display: block;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  #typebox {
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    float: left;
+    width: 360px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: none;
+    background: transparent;
+    color: #fff;
+  }
+
+  #plustype {
+    margin-top: 20px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    color: #fff;
+  }
+`;
+
+export const TypeList = styled.div`
+  position: absolute;
+  border-radius: 5.724px;
+  background: #e8f2ff;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+  width: 421px;
+  height: 190px;
+  flex-shrink: 0;
+  z-index: 1;
+  margin-top: 5px;
+
+  label {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    input {
+      margin-right: 10px;
+    }
 `;
 
 export const Birth = styled.div`

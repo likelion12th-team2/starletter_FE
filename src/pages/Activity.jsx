@@ -3,17 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as A from "../styles/StyledMB";
-import { Nickname } from "../styles/StyledJoin";
+import axios from "axios";
 
 const Activity = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
+    console.log("Stored Token:", token);
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
@@ -56,10 +57,27 @@ const Activity = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // 예시로 localStorage에 저장된 토큰을 삭제
-    setIsLoggedIn(false);
-    navigate(`/`);
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
   };
 
   const profile = {

@@ -46,6 +46,13 @@ export const Image = styled.div`
   flex-shrink: 0;
   border-radius: 20px;
   background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+
+  #img {
+    width: 292px;
+    height: 379px;
+    flex-shrink: 0;
+    border-radius: 20px;
+  }
 `;
 
 export const Detail = styled.div`
@@ -56,6 +63,7 @@ export const Detail = styled.div`
   //   margin-top: 68px;
 
   #title {
+    width: 350px;
     color: #000;
     font-family: Inter;
     font-size: 35px;

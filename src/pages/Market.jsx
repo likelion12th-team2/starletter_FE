@@ -42,11 +42,19 @@ const Market = ({ nickname }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/mybook");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
   const profile = {

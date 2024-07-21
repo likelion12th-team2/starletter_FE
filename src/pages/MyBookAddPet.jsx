@@ -57,7 +57,7 @@ const MyBookAddPet = ({ nickname }) => {
 
   const goMyBook = () => {
     if (isLoggedIn) {
-      navigate("/bookroom");
+      navigate("/mybook");
     } else {
       navigate("/login");
     }
