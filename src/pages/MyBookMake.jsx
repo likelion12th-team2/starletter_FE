@@ -32,16 +32,32 @@ const MyBookMake = ({ nickname }) => {
     navigate(`/join`);
   };
 
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
-  };
-
-  const profile = {
-    name: nickname,
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleLogout = async () => {
@@ -51,7 +67,7 @@ const MyBookMake = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -66,12 +82,8 @@ const MyBookMake = ({ nickname }) => {
     }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
-
-  const goMarket = () => {
-    navigate(`/market`);
+  const profile = {
+    name: nickname,
   };
 
   const books = [
@@ -107,6 +119,7 @@ const MyBookMake = ({ nickname }) => {
   };
   const showButtons = books.length > 1;
 
+  //책만들기 모달
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
@@ -120,7 +133,6 @@ const MyBookMake = ({ nickname }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [coverImage, setCoverImage] = useState(null);
-  const history = useNavigate();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -136,6 +148,7 @@ const MyBookMake = ({ nickname }) => {
     // });
   };
 
+  //키워드 선택
   const [selectedKeyword, setSelectedKeyword] = useState("");
 
   const handleKeywordClick = (keyword) => {
@@ -195,17 +208,15 @@ const MyBookMake = ({ nickname }) => {
           </MM.NavContent>
         </MM.Nav>
       </header>
-      <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        profile={profile}
-        anchorRef={myPageRef}
-      />
+
       <main>
         <MM.bodyContainer>
           <MM.Slider>
             <MM.Button onClick={prevBook} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/beforebook.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/beforebook.png`}
+                alt="prevpage"
+              />
             </MM.Button>
             <MM.BookContainer>
               {books.map((book, index) => {
@@ -243,6 +254,7 @@ const MyBookMake = ({ nickname }) => {
                     <img
                       id="img"
                       src={`${process.env.PUBLIC_URL}${book.img}`}
+                      alt="addedimg"
                     />
                     <div id="title">{book.title}</div>
                     <div id="author">{book.author}</div>
@@ -257,7 +269,10 @@ const MyBookMake = ({ nickname }) => {
               })}
             </MM.BookContainer>
             <MM.Button onClick={nextBook} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/nextbook.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/nextbook.png`}
+                alt="nextbook"
+              />
             </MM.Button>
           </MM.Slider>
         </MM.bodyContainer>
@@ -276,6 +291,13 @@ const MyBookMake = ({ nickname }) => {
             <div id="sns">인스타 아이디</div>
           </MM.Introduction>
         </MM.Footer>
+        {/*  */}
+        <MyPageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          profile={profile}
+          anchorRef={myPageRef}
+        />
       </footer>
       <Modal
         isOpen={modalIsOpen}
@@ -299,7 +321,10 @@ const MyBookMake = ({ nickname }) => {
         <MM.ModalWrap>
           <MM.BackButton>
             <button id="backbtn" onClick={closeModal}>
-              <img src={`${process.env.PUBLIC_URL}/images/deletModal.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/deletModal.png`}
+                alt="back"
+              />
             </button>
           </MM.BackButton>
           <MM.ModalContent>

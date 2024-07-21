@@ -35,6 +35,18 @@ const MyBookAddPet = ({ nickname }) => {
     navigate(`/join`);
   };
 
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -44,19 +56,23 @@ const MyBookAddPet = ({ nickname }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
-  };
-  const goMyBookMake = () => {
-    navigate(`/mybook/make`);
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+  const goMyBookMake = () => {
+    navigate(`/mybook/make`);
   };
 
   const handleLogout = async () => {
@@ -82,12 +98,9 @@ const MyBookAddPet = ({ nickname }) => {
     }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
-
-  const goMarket = () => {
-    navigate(`/market`);
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   // 생일 날짜 선택
@@ -147,12 +160,7 @@ const MyBookAddPet = ({ nickname }) => {
           </AP.NavContent>
         </AP.Nav>
       </header>
-      <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        profile={profile}
-        anchorRef={myPageRef}
-      />
+
       {/*  */}
       <body>
         <AP.bodyContainer>
@@ -213,6 +221,12 @@ const MyBookAddPet = ({ nickname }) => {
         </AP.bodyContainer>
       </body>
       {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <AP.Footer>
           <AP.Introduction>

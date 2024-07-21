@@ -16,6 +16,8 @@ import MyBookMake from "./pages/MyBookMake";
 import MyBookDetail from "./pages/MyBookDetail";
 import MyBookWrite from "./pages/MyBookWrite";
 
+import Library from "./pages/Library";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -48,11 +50,13 @@ function App() {
         <Route path="/funeral" element={<Funeral />} />
         <Route path="/market" element={<Market />} />
 
-        <Route path="/mybook" element={<MyBook />}></Route>
-        <Route path="/mybook/addpet" element={<MyBookAddPet />}></Route>
-        <Route path="/mybook/make" element={<MyBookMake />}></Route>
-        <Route path="/mybook/detail" element={<MyBookDetail />}></Route>
-        <Route path="/mybook/write" element={<MyBookWrite />}></Route>
+        <Route path="/mybook" element={<MyBook />} />
+        <Route path="/mybook/addpet" element={<MyBookAddPet />} />
+        <Route path="/mybook/make" element={<MyBookMake />} />
+        <Route path="/mybook/detail" element={<MyBookDetail />} />
+        <Route path="/mybook/write" element={<MyBookWrite />} />
+
+        <Route path="/library" element={<Library />} />
       </Routes>
     </BrowserRouter>
   );

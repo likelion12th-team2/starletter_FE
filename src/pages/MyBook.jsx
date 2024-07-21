@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
 import axios from "axios";
-import MyPageModal from "./MyPageModal";
 
 const MyBook = ({ nickname }) => {
   const navigate = useNavigate();
@@ -151,12 +150,6 @@ const MyBook = ({ nickname }) => {
           </M.NavContent>
         </M.Nav>
       </header>
-      <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        profile={profile}
-        anchorRef={myPageRef}
-      />
       {/*  */}
       <body>
         <M.bodyContainer>

@@ -33,6 +33,18 @@ const MyBookWrite = ({ nickname }) => {
     navigate(`/join`);
   };
 
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -42,19 +54,19 @@ const MyBookWrite = ({ nickname }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
-  };
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
-  };
-
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleLogout = async () => {
@@ -80,13 +92,11 @@ const MyBookWrite = ({ nickname }) => {
     }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
-  const goMarket = () => {
-    navigate(`/market`);
-  };
   //공개 비공개
   const [visibility, setVisibility] = useState("public");
 
@@ -188,12 +198,6 @@ const MyBookWrite = ({ nickname }) => {
           </MW.NavContent>
         </MW.Nav>
       </header>
-      <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        profile={profile}
-        anchorRef={myPageRef}
-      />
       {/*  */}
       <main>
         <MW.WriteContainer>
@@ -266,6 +270,12 @@ const MyBookWrite = ({ nickname }) => {
         </MW.WriteContainer>
       </main>
       {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <MW.Footer>
           <MW.Introduction>
