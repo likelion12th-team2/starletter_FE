@@ -52,12 +52,16 @@ const Login = () => {
     navigate(`/join`);
   };
 
+  const goHome = () => {
+    navigate(`/`);
+  };
+
   return (
     <L.Container>
       <header>
         <L.Nav>
           <L.NavContent>
-            <L.Logo>
+            <L.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}

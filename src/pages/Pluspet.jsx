@@ -15,7 +15,8 @@ const Pluspet = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
 
-  const [pet_name, setPet_Name] = useState("");
+  const [petName, setPet_Name] = useState("");
+  const [petType, setPetType] = useState("");
   const [pet_birth1, setPet_Birth] = useState(null);
   const [pet_anniv1, setPet_Anniv] = useState(null);
   const [token, setToken] = useState("");
@@ -27,6 +28,23 @@ const Pluspet = ({ nickname }) => {
       setIsLoggedIn(true);
     }
   }, []);
+
+  const [profileImage, setProfileImage] = useState(
+    `${process.env.PUBLIC_URL}/images/ProfileImg.svg`
+  );
+  const [file, setFile] = useState(null);
+
+  const handleImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+      setFile(selectedFile);
+    }
+  };
 
   // useEffect(() => {
   //   // localStorage에 저장된 모든 항목을 콘솔에 출력
@@ -45,7 +63,7 @@ const Pluspet = ({ nickname }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const pet_birth = pet_birth1
+    const petBirth = pet_birth1
       ? pet_birth1
           .toLocaleDateString("ko-KR", {
             year: "numeric",
@@ -57,7 +75,7 @@ const Pluspet = ({ nickname }) => {
           .replace(/-$/, "")
       : "";
 
-    const pet_anniv = pet_anniv1
+    const petAnniv = pet_anniv1
       ? pet_anniv1
           .toLocaleDateString("ko-KR", {
             year: "numeric",
@@ -69,27 +87,42 @@ const Pluspet = ({ nickname }) => {
           .replace(/-$/, "")
       : "";
 
+    const petImage = file;
+
+    if (!file) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+
+    console.log(petName);
+    console.log(petBirth);
+    console.log(petAnniv);
+    console.log(petType);
+    console.log(petImage);
+
     try {
+      const formData = new FormData();
+      formData.append("petName", petName);
+      formData.append("petBirth", petBirth);
+      formData.append("petAnniv", petAnniv);
+      formData.append("petType", petType);
+      formData.append("petImage", file);
+
       const response = await axios.post(
         "http://127.0.0.1:8000/accounts/pets/",
-        {
-          pet_name: pet_name,
-          pet_birth: pet_birth,
-          pet_anniv: pet_anniv,
-        },
+        formData,
         {
           headers: {
             Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
-
-      // 로그인 성공 시 토큰을 로컬 스토리지에 저장
       localStorage.setItem("token", response.data.key);
-      console.log("토큰 저장 성공:", response.data.key);
       navigate(`/mypage/managepet`);
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
+      console.log(error.response.data);
     }
   };
 
@@ -156,6 +189,19 @@ const Pluspet = ({ nickname }) => {
     name: nickname,
   };
 
+  const [showTypeList, setShowTypeList] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
+
+  const toggleTypeList = () => {
+    setShowTypeList(!showTypeList);
+  };
+
+  const selectType = (type) => {
+    setSelectedType(type);
+    setPetType(type);
+    setShowTypeList(false);
+  };
+
   return (
     <P.Container>
       <header>
@@ -219,15 +265,19 @@ const Pluspet = ({ nickname }) => {
         <P.Body>
           <P.Title>반려동물 추가</P.Title>
           <P.ProImg>
-            <img
-              id="profile"
-              src={`${process.env.PUBLIC_URL}/images/ProfileImg.svg`}
-              alt="프로필"
-            />
-            <img
-              id="edit"
-              src={`${process.env.PUBLIC_URL}/images/EditProfile.svg`}
-              alt="편집"
+            <img id="profile" src={profileImage} alt="프로필" />
+            <label htmlFor="fileInput">
+              <img
+                id="edit"
+                src={`${process.env.PUBLIC_URL}/images/EditProfile.svg`}
+                alt="편집"
+              />
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              onChange={handleImageChange}
             />
           </P.ProImg>
           <P.Profile>
@@ -238,12 +288,44 @@ const Pluspet = ({ nickname }) => {
                   id="namebox"
                   type="text"
                   placeholder="반려동물의 이름을 입력해 주세요"
-                  value={pet_name}
+                  value={petName}
                   onChange={(e) => setPet_Name(e.target.value)}
                   required
                 />
               </P.NameBox>
             </P.Name>
+            <P.Type>
+              <div id="type">타입</div>
+              <P.TypeBox>
+                <input
+                  id="typebox"
+                  type="text"
+                  placeholder="반려동물의 종을 선택해 주세요"
+                  value={selectedType}
+                  onChange={(e) => setPetType(e.target.value)}
+                  readOnly
+                />
+                <img
+                  id="plustype"
+                  src={`${process.env.PUBLIC_URL}/images/Plustype.svg`}
+                  alt="더보기"
+                  onClick={toggleTypeList}
+                />
+                {showTypeList && (
+                  <P.TypeList>
+                    {["강아지", "고양이", "소동물", "특수동물"].map((type) => (
+                      <label key={type}>
+                        <input
+                          type="checkbox"
+                          onClick={() => selectType(type)}
+                        />
+                        {type}
+                      </label>
+                    ))}
+                  </P.TypeList>
+                )}
+              </P.TypeBox>
+            </P.Type>
             <P.Birth>
               <div id="birthday">생일</div>
               <P.BirthBox>

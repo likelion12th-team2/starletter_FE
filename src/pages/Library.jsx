@@ -86,7 +86,7 @@ const MyBook = ({ nickname }) => {
 
   const goMyBook = () => {
     if (isLoggedIn) {
-      navigate("/bookroom");
+      navigate("/mybook");
     } else {
       navigate("/login");
     }
