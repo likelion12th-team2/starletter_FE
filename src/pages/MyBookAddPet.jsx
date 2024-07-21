@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as AP from "../styles/styledMyBookAddPet";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import MyPageModal from "./MyPageModal";
 
-const MyBookAddPet = () => {
+const MyBookAddPet = ({ nickname }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("로그인 되어있음");
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const goHome = () => {
+    navigate(`/`);
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -13,6 +33,74 @@ const MyBookAddPet = () => {
 
   const goJoin = () => {
     navigate(`/join`);
+  };
+
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const goMyBook = () => {
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goLib = () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goMyBookMake = () => {
+    navigate(`/mybook/make`);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
+
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   // 생일 날짜 선택
@@ -24,31 +112,55 @@ const MyBookAddPet = () => {
       <header>
         <AP.Nav>
           <AP.NavContent>
-            <AP.Logo>
+            <AP.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
                 alt="logo"
               />
             </AP.Logo>
-            <AP.MovingContent>
-              <div id="library">내 서재</div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </AP.MovingContent>
-            <div id="bar"> | </div>
-            <AP.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join" onClick={goJoin}>
-                회원가입
-              </div>
-            </AP.Account>
+            <AP.Menu>
+              <AP.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </AP.MovingContent>
+              <div id="bar"> | </div>
+              <AP.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </AP.Account>
+            </AP.Menu>
           </AP.NavContent>
         </AP.Nav>
       </header>
+
       {/*  */}
       <body>
         <AP.bodyContainer>
@@ -102,11 +214,19 @@ const MyBookAddPet = () => {
             </AP.FixedDate>
           </AP.Input>
           <AP.AddPetBtn>
-            <button id="addPetBtn">반려동물 추가</button>
+            <button id="addPetBtn" onClick={goMyBookMake}>
+              반려동물 추가
+            </button>
           </AP.AddPetBtn>
         </AP.bodyContainer>
       </body>
       {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <AP.Footer>
           <AP.Introduction>

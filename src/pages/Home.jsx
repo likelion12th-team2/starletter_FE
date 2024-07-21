@@ -151,12 +151,14 @@ const Home = ({ nickname }) => {
           </H.NavContent>
         </H.Nav>
       </header>
+      {/* 모달창 추가 */}
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
         profile={profile}
         anchorRef={myPageRef}
       />
+      {/*  */}
       <H.Body>
         <H.Detail>
           <img

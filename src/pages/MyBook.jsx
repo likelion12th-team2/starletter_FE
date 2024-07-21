@@ -13,13 +13,17 @@ const MyBook = ({ nickname }) => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
+    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
-    console.log("Stored Token:", token);
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
   }, []);
+
+  const goHome = () => {
+    navigate(`/`);
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -98,7 +102,7 @@ const MyBook = ({ nickname }) => {
       <header>
         <M.Nav>
           <M.NavContent>
-            <M.Logo>
+            <M.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}

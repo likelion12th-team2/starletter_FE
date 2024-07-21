@@ -1,10 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as MM from "../styles/styledMyBookMake";
 import Modal from "react-modal";
+import axios from "axios";
+import MyPageModal from "./MyPageModal";
 
-const MyBookMake = () => {
+const MyBookMake = ({ nickname }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("로그인 되어있음");
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const goHome = () => {
+    navigate(`/`);
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -14,10 +32,60 @@ const MyBookMake = () => {
     navigate(`/join`);
   };
 
-  const goMyBook = () => {
-    navigate(`/mybook`);
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
   };
-  //책 슬라이드
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
+  const goMyBook = () => {
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goLib = () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
+
+  const profile = {
+    name: nickname,
+  };
+
   const books = [
     {
       id: 1,
@@ -51,7 +119,7 @@ const MyBookMake = () => {
   };
   const showButtons = books.length > 1;
 
-  // 모달창 상태
+  //책만들기 모달
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
@@ -62,11 +130,9 @@ const MyBookMake = () => {
     setModalIsOpen(false);
   };
 
-  //모달창에서 제목,사진,내용
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [coverImage, setCoverImage] = useState(null);
-  const history = useNavigate();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -82,42 +148,75 @@ const MyBookMake = () => {
     // });
   };
 
+  //키워드 선택
+  const [selectedKeyword, setSelectedKeyword] = useState("");
+
+  const handleKeywordClick = (keyword) => {
+    setSelectedKeyword(keyword);
+  };
+
   return (
     <MM.Container>
       <header>
         <MM.Nav>
           <MM.NavContent>
-            <MM.Logo>
+            <MM.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
                 alt="logo"
               />
             </MM.Logo>
-            <MM.MovingContent>
-              <div id="library">내 서재</div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </MM.MovingContent>
-            <div id="bar"> | </div>
-            <MM.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join" onClick={goJoin}>
-                회원가입
-              </div>
-            </MM.Account>
+            <MM.Menu>
+              <MM.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </MM.MovingContent>
+              <div id="bar"> | </div>
+              <MM.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </MM.Account>
+            </MM.Menu>
           </MM.NavContent>
         </MM.Nav>
       </header>
-      {/*  */}
-      <body>
+
+      <main>
         <MM.bodyContainer>
           <MM.Slider>
             <MM.Button onClick={prevBook} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/beforebook.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/beforebook.png`}
+                alt="prevpage"
+              />
             </MM.Button>
             <MM.BookContainer>
               {books.map((book, index) => {
@@ -135,7 +234,6 @@ const MyBookMake = () => {
                   current !== 0;
                 let hidden = !(large || small);
 
-                // 책이 하나만 있을 때는 큰 책으로 중앙에 위치
                 if (books.length === 1) {
                   large = true;
                   small = false;
@@ -153,10 +251,10 @@ const MyBookMake = () => {
                     prev={prev}
                     hidden={hidden}
                   >
-                    {/* 이미지, 제목, 작가 받아와야함 */}
                     <img
                       id="img"
                       src={`${process.env.PUBLIC_URL}${book.img}`}
+                      alt="addedimg"
                     />
                     <div id="title">{book.title}</div>
                     <div id="author">{book.author}</div>
@@ -171,11 +269,14 @@ const MyBookMake = () => {
               })}
             </MM.BookContainer>
             <MM.Button onClick={nextBook} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/nextbook.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/nextbook.png`}
+                alt="nextbook"
+              />
             </MM.Button>
           </MM.Slider>
         </MM.bodyContainer>
-      </body>
+      </main>
       <footer>
         <MM.Footer>
           <MM.Introduction>
@@ -190,6 +291,13 @@ const MyBookMake = () => {
             <div id="sns">인스타 아이디</div>
           </MM.Introduction>
         </MM.Footer>
+        {/*  */}
+        <MyPageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          profile={profile}
+          anchorRef={myPageRef}
+        />
       </footer>
       <Modal
         isOpen={modalIsOpen}
@@ -213,22 +321,19 @@ const MyBookMake = () => {
         <MM.ModalWrap>
           <MM.BackButton>
             <button id="backbtn" onClick={closeModal}>
-              <img src={`${process.env.PUBLIC_URL}/images/deletModal.png`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/deletModal.png`}
+                alt="back"
+              />
             </button>
           </MM.BackButton>
           <MM.ModalContent>
-            {/*  */}
-            {/* <MM.Sample>
-              <div id="SampleTitle">제목</div>
-              <div id="SampleImg"></div>
-            </MM.Sample> */}
             <MM.BookCover>
               <MM.BookCoverImg></MM.BookCoverImg>
               <MM.BookCoverText>
                 <div id="title">제목</div>
               </MM.BookCoverText>
             </MM.BookCover>
-            {/*  */}
             <MM.Text>
               <MM.ModalTitle>
                 <div id="titleText">제목</div>
@@ -289,6 +394,23 @@ const MyBookMake = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </MM.DescriptionText>
+              <MM.Keyword>
+                <MM.KeywordTitle>#키워드 선택</MM.KeywordTitle>
+                <MM.KeywordButtons>
+                  {["위로", "공감", "일상", "편지"].map((keyword) => (
+                    <button
+                      key={keyword}
+                      className={`keyword ${
+                        selectedKeyword === keyword ? "selected" : ""
+                      }`}
+                      id={keyword}
+                      onClick={() => handleKeywordClick(keyword)}
+                    >
+                      #{keyword}
+                    </button>
+                  ))}
+                </MM.KeywordButtons>
+              </MM.Keyword>
             </MM.Text>
           </MM.ModalContent>
           <MM.Create>

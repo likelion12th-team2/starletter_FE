@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as MB from "../styles/styledMyBookDetail";
 import Modal from "react-modal"; // 모달
 import PropTypes from "prop-types"; // 책 구현
+import axios from "axios";
+import MyPageModal from "./MyPageModal";
 
-const MyBookDetail = ({ pages = [] }) => {
+const MyBookDetail = ({ pages = [], nickname }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("로그인 되어있음");
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const goHome = () => {
+    navigate(`/`);
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -15,8 +35,64 @@ const MyBookDetail = ({ pages = [] }) => {
     navigate(`/join`);
   };
 
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail`);
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/bookroom");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goLib = () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const goMyBookWrite = () => {
+    navigate(`/mybook/write`);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate(`/`);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
+
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   // 모달창 상태
@@ -105,155 +181,189 @@ const MyBookDetail = ({ pages = [] }) => {
       <header>
         <MB.Nav>
           <MB.NavContent>
-            <MB.Logo>
+            <MB.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
                 alt="logo"
               />
             </MB.Logo>
-            <MB.MovingContent>
-              <div id="library" onClick={goMyBook}>
-                내 서재
-              </div>
-              <div id="bookroom">책방</div>
-              <div id="comparison">장례식장 비교</div>
-              <div id="market">마켓</div>
-            </MB.MovingContent>
-            <div id="bar"> | </div>
-            <MB.Account>
-              <div id="login" onClick={goLogin}>
-                로그인
-              </div>
-              <div id="join" onClick={goJoin}>
-                회원가입
-              </div>
-            </MB.Account>
+            <MB.Menu>
+              <MB.MovingContent>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
+              </MB.MovingContent>
+              <div id="bar"> | </div>
+              <MB.Account>
+                {isLoggedIn ? (
+                  <>
+                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                      마이페이지
+                    </div>
+                    <div id="logout" onClick={handleLogout}>
+                      로그아웃
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div id="login" onClick={goLogin}>
+                      로그인
+                    </div>
+                    <div id="join" onClick={goJoin}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </MB.Account>
+            </MB.Menu>
           </MB.NavContent>
         </MB.Nav>
       </header>
-      <MB.BodyContainer>
-        <MB.NewBook>
-          <MB.BookCover>
-            <MB.BookCoverImg>
-              <img
-                id="MycoverImg"
-                src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                alt="Mycover1"
-              />
-            </MB.BookCoverImg>
-            <MB.BookCoverText>
+      <body>
+        <MB.BodyContainer>
+          <MB.NewBook>
+            <MB.BookCover>
+              <MB.BookCoverImg>
+                <img
+                  id="MycoverImg"
+                  src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                  alt="Mycover1"
+                />
+              </MB.BookCoverImg>
+              <MB.BookCoverText>
+                <div id="title">쪼꼬랑 누나 여행기록</div>
+              </MB.BookCoverText>
+            </MB.BookCover>
+            <MB.BookDetail>
               <div id="title">쪼꼬랑 누나 여행기록</div>
-            </MB.BookCoverText>
-          </MB.BookCover>
-          <MB.BookDetail>
-            <div id="title">쪼꼬랑 누나 여행기록</div>
-            <div id="writer">김별</div>
-            <div id="writtendate">마지막 수정일: 2024.07.17</div>
-            <div id="ps">
-              쪼꼬는 12살 푸들할머니 그래도 내 눈에는 영원히 애기 산책나가면
-              인기 짱 많은 아파트 인싸 강아지 12년간 이곳저곳 놀러다녔던 기억을
-              모아🌈🐕
-            </div>
-          </MB.BookDetail>
-        </MB.NewBook>
-        <MB.MyBook>
-          <MB.BookContainer>
-            <MB.Page onClick={handlePrevPage} disabled={currentPage === 0}>
-              <MB.PageContent>
-                {currentPage > 0 && (
-                  <>
-                    <div id="date">
-                      {contents[currentPage - 1].date}
-                      {contents[currentPage - 1].public && (
-                        <img
-                          id="public"
-                          src={`${process.env.PUBLIC_URL}/images/public.png`}
-                          alt="공개 페이지"
-                        />
-                      )}
-                    </div>
+              <div id="writer">김별</div>
+              <div id="writtendate">마지막 수정일: 2024.07.17</div>
+              <div id="ps">
+                쪼꼬는 12살 푸들할머니 그래도 내 눈에는 영원히 애기 산책나가면
+                인기 짱 많은 아파트 인싸 강아지 12년간 이곳저곳 놀러다녔던
+                기억을 모아🌈🐕
+              </div>
+            </MB.BookDetail>
+          </MB.NewBook>
+          <MB.MyBook>
+            <MB.BookContainer>
+              <MB.Page onClick={handlePrevPage} disabled={currentPage === 0}>
+                <MB.PageContent>
+                  {currentPage > 0 && (
+                    <>
+                      <div id="date">
+                        {contents[currentPage - 1].date}
+                        {contents[currentPage - 1].public && (
+                          <img
+                            id="public"
+                            src={`${process.env.PUBLIC_URL}/images/public.png`}
+                            alt="공개 페이지"
+                          />
+                        )}
+                      </div>
 
-                    <div id="images">
-                      {contents[currentPage - 1].img1 && (
-                        <img
-                          id="img"
-                          src={`${process.env.PUBLIC_URL}${
-                            contents[currentPage - 1].img1
-                          }`}
-                          alt="페이지 내용"
-                        />
-                      )}
-                      {contents[currentPage - 1].img2 && (
-                        <img
-                          id="img"
-                          src={`${process.env.PUBLIC_URL}${
-                            contents[currentPage - 1].img2
-                          }`}
-                          alt="페이지 내용"
-                        />
-                      )}
-                    </div>
-                    <div id="content">{contents[currentPage - 1].content}</div>
-                  </>
-                )}
-              </MB.PageContent>
-            </MB.Page>
-            <MB.Page
-              onClick={handleNextPage}
-              disabled={currentPage >= contents.length - 1}
-            >
-              <MB.PageContent>
-                <div id="date">
-                  {contents[currentPage].date}
-                  {contents[currentPage].public && (
-                    <img
-                      id="public"
-                      src={`${process.env.PUBLIC_URL}/images/public.png`}
-                      alt="공개 페이지"
-                    />
+                      <div id="images">
+                        {contents[currentPage - 1].img1 && (
+                          <img
+                            id="img"
+                            src={`${process.env.PUBLIC_URL}${
+                              contents[currentPage - 1].img1
+                            }`}
+                            alt="페이지 내용"
+                          />
+                        )}
+                        {contents[currentPage - 1].img2 && (
+                          <img
+                            id="img"
+                            src={`${process.env.PUBLIC_URL}${
+                              contents[currentPage - 1].img2
+                            }`}
+                            alt="페이지 내용"
+                          />
+                        )}
+                      </div>
+                      <div id="content">
+                        {contents[currentPage - 1].content}
+                      </div>
+                    </>
                   )}
-                </div>
-                <div id="images">
-                  {contents[currentPage].img1 && (
-                    <img
-                      id="img"
-                      src={`${process.env.PUBLIC_URL}${contents[currentPage].img1}`}
-                      alt="페이지 내용"
-                    />
-                  )}
-                  {contents[currentPage].img2 && (
-                    <img
-                      id="img"
-                      src={`${process.env.PUBLIC_URL}${contents[currentPage].img2}`}
-                      alt="페이지 내용"
-                    />
-                  )}
-                </div>
-                <div id="content">{contents[currentPage].content}</div>
-              </MB.PageContent>
-            </MB.Page>
-          </MB.BookContainer>
-        </MB.MyBook>
-        <MB.WriteNewPage>
-          <button id="writeNewPage">새 페이지 쓰기</button>
-        </MB.WriteNewPage>
-        <MB.Section>
-          <div id="section"></div>
-        </MB.Section>
-        <MB.PostitWrap>
-          <MB.PostitList>
-            {postits.map((postit) => (
-              <MB.Postit
-                key={postit.id}
-                onClick={() => openModal(postit.content)}
+                </MB.PageContent>
+              </MB.Page>
+              <MB.Page
+                onClick={handleNextPage}
+                disabled={currentPage >= contents.length - 1}
               >
-                <div id="content">{postit.content}</div>
-              </MB.Postit>
-            ))}
-          </MB.PostitList>
-        </MB.PostitWrap>
-      </MB.BodyContainer>
+                <MB.PageContent>
+                  <div id="date">
+                    {contents[currentPage].date}
+                    {contents[currentPage].public && (
+                      <img
+                        id="public"
+                        src={`${process.env.PUBLIC_URL}/images/public.png`}
+                        alt="공개 페이지"
+                      />
+                    )}
+                  </div>
+                  <div id="images">
+                    {contents[currentPage].img1 && (
+                      <img
+                        id="img"
+                        src={`${process.env.PUBLIC_URL}${contents[currentPage].img1}`}
+                        alt="페이지 내용"
+                      />
+                    )}
+                    {contents[currentPage].img2 && (
+                      <img
+                        id="img"
+                        src={`${process.env.PUBLIC_URL}${contents[currentPage].img2}`}
+                        alt="페이지 내용"
+                      />
+                    )}
+                  </div>
+                  <div id="content">{contents[currentPage].content}</div>
+                </MB.PageContent>
+              </MB.Page>
+            </MB.BookContainer>
+          </MB.MyBook>
+          <MB.WriteNewPage>
+            <button id="writeNewPage" onClick={goMyBookWrite}>
+              새 페이지 쓰기
+            </button>
+          </MB.WriteNewPage>
+          <MB.Section>
+            <div id="section"></div>
+          </MB.Section>
+          <MB.PostitWrap>
+            <MB.PostitList>
+              {postits.map((postit) => (
+                <MB.Postit
+                  key={postit.id}
+                  onClick={() => openModal(postit.content)}
+                >
+                  <div id="content">{postit.content}</div>
+                </MB.Postit>
+              ))}
+            </MB.PostitList>
+          </MB.PostitWrap>
+        </MB.BodyContainer>
+      </body>
+      {/*  */}
+      <MyPageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        profile={profile}
+        anchorRef={myPageRef}
+      />
       <footer>
         <MB.Footer>
           <MB.Introduction>
