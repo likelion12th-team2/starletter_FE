@@ -122,6 +122,7 @@ export const LibContainer = styled.div`
   align-items: center;
 `;
 export const SearchWrap = styled.div`
+  margin-bottom: 220px;
   position: relative;
   margin-top: 90px;
 `;
@@ -246,26 +247,42 @@ export const RecommendList = styled.div`
 
 //
 export const BookList = styled.div`
-  margin-top: 220px;
+  display: flex;
+  flex-direction: column;
+
   width: 1113.268px;
   height: 346px;
   flex-shrink: 0;
 `;
+export const Title = styled.div`
+  display: flex;
+  margin-bottom: 15px;
+
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.45px;
+`;
 export const Heart = styled.div``;
 export const HeartWrap = styled.div``;
+
+export const Book = styled.div`
+  position: relative;
+`;
 export const BookCover = styled.div`
   width: 184.866px;
   height: 250px;
   flex-shrink: 0;
   border-radius: 13.353px;
-  border: linear-gradient(1px, #85858580 50%, #79a3c680 50%);
   background: #87a8cf;
 
   position: relative;
 
   display: flex;
   flex-direction: column;
-  align-item: center;
 `;
 export const BookCoverText = styled.div`
   #title {
@@ -293,10 +310,6 @@ export const BookCoverText = styled.div`
   }
 `;
 export const BookCoverImg = styled.div`
-  width: 386px;
-  height: 353px;
-  flex-shrink: 0;
-  position: relative;
   margin-top: 54.12px;
 
   #MycoverImg {
@@ -306,21 +319,25 @@ export const BookCoverImg = styled.div`
     object-fit: cover;
   }
 `;
-export const Week = styled.div``;
-export const WeektWrap = styled.div``;
-export const Title = styled.div`
-  display: flex;
-
-  margin-bottom: 15px;
-
+export const BookTitle = styled.div`
   color: #fff;
   font-family: "Pretendard Variable";
-  font-size: 30px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  letter-spacing: 0.45px;
 `;
+export const BookWriter = styled.div`
+  color: var(--gray-30, #c2c1c1);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+export const Week = styled.div``;
+export const WeektWrap = styled.div``;
 
 // footer
 export const Footer = styled.div`

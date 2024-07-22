@@ -6,9 +6,11 @@ import axios from "axios";
 import styled from "styled-components";
 
 // 기존 스타일드 컴포넌트를 확장하여 조건부 스타일링을 적용하는 방법
-const Search = styled(L.Search)`
-  position: ${(props) => (props.isAbsolute ? "absolute" : "static")};
-`;
+const Search = styled(L.Search).attrs((props) => ({
+  style: {
+    position: props.isAbsolute ? "absolute" : "static",
+  },
+}))``;
 
 const MyBook = ({ nickname }) => {
   const navigate = useNavigate();
@@ -207,7 +209,7 @@ const MyBook = ({ nickname }) => {
           </L.NavContent>
         </L.Nav>
       </header>
-      <main>
+      <div>
         <L.LibContainer>
           <L.SearchWrap ref={searchWrapRef}>
             {" "}
@@ -266,27 +268,32 @@ const MyBook = ({ nickname }) => {
             <L.Heart>
               <L.Title>공감 많이 받은 책</L.Title>
               <L.HeartWrap>
-                <L.BookCover>
-                  <L.BookCoverImg>
-                    <img
-                      id="MycoverImg"
-                      src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                      alt="Mycover1"
-                    />
-                  </L.BookCoverImg>
-                  <L.BookCoverText>
-                    <div id="title">천사강아지</div>
-                  </L.BookCoverText>
-                </L.BookCover>
+                {/* 책 */}
+                <L.Book>
+                  <L.BookCover>
+                    <L.BookCoverImg>
+                      <img
+                        id="MycoverImg"
+                        src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                        alt="Mycover1"
+                      />
+                    </L.BookCoverImg>
+                    <L.BookCoverText>
+                      <div id="title">천사강아지</div>
+                    </L.BookCoverText>
+                  </L.BookCover>
+                  <L.BookTitle>천사강아지</L.BookTitle>
+                  <L.BookWriter>별똥별</L.BookWriter>
+                </L.Book>
               </L.HeartWrap>
             </L.Heart>
-            <L.Week>
+            {/* <L.Week>
               <L.Title>이주의 책</L.Title>
               <L.WeektWrap></L.WeektWrap>
-            </L.Week>
+            </L.Week> */}
           </L.BookList>
         </L.LibContainer>
-      </main>
+      </div>
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
