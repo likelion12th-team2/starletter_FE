@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as FM from "../styles/StyledFM";
 
-const FuneralModal = ({ show, handleClose }) => {
-  if (!show) {
+const FuneralModal = ({ show, handleClose, funeral }) => {
+  if (!show || !funeral) {
     return null;
   }
 
@@ -18,17 +18,26 @@ const FuneralModal = ({ show, handleClose }) => {
       </FM.Close>
       <FM.Content>
         <FM.Image>
-          <img id="img" src="" alt="" />
+          <img id="img" src={funeral.image} alt={funeral.name} />
         </FM.Image>
         <FM.Detail>
-          <div id="title">펫포레스트 경기 광주점</div>
-          <div id="location">경기도 광주시 오포안로 77</div>
-          <div id="number">TEL. 1577-0996</div>
-          <div id="go">홈페이지 바로가기</div>
+          <div id="title">{funeral.name}</div>
+          <div id="location">{funeral.location}</div>
+          {funeral.contact && <div id="number">{funeral.contact}</div>}
+          {funeral.link && (
+            <div id="go">
+              <a href={funeral.link} target="_blank" rel="noopener noreferrer">
+                홈페이지 바로가기
+              </a>
+            </div>
+          )}
           <FM.Tag>
-            <FM.TagDet>
-              <div id="det1">장례</div>
-            </FM.TagDet>
+            {Array.isArray(funeral.tag) &&
+              funeral.tag.map((tag, index) => (
+                <FM.TagDet key={index}>
+                  <div id="det1">{tag}</div>
+                </FM.TagDet>
+              ))}
           </FM.Tag>
         </FM.Detail>
       </FM.Content>

@@ -55,17 +55,17 @@ const MyBook = ({ nickname }) => {
 
   const goMyBook = () => {
     if (isLoggedIn) {
-      navigate("/bookroom");
+      navigate(`/bookroom`);
     } else {
-      navigate("/login");
+      navigate(`/login`);
     }
   };
 
   const goLib = () => {
     if (isLoggedIn) {
-      navigate("/library");
+      navigate(`/library`);
     } else {
-      navigate("/login");
+      navigate(`/login`);
     }
   };
 

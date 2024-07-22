@@ -186,18 +186,22 @@ export const Title = styled.div`
 
 export const FunList = styled.div`
   margin-top: 60px;
-  display: flex;
   flex-direction: row;
-  gap: 55px;
+  column-gap: 55px;
+  row-gap: 55px;
+  display: grid;
   text-align: center;
   align-items: center;
   justify-content: center;
   margin-bottom: 230px;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 export const Fun1 = styled.div`
   display: flex;
   flex-direction: column;
+  height: 400px;
+  text-align: left;
 
   #img1 {
     width: 319px;
@@ -208,6 +212,7 @@ export const Fun1 = styled.div`
   }
 
   #name1 {
+    width: 300px;
     margin-top: 11px;
     margin-right: auto;
     color: #fff;
@@ -220,6 +225,7 @@ export const Fun1 = styled.div`
   }
 
   #loc1 {
+    width: 300px;
     margin-top: 10px;
     margin-right: auto;
     color: #999;

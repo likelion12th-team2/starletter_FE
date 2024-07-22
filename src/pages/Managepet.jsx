@@ -3,37 +3,23 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as MP from "../styles/StyledMP";
-import { Nickname } from "../styles/StyledJoin";
+import axios from "axios";
 
 const Managepet = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
-
-  const pets = [
-    {
-      id: 1,
-      img: "/images/ProfileImg.svg",
-      name: "쪼꼬",
-      date: "2012.02.10 ~ 2024.07.01",
-    },
-    {
-      id: 2,
-      img: "/images/Pepper.svg",
-      name: "후추",
-      date: "2017.06.04 ~ ",
-    },
-  ];
+  const [pets, setPets] = useState([]);
 
   const [current, setCurrent] = useState(0);
   const nextpet = () => {
@@ -45,7 +31,7 @@ const Managepet = ({ nickname }) => {
   const showButtons = pets.length > 1;
 
   const goLogin = () => {
-    navigate(`/login`);
+    navigate("/login");
   };
 
   const goHome = () => {
@@ -80,16 +66,62 @@ const Managepet = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // 예시로 localStorage에 저장된 토큰을 삭제
-    setIsLoggedIn(false);
-    navigate(`/`);
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/logout/",
+        {},
+        {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      console.log("로그아웃 성공:", response.data);
+      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
+      localStorage.removeItem("token");
+      localStorage.removeItem("key");
+      setIsLoggedIn(false);
+      setToken("");
+      navigate("/");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
   };
 
   const profile = {
     // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/pets/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        localStorage.setItem("token", response.data.key);
+        setPets(response.data);
+      } catch (error) {
+        console.error(
+          "조회불가: ",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   return (
     <MP.Container>
@@ -154,8 +186,11 @@ const Managepet = ({ nickname }) => {
         <MP.BodyContainer>
           <div id="title">나의 반려동물 관리</div>
           <MP.Slider>
-            <MP.SlideButton onClick={prevpet} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/Back.svg`} />
+            <MP.SlideButton onClick={prevpet}>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/Back.svg`}
+                alt="Previous"
+              />
             </MP.SlideButton>
             <MP.BookContainer>
               {pets.map((pet, index) => {
@@ -173,7 +208,6 @@ const Managepet = ({ nickname }) => {
                   current !== 0;
                 let hidden = !(large || small);
 
-                // 책이 하나만 있을 때는 큰 책으로 중앙에 위치
                 if (pets.length === 1) {
                   large = true;
                   small = false;
@@ -184,17 +218,18 @@ const Managepet = ({ nickname }) => {
 
                 return (
                   <MP.Book
-                    key={pets.id}
-                    large={large}
-                    small={small}
-                    next={next}
-                    prev={prev}
-                    hidden={hidden}
+                    key={pet.id}
+                    className={`${large ? "large" : ""} ${
+                      small ? "small" : ""
+                    } ${next ? "next" : ""} ${prev ? "prev" : ""} ${
+                      hidden ? "hidden" : ""
+                    }`}
                   >
-                    {/* 이미지, 제목, 작가 받아와야함 */}
-                    <img id="img" src={`${process.env.PUBLIC_URL}${pet.img}`} />
-                    <div id="name">{pet.name}</div>
-                    <div id="date">{pet.date}</div>
+                    <img id="img" src={pet.petImage} alt={pet.petName} />
+                    <div id="name">{pet.petName}</div>
+                    <div id="date">
+                      {pet.petBirth}~{pet.petAnniv}
+                    </div>
                     <button id="bookbtn">서재 바로가기</button>
                   </MP.Book>
                 );

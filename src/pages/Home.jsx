@@ -13,10 +13,9 @@ const Home = ({ nickname }) => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("Stored Token:", token);
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -53,7 +52,7 @@ const Home = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -69,6 +68,10 @@ const Home = ({ nickname }) => {
     }
   };
 
+  const goHome = () => {
+    navigate(`/`);
+  };
+
   const goFun = () => {
     navigate(`/funeral`);
   };
@@ -79,7 +82,7 @@ const Home = ({ nickname }) => {
 
   const goMyBook = () => {
     if (isLoggedIn) {
-      navigate("/bookroom");
+      navigate("/mybook");
     } else {
       navigate("/login");
     }
@@ -103,7 +106,7 @@ const Home = ({ nickname }) => {
       <header>
         <H.Nav>
           <H.NavContent>
-            <H.Logo>
+            <H.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}

@@ -14,13 +14,17 @@ const Funeral = ({ nickname }) => {
   const [token, setToken] = useState("");
 
   const [show, setShow] = useState(false);
+  const [selectedFuneral, setSelectedFuneral] = useState(null);
+  const [funerals, setFunerals] = useState([]);
 
-  const showModal = () => {
+  const showModal = (funeral) => {
+    setSelectedFuneral(funeral);
     setShow(true);
   };
 
   const hideModal = () => {
     setShow(false);
+    setSelectedFuneral(null);
   };
 
   useEffect(() => {
@@ -31,6 +35,30 @@ const Funeral = ({ nickname }) => {
       setIsLoggedIn(true);
     }
   }, []);
+
+  useEffect(() => {
+    fetchInitialFunerals();
+  }, []);
+
+  const fetchInitialFunerals = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/funeralhalls/");
+      setFunerals(response.data);
+    } catch (error) {
+      console.error("Error fetching initial funeral data:", error);
+    }
+  };
+
+  const fetchFunerals = async (query) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/funeralhalls/`, {
+        params: { search: query },
+      });
+      setFunerals(response.data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
 
   const goHome = () => {
     navigate(`/`);
@@ -53,11 +81,19 @@ const Funeral = ({ nickname }) => {
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    if (isLoggedIn) {
+      navigate("/mybook");
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {
-    navigate(`/library`);
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
   };
 
   const profile = {
@@ -94,6 +130,29 @@ const Funeral = ({ nickname }) => {
 
   const goMarket = () => {
     navigate(`/market`);
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState([]);
+  const [showAd, setShowAd] = useState(true);
+  const [searchMessage, setSearchMessage] = useState("");
+
+  const handleSearch = () => {
+    if (searchTerm.trim() !== "") {
+      fetchFunerals(searchTerm);
+      setShowAd(false);
+      setSearchMessage(`'${searchTerm}' 에 대한 검색 결과예요`);
+    } else {
+      fetchInitialFunerals();
+      setShowAd(true);
+      setSearchMessage("");
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -161,46 +220,34 @@ const Funeral = ({ nickname }) => {
             id="detail"
             type="text"
             placeholder="지역이나 키워드를 검색해 보세요"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
           <img
             id="search"
             src={`${process.env.PUBLIC_URL}/images/Search.svg`}
             alt="검색"
+            onClick={handleSearch}
           />
         </F.Search>
-        <F.Ad></F.Ad>
-        <F.Title>수도권 반려동물 전문 장례식장을 보여드릴게요</F.Title>
+        {showAd && <F.Ad>광고 내용</F.Ad>}
+        {searchMessage && <F.Title>{searchMessage}</F.Title>}
         <F.FunList>
-          <F.Fun1 onClick={showModal}>
-            <img
-              id="img1"
-              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
-              alt="장례식장"
-            />
-            <div id="name1">더포에버</div>
-            <div id="loc1">인천 서구 설원로 79</div>
-          </F.Fun1>
-          <F.Fun2>
-            <img
-              id="img2"
-              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
-              alt="장례식장"
-            />
-            <div id="name2">더포에버</div>
-            <div id="loc2">인천 서구 설원로 79</div>
-          </F.Fun2>
-          <F.Fun3>
-            <img
-              id="img3"
-              src={`${process.env.PUBLIC_URL}/images/Fun1.svg`}
-              alt="장례식장"
-            />
-            <div id="name3">더포에버</div>
-            <div id="loc3">인천 서구 설원로 79</div>
-          </F.Fun3>
+          {funerals.map((funeral) => (
+            <F.Fun1 key={funeral.id} onClick={() => showModal(funeral)}>
+              <img id="img1" src={funeral.image} alt={funeral.name} />
+              <div id="name1">{funeral.name}</div>
+              <div id="loc1">{funeral.location}</div>
+            </F.Fun1>
+          ))}
         </F.FunList>
       </F.Body>
-      <FuneralModal show={show} handleClose={hideModal} />
+      <FuneralModal
+        show={show}
+        handleClose={hideModal}
+        funeral={selectedFuneral}
+      />
       <footer>
         <F.Footer>
           <F.Introduction>
