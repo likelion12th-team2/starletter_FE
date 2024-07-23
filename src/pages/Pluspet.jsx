@@ -94,11 +94,19 @@ const Pluspet = ({ nickname }) => {
       return;
     }
 
-    console.log(petName);
-    console.log(petBirth);
-    console.log(petAnniv);
-    console.log(petType);
-    console.log(petImage);
+    // console.log(petName);
+    // console.log(petBirth);
+    // console.log(petAnniv);
+    // console.log(petType);
+    // console.log(petImage);
+
+    const token = localStorage.getItem("token");
+    console.log("사용할 토큰:", token);
+
+    if (!token) {
+      console.error("토큰이 localStorage에 없습니다.");
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -113,12 +121,12 @@ const Pluspet = ({ nickname }) => {
         formData,
         {
           headers: {
-            Authorization: `Token ${token}`,
+            Authorization: "Token " + token,
             "Content-Type": "multipart/form-data",
           },
         }
       );
-      localStorage.setItem("token", response.data.key);
+      console.log(response.data);
       navigate(`/mypage/managepet`);
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
@@ -313,7 +321,7 @@ const Pluspet = ({ nickname }) => {
                 />
                 {showTypeList && (
                   <P.TypeList>
-                    {["강아지", "고양이", "소동물", "특수동물"].map((type) => (
+                    {["강아지", "고양이", "소동물", "기타"].map((type) => (
                       <label key={type}>
                         <input
                           type="checkbox"

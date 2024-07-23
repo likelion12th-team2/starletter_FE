@@ -35,27 +35,27 @@ const Managepet = ({ nickname }) => {
   };
 
   const goHome = () => {
-    navigate(`/`);
+    navigate("/");
   };
 
   const goJoin = () => {
-    navigate(`/join`);
+    navigate("/join");
   };
 
   const goFun = () => {
-    navigate(`/funeral`);
+    navigate("/funeral");
   };
 
   const goMarket = () => {
-    navigate(`/market`);
+    navigate("/market");
   };
 
   const goMyBook = () => {
-    navigate(`/mybook`);
+    navigate("/mybook");
   };
 
   const goLib = () => {
-    navigate(`/library`);
+    navigate("/library");
   };
 
   const openModal = () => {
@@ -99,6 +99,7 @@ const Managepet = ({ nickname }) => {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found");
+        navigate("/login"); // 토큰이 없을 시 로그인 페이지로 이동
         return;
       }
       try {
@@ -110,18 +111,21 @@ const Managepet = ({ nickname }) => {
             },
           }
         );
-        localStorage.setItem("token", response.data.key);
         setPets(response.data);
       } catch (error) {
         console.error(
           "조회불가: ",
           error.response ? error.response.data : error.message
         );
+        if (error.response && error.response.status === 401) {
+          // 토큰이 유효하지 않을 경우 로그인 페이지로 이동
+          navigate("/login");
+        }
       }
     };
 
     fetchPets();
-  }, []);
+  }, [navigate]);
 
   return (
     <MP.Container>
@@ -182,80 +186,74 @@ const Managepet = ({ nickname }) => {
         profile={profile}
         anchorRef={myPageRef}
       />
-      <body>
-        <MP.BodyContainer>
-          <div id="title">나의 반려동물 관리</div>
-          <MP.Slider>
-            <MP.SlideButton onClick={prevpet}>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/Back.svg`}
-                alt="Previous"
-              />
-            </MP.SlideButton>
-            <MP.BookContainer>
-              {pets.map((pet, index) => {
-                let large = index === current;
-                let small =
-                  (index === (current + 1) % pets.length &&
-                    current !== pets.length - 1) ||
-                  (index === (current - 1 + pets.length) % pets.length &&
-                    current !== 0);
-                let next =
-                  index === (current + 1) % pets.length &&
-                  current !== pets.length - 1;
-                let prev =
-                  index === (current - 1 + pets.length) % pets.length &&
-                  current !== 0;
-                let hidden = !(large || small);
-
-                if (pets.length === 1) {
-                  large = true;
-                  small = false;
-                  next = false;
-                  prev = false;
-                  hidden = false;
-                }
-
-                return (
-                  <MP.Book
-                    key={pet.id}
-                    className={`${large ? "large" : ""} ${
-                      small ? "small" : ""
-                    } ${next ? "next" : ""} ${prev ? "prev" : ""} ${
-                      hidden ? "hidden" : ""
-                    }`}
-                  >
-                    <img id="img" src={pet.petImage} alt={pet.petName} />
-                    <div id="name">{pet.petName}</div>
-                    <div id="date">
-                      {pet.petBirth}~{pet.petAnniv}
-                    </div>
-                    <button id="bookbtn">서재 바로가기</button>
-                  </MP.Book>
-                );
-              })}
-            </MP.BookContainer>
-            <MP.SlideButton onClick={nextpet} show={showButtons}>
-              <img src={`${process.env.PUBLIC_URL}/images/Next.svg`} />
-            </MP.SlideButton>
-          </MP.Slider>
-        </MP.BodyContainer>
-      </body>
-      <footer>
-        <MP.Footer>
-          <MP.Introduction>
-            <div id="introduce">나의 별에게 보내는 편지</div>
+      <MP.BodyContainer>
+        <div id="title">나의 반려동물 관리</div>
+        <MP.Slider>
+          <MP.SlideButton onClick={prevpet}>
             <img
-              id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
-              alt="logo"
+              src={`${process.env.PUBLIC_URL}/images/Back.svg`}
+              alt="Previous"
             />
-            <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
-            <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
-            <div id="sns">인스타 아이디</div>
-          </MP.Introduction>
-        </MP.Footer>
-      </footer>
+          </MP.SlideButton>
+          <MP.BookContainer>
+            {pets.map((pet, index) => {
+              let large = index === current;
+              let small =
+                (index === (current + 1) % pets.length &&
+                  current !== pets.length - 1) ||
+                (index === (current - 1 + pets.length) % pets.length &&
+                  current !== 0);
+              let next =
+                index === (current + 1) % pets.length &&
+                current !== pets.length - 1;
+              let prev =
+                index === (current - 1 + pets.length) % pets.length &&
+                current !== 0;
+              let hidden = !(large || small);
+
+              if (pets.length === 1) {
+                large = true;
+                small = false;
+                next = false;
+                prev = false;
+                hidden = false;
+              }
+
+              return (
+                <MP.Book
+                  key={pet.id}
+                  className={`${large ? "large" : ""} ${small ? "small" : ""} ${
+                    next ? "next" : ""
+                  } ${prev ? "prev" : ""} ${hidden ? "hidden" : ""}`}
+                >
+                  <img id="img" src={pet.petImage} alt={pet.petName} />
+                  <div id="name">{pet.petName}</div>
+                  <div id="date">
+                    {pet.petBirth}~{pet.petAnniv}
+                  </div>
+                  <button id="bookbtn">서재 바로가기</button>
+                </MP.Book>
+              );
+            })}
+          </MP.BookContainer>
+          <MP.SlideButton onClick={nextpet} show={showButtons}>
+            <img src={`${process.env.PUBLIC_URL}/images/Next.svg`} />
+          </MP.SlideButton>
+        </MP.Slider>
+      </MP.BodyContainer>
+      <MP.Footer>
+        <MP.Introduction>
+          <div id="introduce">나의 별에게 보내는 편지</div>
+          <img
+            id="logo"
+            src={`${process.env.PUBLIC_URL}/images/logo.png`}
+            alt="logo"
+          />
+          <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
+          <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
+          <div id="sns">인스타 아이디</div>
+        </MP.Introduction>
+      </MP.Footer>
     </MP.Container>
   );
 };
