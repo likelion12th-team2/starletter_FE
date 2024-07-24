@@ -13,6 +13,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("폼 제출됨");
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/accounts/login/",
@@ -29,9 +30,9 @@ const Login = () => {
       const token = response.data.key || response.data.data?.key;
       if (token) {
         localStorage.setItem("token", response.data.key);
-        console.log("토큰 저장 성공:", response.data.key);
+        console.log("토큰 저장 성공:", token);
 
-        // 메인 페이지로 이동'
+        // 메인 페이지로 이동
         navigate("/");
       } else {
         console.log("토큰이 응답 데이터에 없습니다.");
