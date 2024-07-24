@@ -12,7 +12,7 @@ const Search = styled(L.Search).attrs((props) => ({
   },
 }))``;
 
-const MyBook = ({ nickname }) => {
+const Library = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -156,6 +156,56 @@ const MyBook = ({ nickname }) => {
     }
   };
 
+  //공감 많이 받은 책
+  const booksMostMinds = [
+    {
+      id: 1,
+      title: "마루는 강쥐",
+      pet: 1,
+      author: "핑핑이",
+      description: "마루야 안녕 잘지내",
+      cover: "http://127.0.0.1:8000/media/book_covers/파일명",
+      lastUpdated: "2024-07-01",
+      keywordTag: "일상",
+    },
+    {
+      id: 2,
+      title: "나비안녕",
+      pet: 2,
+      author: "이유저",
+      description: "",
+      cover: null,
+      lastUpdated: "2024-07-10",
+      keywordTag: "공감",
+    },
+  ];
+
+  //최근 책
+  const booksRecent = [
+    {
+      id: 3,
+      title: "앵무 귀여워",
+      pet: 4,
+      author: "핑핑이",
+      description: "",
+      cover: null,
+      lastUpdated: "2024-07-22",
+      keywordTag: "공감",
+    },
+    {
+      id: 5,
+      title: "김구름의 하루",
+      pet: 7,
+      author: "핑핑이",
+      description: "잘 살아",
+      cover: "http://127.0.0.1:8000/media/book_covers/파일명",
+      lastUpdated: "2024-07-22",
+      keywordTag: "일상",
+    },
+  ];
+
+  //책 클릭시 책 상세로 이동
+
   return (
     <L.Container>
       <header>
@@ -264,34 +314,69 @@ const MyBook = ({ nickname }) => {
               </L.SearchPlus>
             )}
           </L.SearchWrap>
-          <L.BookList>
+
+          {/* 검색어 입력 전 메인 */}
+          <L.LibMain>
             <L.Heart>
               <L.Title>공감 많이 받은 책</L.Title>
               <L.HeartWrap>
                 {/* 책 */}
-                <L.Book>
-                  <L.BookCover>
-                    <L.BookCoverImg>
-                      <img
-                        id="MycoverImg"
-                        src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                        alt="Mycover1"
-                      />
-                    </L.BookCoverImg>
-                    <L.BookCoverText>
-                      <div id="title">천사강아지</div>
-                    </L.BookCoverText>
-                  </L.BookCover>
-                  <L.BookTitle>천사강아지</L.BookTitle>
-                  <L.BookWriter>별똥별</L.BookWriter>
-                </L.Book>
+                {booksMostMinds.slice(0, 5).map((bookMostMinds) => (
+                  <L.Book
+                    key={bookMostMinds.id}
+                    onClick={() => {
+                      navigate(`/library/${bookMostMinds.id}`);
+                    }}
+                  >
+                    <L.BookCover>
+                      <L.BookCoverImg>
+                        <img
+                          id="MycoverImg"
+                          src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                          alt="Mycover1"
+                        />
+                      </L.BookCoverImg>
+                      <L.BookCoverText>
+                        <div id="title">{bookMostMinds.title}</div>
+                      </L.BookCoverText>
+                    </L.BookCover>
+                    <L.BookTitle>{bookMostMinds.title}</L.BookTitle>
+                    <L.BookWriter>{bookMostMinds.author}</L.BookWriter>
+                  </L.Book>
+                ))}
               </L.HeartWrap>
             </L.Heart>
-            {/* <L.Week>
+            <L.Recent>
               <L.Title>이주의 책</L.Title>
-              <L.WeektWrap></L.WeektWrap>
-            </L.Week> */}
-          </L.BookList>
+              <L.RecentWrap>
+                {/* 책 */}
+
+                {booksRecent.slice(0, 5).map((bookRecent) => (
+                  <L.Book
+                    key={bookRecent.id}
+                    onClick={() => {
+                      navigate(`/library/${bookRecent.id}`);
+                    }}
+                  >
+                    <L.BookCover>
+                      <L.BookCoverImg>
+                        <img
+                          id="MycoverImg"
+                          src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                          alt="Mycover1"
+                        />
+                      </L.BookCoverImg>
+                      <L.BookCoverText>
+                        <div id="title">{bookRecent.title}</div>
+                      </L.BookCoverText>
+                    </L.BookCover>
+                    <L.BookTitle>{bookRecent.title}</L.BookTitle>
+                    <L.BookWriter>{bookRecent.author}</L.BookWriter>
+                  </L.Book>
+                ))}
+              </L.RecentWrap>
+            </L.Recent>
+          </L.LibMain>
         </L.LibContainer>
       </div>
       <MyPageModal
@@ -319,4 +404,4 @@ const MyBook = ({ nickname }) => {
   );
 };
 
-export default MyBook;
+export default Library;

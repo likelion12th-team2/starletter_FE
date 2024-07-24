@@ -171,15 +171,15 @@ export const Book = styled.div`
   align-items: center;
   justify-content: center;
 
-  #img {
-    width: 228px;
-    height: 228px;
-    object-fit: cover;
-    flex-shrink: 0;
-    border-radius: 228px;
-    background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;
-    box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  }
+  // #img {
+  //   width: 228px;
+  //   height: 228px;
+  //   object-fit: cover;
+  //   flex-shrink: 0;
+  //   border-radius: 228px;
+  //   background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;
+  //   box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  // }
   #name {
     color: #fff;
     text-align: center;

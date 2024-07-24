@@ -245,17 +245,12 @@ export const RecommendList = styled.div`
   }
 `;
 
-//
-export const BookList = styled.div`
-  display: flex;
-  flex-direction: column;
+//검색어 입력 전 메인
+export const LibMain = styled.div``;
 
-  width: 1113.268px;
-  height: 346px;
-  flex-shrink: 0;
-`;
 export const Title = styled.div`
   display: flex;
+
   margin-bottom: 15px;
 
   color: #fff;
@@ -267,7 +262,12 @@ export const Title = styled.div`
   letter-spacing: 0.45px;
 `;
 export const Heart = styled.div``;
-export const HeartWrap = styled.div``;
+export const HeartWrap = styled.div`
+  display: flex;
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+`;
 
 export const Book = styled.div`
   position: relative;
@@ -335,10 +335,19 @@ export const BookWriter = styled.div`
   font-weight: 500;
   line-height: normal;
 `;
+export const Recent = styled.div`
+  margin-top: 100px;
+  margin-bottom: 135px;
+`;
+export const RecentWrap = styled.div`
+  display: flex;
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+`;
 
-export const Week = styled.div``;
-export const WeektWrap = styled.div``;
-
+//검색 결과
+//export const
 // footer
 export const Footer = styled.div`
   bottom: 0;

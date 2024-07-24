@@ -1,27 +1,138 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import MyPageModal from "./MyPageModal";
 import * as AP from "../styles/styledMyBookAddPet";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-import MyPageModal from "./MyPageModal";
 
 const MyBookAddPet = ({ nickname }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showDatePicker1, setShowDatePicker1] = useState(false);
+
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
+
+  const [petName, setPet_Name] = useState("");
+  const [petType, setPetType] = useState("");
+  const [pet_birth1, setPet_Birth] = useState(null);
+  const [pet_anniv1, setPet_Anniv] = useState(null);
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
+
+  const [profileImage, setProfileImage] = useState(
+    `${process.env.PUBLIC_URL}/images/ProfileImg.svg`
+  );
+  const [file, setFile] = useState(null);
+
+  const handleImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+      setFile(selectedFile);
+    }
+  };
+
+  // useEffect(() => {
+  //   // localStorage에 저장된 모든 항목을 콘솔에 출력
+  //   for (let i = 0; i < localStorage.length; i++) {
+  //     const key = localStorage.key(i);
+  //     const value = localStorage.getItem(key);
+  //     console.log(`Key: ${key}, Value: ${value}`);
+  //   }
+  // }, []);
+
+  const handleDateChange = (date) => {
+    setPet_Birth(date);
+    setShowDatePicker(false); // 날짜 선택 시 달력 닫기
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const petBirth = pet_birth1
+      ? pet_birth1
+          .toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })
+          .replace(/\./g, "-")
+          .replace(/ /g, "")
+          .replace(/-$/, "")
+      : "";
+
+    const petAnniv = pet_anniv1
+      ? pet_anniv1
+          .toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })
+          .replace(/\./g, "-")
+          .replace(/ /g, "")
+          .replace(/-$/, "")
+      : "";
+
+    const petImage = file;
+
+    if (!file) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+
+    console.log(petName);
+    console.log(petBirth);
+    console.log(petAnniv);
+    console.log(petType);
+    console.log(petImage);
+
+    try {
+      const formData = new FormData();
+      formData.append("petName", petName);
+      formData.append("petBirth", petBirth);
+      formData.append("petAnniv", petAnniv);
+      formData.append("petType", petType);
+      formData.append("petImage", file);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/accounts/pets/",
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      localStorage.setItem("token", response.data.key);
+      navigate(`/mybook/make`);
+    } catch (error) {
+      console.log(`추가 실패: ${error.message}`);
+      console.log(error.response.data);
+    }
+  };
+
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
 
   const goHome = () => {
     navigate(`/`);
@@ -35,16 +146,12 @@ const MyBookAddPet = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
+  const goMyBook = () => {
+    navigate(`/mybook`);
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
-
-  const goMarket = () => {
-    navigate(`/market`);
+  const goLib = () => {
+    navigate(`/library`);
   };
 
   const openModal = () => {
@@ -55,26 +162,6 @@ const MyBookAddPet = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const goMyBook = () => {
-    if (isLoggedIn) {
-      navigate("/mybook");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const goMyBookMake = () => {
-    navigate(`/mybook/make`);
-  };
-
   const handleLogout = async () => {
     try {
       const response = await axios.post(
@@ -82,7 +169,7 @@ const MyBookAddPet = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -99,13 +186,21 @@ const MyBookAddPet = ({ nickname }) => {
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
 
-  // 생일 날짜 선택
-  const [birthDate, setBirthDate] = useState(null);
-  const [fixedDate, setFixedDate] = useState(null);
+  const [showTypeList, setShowTypeList] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
+
+  const toggleTypeList = () => {
+    setShowTypeList(!showTypeList);
+  };
+
+  const selectType = (type) => {
+    setSelectedType(type);
+    setPetType(type);
+    setShowTypeList(false);
+  };
 
   return (
     <AP.Container>
@@ -160,73 +255,142 @@ const MyBookAddPet = ({ nickname }) => {
           </AP.NavContent>
         </AP.Nav>
       </header>
-
-      {/*  */}
-      <body>
-        <AP.bodyContainer>
-          <AP.Title>아직 등록한 반려동물이 없어요</AP.Title>
-          <AP.Input>
-            <AP.PetName>
-              <div id="petName">반려동물 이름</div>
-              <input
-                id="petNameInput"
-                type="text"
-                placeholder="반려동물의 이름을 입력해 주세요"
-              />
-            </AP.PetName>
-            <AP.Birth>
-              <div id="birth">생일</div>
-              <div id="DatePickerWrap">
-                <DatePicker
-                  dateFormat="yyyy.MM.dd" // 날짜 형태
-                  shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                  maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                  selected={birthDate}
-                  onChange={(date) => setBirthDate(date)}
-                  customInput={<AP.DatePickerInput />} // styled-components로 감싼 커스텀>
-                  placeholderText="연도-월-일"
-                />
-                <img
-                  id="dateIcon"
-                  src={`${process.env.PUBLIC_URL}/images/calendar.png`}
-                  alt="calendar"
-                />
-              </div>
-            </AP.Birth>
-            <AP.FixedDate>
-              <div id="fixedDate">기일</div>
-              <div id="DatePickerWrap">
-                <DatePicker
-                  dateFormat="yyyy.MM.dd" // 날짜 형태
-                  shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                  maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                  selected={fixedDate}
-                  onChange={(date) => setFixedDate(date)}
-                  customInput={<AP.DatePickerInput />} // styled-components로 감싼 커스텀>
-                  placeholderText="연도-월-일"
-                />
-                <img
-                  id="dateIcon"
-                  src={`${process.env.PUBLIC_URL}/images/calendar.png`}
-                  alt="calendar"
-                />
-              </div>
-            </AP.FixedDate>
-          </AP.Input>
-          <AP.AddPetBtn>
-            <button id="addPetBtn" onClick={goMyBookMake}>
-              반려동물 추가
-            </button>
-          </AP.AddPetBtn>
-        </AP.bodyContainer>
-      </body>
-      {/*  */}
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
         profile={profile}
         anchorRef={myPageRef}
       />
+      <form onSubmit={handleSubmit}>
+        <AP.Body>
+          <AP.Title>아직 등록한 반려동물이 없어요</AP.Title>
+          <AP.ProImg>
+            <img id="profile" src={profileImage} alt="프로필" />
+            <label htmlFor="fileInput">
+              <img
+                id="edit"
+                src={`${process.env.PUBLIC_URL}/images/EditProfile.svg`}
+                alt="편집"
+              />
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </AP.ProImg>
+          <AP.Profile>
+            <AP.Name>
+              <div id="name">이름</div>
+              <AP.NameBox>
+                <input
+                  id="namebox"
+                  type="text"
+                  placeholder="반려동물의 이름을 입력해 주세요"
+                  value={petName}
+                  onChange={(e) => setPet_Name(e.target.value)}
+                  required
+                />
+              </AP.NameBox>
+            </AP.Name>
+            <AP.Type>
+              <div id="type">타입</div>
+              <AP.TypeBox>
+                <input
+                  id="typebox"
+                  type="text"
+                  placeholder="반려동물의 종을 선택해 주세요"
+                  value={selectedType}
+                  onChange={(e) => setPetType(e.target.value)}
+                  readOnly
+                />
+                <img
+                  id="plustype"
+                  src={`${process.env.PUBLIC_URL}/images/Plustype.svg`}
+                  alt="더보기"
+                  onClick={toggleTypeList}
+                />
+                {showTypeList && (
+                  <AP.TypeList>
+                    {["강아지", "고양이", "소동물", "특수동물"].map((type) => (
+                      <label key={type}>
+                        <input
+                          type="checkbox"
+                          onClick={() => selectType(type)}
+                        />
+                        {type}
+                      </label>
+                    ))}
+                  </AP.TypeList>
+                )}
+              </AP.TypeBox>
+            </AP.Type>
+            <AP.Birth>
+              <div id="birthday">생일</div>
+              <AP.BirthBox>
+                <input
+                  id="birthbox"
+                  type="text"
+                  placeholder="연도-월-일"
+                  value={pet_birth1 ? pet_birth1.toLocaleDateString() : ""}
+                  readOnly
+                />
+                <img
+                  id="birthcal"
+                  src={`${process.env.PUBLIC_URL}/images/Calender.svg`}
+                  alt="달력"
+                  onClick={() => setShowDatePicker(!showDatePicker)}
+                />
+                {showDatePicker && (
+                  <AP.DatePickerWrapper>
+                    <DatePicker
+                      selected={pet_birth1}
+                      onChange={handleDateChange}
+                      inline
+                    />
+                  </AP.DatePickerWrapper>
+                )}
+              </AP.BirthBox>
+            </AP.Birth>
+            <AP.Memorial>
+              <div id="memorial">기일</div>
+              <AP.MemorialBox>
+                <input
+                  id="memorialbox"
+                  type="text"
+                  placeholder="연도-월-일"
+                  value={pet_anniv1 ? pet_anniv1.toLocaleDateString() : ""}
+                  readOnly
+                />
+                <img
+                  id="memcal"
+                  src={`${process.env.PUBLIC_URL}/images/Calender.svg`}
+                  alt="달력"
+                  onClick={() => setShowDatePicker1(!showDatePicker1)}
+                />
+                {showDatePicker1 && (
+                  <AP.DatePickerWrapper1>
+                    <DatePicker
+                      selected={pet_anniv1}
+                      onChange={(date1) => {
+                        setPet_Anniv(date1);
+                        setShowDatePicker1(false);
+                      }}
+                      inline
+                    />
+                  </AP.DatePickerWrapper1>
+                )}
+              </AP.MemorialBox>
+            </AP.Memorial>
+          </AP.Profile>
+          <AP.Button>
+            <button type="submit" id="btn">
+              추가하기
+            </button>
+          </AP.Button>
+        </AP.Body>
+      </form>
       <footer>
         <AP.Footer>
           <AP.Introduction>

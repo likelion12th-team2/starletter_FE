@@ -8,17 +8,42 @@ import MyPageModal from "./MyPageModal";
 const MyBookMake = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
+  const [books, setBooks] = useState([]);
+  const [petsNoBook, setPetsNoBook] = useState([]);
+  const [current, setCurrent] = useState(0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [coverImage, setCoverImage] = useState(null);
+  const [selectedKeyword, setSelectedKeyword] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
+      setToken(token);
+      fetchPets(token); // 등록된 동물 불러오기
     }
   }, []);
+
+  const fetchPets = async (token) => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/mybooks/list/", {
+        headers: {
+          Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+        },
+      });
+      console.log("동물 불러옴:", response.data);
+      setBooks(response.data.books);
+      setPetsNoBook(response.data.petsNoBook);
+    } catch (error) {
+      console.log("동물 못 불러옴;;", error);
+    }
+  };
 
   const goHome = () => {
     navigate(`/`);
@@ -82,57 +107,35 @@ const MyBookMake = ({ nickname }) => {
     }
   };
 
-  const profile = {
-    name: nickname,
-  };
-
-  const books = [
-    {
-      id: 1,
-      img: "/images/petProfile1.png",
-      title: "쪼꼬",
-      author: "김별",
-    },
-    {
-      id: 2,
-      title: "Book 2",
-      author: "Author 2",
-    },
-    {
-      id: 3,
-      title: "Book 3",
-      author: "Author 3",
-    },
-    {
-      id: 4,
-      title: "Book 4",
-      author: "Author 4",
-    },
-  ];
-
-  const [current, setCurrent] = useState(0);
   const nextBook = () => {
-    setCurrent((prev) => (prev + 1) % books.length);
+    setCurrent((prev) => (prev + 1) % (books.length + petsNoBook.length));
   };
+
   const prevBook = () => {
-    setCurrent((prev) => (prev - 1 + books.length) % books.length);
-  };
-  const showButtons = books.length > 1;
-
-  //책만들기 모달
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const openModal = () => {
-    setModalIsOpen(true);
+    setCurrent(
+      (prev) =>
+        (prev - 1 + books.length + petsNoBook.length) %
+        (books.length + petsNoBook.length)
+    );
   };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
+  const showButtons = books.length + petsNoBook.length > 1;
+
+  const openMyPageModal = () => {
+    setIsMyPageModalOpen(true);
   };
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState(null);
+  const closeMyPageModal = () => {
+    setIsMyPageModalOpen(false);
+  };
+
+  const openBookModal = () => {
+    setIsBookModalOpen(true);
+  };
+
+  const closeBookModal = () => {
+    setIsBookModalOpen(false);
+  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -148,11 +151,12 @@ const MyBookMake = ({ nickname }) => {
     // });
   };
 
-  //키워드 선택
-  const [selectedKeyword, setSelectedKeyword] = useState("");
-
   const handleKeywordClick = (keyword) => {
     setSelectedKeyword(keyword);
+  };
+
+  const profile = {
+    name: nickname,
   };
 
   return (
@@ -186,7 +190,7 @@ const MyBookMake = ({ nickname }) => {
               <MM.Account>
                 {isLoggedIn ? (
                   <>
-                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                    <div id="mypage" onClick={openMyPageModal} ref={myPageRef}>
                       마이페이지
                     </div>
                     <div id="logout" onClick={handleLogout}>
@@ -220,27 +224,24 @@ const MyBookMake = ({ nickname }) => {
             </MM.Button>
             <MM.BookContainer>
               {books.map((book, index) => {
-                let large = index === current;
-                let small =
-                  (index === (current + 1) % books.length &&
-                    current !== books.length - 1) ||
-                  (index === (current - 1 + books.length) % books.length &&
-                    current !== 0);
-                let next =
-                  index === (current + 1) % books.length &&
-                  current !== books.length - 1;
-                let prev =
-                  index === (current - 1 + books.length) % books.length &&
-                  current !== 0;
-                let hidden = !(large || small);
-
-                if (books.length === 1) {
-                  large = true;
-                  small = false;
-                  next = false;
-                  prev = false;
-                  hidden = false;
-                }
+                const position =
+                  (index + petsNoBook.length) %
+                  (books.length + petsNoBook.length);
+                const large = position === current;
+                const small =
+                  position ===
+                    (current + 1) % (books.length + petsNoBook.length) ||
+                  position ===
+                    (current - 1 + books.length + petsNoBook.length) %
+                      (books.length + petsNoBook.length);
+                const next =
+                  position ===
+                  (current + 1) % (books.length + petsNoBook.length);
+                const prev =
+                  position ===
+                  (current - 1 + books.length + petsNoBook.length) %
+                    (books.length + petsNoBook.length);
+                const hidden = !(large || small);
 
                 return (
                   <MM.Book
@@ -253,15 +254,59 @@ const MyBookMake = ({ nickname }) => {
                   >
                     <img
                       id="img"
-                      src={`${process.env.PUBLIC_URL}${book.img}`}
-                      alt="addedimg"
+                      src={
+                        book.cover ||
+                        `${process.env.PUBLIC_URL}/images/default_cover.png`
+                      }
+                      alt="cover"
                     />
                     <div id="title">{book.title}</div>
                     <div id="author">{book.author}</div>
-                    <MM.AddBtn onClick={openModal}>
+                  </MM.Book>
+                );
+              })}
+              {petsNoBook.map((pet, index) => {
+                const position = index;
+                const large = position === current;
+                const small =
+                  position ===
+                    (current + 1) % (books.length + petsNoBook.length) ||
+                  position ===
+                    (current - 1 + books.length + petsNoBook.length) %
+                      (books.length + petsNoBook.length);
+                const next =
+                  position ===
+                  (current + 1) % (books.length + petsNoBook.length);
+                const prev =
+                  position ===
+                  (current - 1 + books.length + petsNoBook.length) %
+                    (books.length + petsNoBook.length);
+                const hidden = !(large || small);
+
+                return (
+                  <MM.Book
+                    key={pet.id}
+                    large={large}
+                    small={small}
+                    next={next}
+                    prev={prev}
+                    hidden={hidden}
+                  >
+                    <img
+                      id="img"
+                      src={
+                        pet.petImage ||
+                        `${process.env.PUBLIC_URL}/images/default_pet.png`
+                      }
+                      alt="pet"
+                    />
+                    <div id="title">{pet.petName}</div>
+                    <div id="author">{pet.petUser}</div>
+                    <MM.AddBtn onClick={openBookModal}>
                       <img
                         id="addbtn"
                         src={`${process.env.PUBLIC_URL}/images/BookAddBtn.svg`}
+                        alt="add"
                       />
                     </MM.AddBtn>
                   </MM.Book>
@@ -291,17 +336,16 @@ const MyBookMake = ({ nickname }) => {
             <div id="sns">인스타 아이디</div>
           </MM.Introduction>
         </MM.Footer>
-        {/*  */}
         <MyPageModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
+          isOpen={isMyPageModalOpen}
+          onClose={closeMyPageModal}
           profile={profile}
           anchorRef={myPageRef}
         />
       </footer>
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        isOpen={isBookModalOpen}
+        onRequestClose={closeBookModal}
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -320,7 +364,7 @@ const MyBookMake = ({ nickname }) => {
       >
         <MM.ModalWrap>
           <MM.BackButton>
-            <button id="backbtn" onClick={closeModal}>
+            <button id="backbtn" onClick={closeBookModal}>
               <img
                 src={`${process.env.PUBLIC_URL}/images/deletModal.png`}
                 alt="back"
