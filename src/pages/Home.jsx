@@ -5,7 +5,7 @@ import MyPageModal from "./MyPageModal";
 import * as H from "../styles/StyledHome";
 import axios from "axios";
 
-const Home = ({ nickname }) => {
+const Home = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -177,177 +177,49 @@ const Home = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       {/*  */}
       <H.Body>
-        <H.Detail>
-          <img
-            id="img"
-            src={`${process.env.PUBLIC_URL}/images/Slogan.svg`}
-            alt="슬로건"
-          />
-        </H.Detail>
-        <H.Library>
-          <img
-            id="img1"
-            src={`${process.env.PUBLIC_URL}/images/Main_lib.svg`}
-            alt="내서재"
-          />
-          <H.LibBtn onClick={goMyBook}>
-            <div id="detail">내 서재로 가기</div>
-          </H.LibBtn>
-        </H.Library>
-        <H.Bookroom>
-          <img
-            id="img2"
-            src={`${process.env.PUBLIC_URL}/images/Main_book.svg`}
-            alt="책방"
-          />
-          <H.BookBtn onClick={goLib}>
-            <div id="detail">책방으로 이동</div>
-          </H.BookBtn>
-        </H.Bookroom>
-        <H.Funeral>
-          <div id="detail">
-            가장 가까운 반려동물 전문 장례식장을 보여드릴게요{" "}
-          </div>
-          <H.FuCont>
-            <H.Fu1>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Lib1.svg`}
-                alt="1번"
-              />
-              <div id="title">펫포레스트 경기 광주점</div>
-              <div id="adress">경기도 광주시 오포안로 77</div>
-            </H.Fu1>
-            <H.Fu2>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Lib2.svg`}
-                alt="2번"
-              />
-              <div id="title">21그램 경기광주 1호점</div>
-              <div id="adress">경기도 광주시 매자리길 185-35</div>
-            </H.Fu2>
-            <H.Fu3>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Lib3.svg`}
-                alt="3번"
-              />
-              <div id="title">포포즈 경기 광주점</div>
-              <div id="adress">경기도 광주시 산수로 409-11</div>
-            </H.Fu3>
-          </H.FuCont>
-        </H.Funeral>
-        <H.Search>
-          <img
-            id="search"
-            src={`${process.env.PUBLIC_URL}/images/Search.svg`}
-            alt="search"
-          />
-          <input
-            id="text"
-            type="text"
-            placeholder="지역이나 키워드를 검색해 보세요"
-          />
-        </H.Search>
-        <H.Product>
-          <div id="detail">
-            세상에 하나뿐인 나의 반려동물을 기억할 수 있는 상품을 추천해 드려요
-          </div>
-          <H.ProCont1>
-            <H.Pro1>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro1.svg`}
-                alt="1번"
-              />
-              <div id="title">[양모아네뜨] 아트돌 양모펠트 강아지 전신</div>
-              <H.Cost1>
-                <div id="sale">28%</div>
-                <div id="price">900,000원</div>
-              </H.Cost1>
-              <H.Price1>650,000원</H.Price1>
-            </H.Pro1>
-            <H.Pro2>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro2.svg`}
-                alt="2번"
-              />
-              <div id="title">[퐁자씨] 우리집 쪼꼬미 키링🐶🐱ㅣ모루인형</div>
-              <H.Cost2>
-                <div id="sale">30%</div>
-                <div id="price">40,000원</div>
-              </H.Cost2>
-              <H.Price2>32,000원</H.Price2>
-            </H.Pro2>
-            <H.Pro3>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro3.svg`}
-                alt="3번"
-              />
-              <div id="title">
-                [달콤펫] 반려동물초상화(중) 달콤펫초상화 입체주문제작
-              </div>
-              <H.Cost3>
-                <div id="sale"></div>
-                <div id="price"></div>
-              </H.Cost3>
-              <H.Price3>130,000원</H.Price3>
-            </H.Pro3>
-          </H.ProCont1>
-          <H.ProCont2>
-            <H.Pro4>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro4.svg`}
-                alt="4번"
-              />
-              <div id="title">[비자르] 반려 동물 유골 주얼리</div>
-              <H.Cost4>
-                <div id="sale"></div>
-                <div id="price"></div>
-              </H.Cost4>
-              <H.Price4>95,000원</H.Price4>
-            </H.Pro4>
-            <H.Pro5>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro5.svg`}
-                alt="5번"
-              />
-              <div id="title">
-                [더해빙] 반려동물 추모 액자 납골당 주문제작 아크릴 메모리얼
-              </div>
-              <H.Cost5>
-                <div id="sale">12%</div>
-                <div id="price">37,300원</div>
-              </H.Cost5>
-              <H.Price5>33,000원</H.Price5>
-            </H.Pro5>
-            <H.Pro6>
-              <img
-                id="pic"
-                src={`${process.env.PUBLIC_URL}/images/Pro6.svg`}
-                alt="6번"
-              />
-              <div id="title">
-                [소풍] 소동물 수의보 - 햄스터, 토끼, 고슴도치등 이불싸개
-              </div>
-              <H.Cost6>
-                <div id="sale">5%</div>
-                <div id="price">40,000원</div>
-              </H.Cost6>
-              <H.Price6>38,000원</H.Price6>
-            </H.Pro6>
-          </H.ProCont2>
-        </H.Product>
+        <H.List>
+          <H.Lib onClick={goMyBook}>
+            <img
+              id="library"
+              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              alt="서재"
+            />
+            <div id="detlib">내 서재</div>
+          </H.Lib>
+          <H.Book onClick={goLib}>
+            <img
+              id="bookroom"
+              src={`${process.env.PUBLIC_URL}/images/Book.svg`}
+              alt="책방"
+            />
+            <div id="detbook">책방</div>
+          </H.Book>
+          <H.Fun onClick={goFun}>
+            <img
+              id="funeral"
+              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              alt="장례식장"
+            />
+            <div id="detfun">장례식장</div>
+          </H.Fun>
+          <H.Mar onClick={goMarket}>
+            <img
+              id="market"
+              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              alt="마켓"
+            />
+            <div id="detmar">마켓</div>
+          </H.Mar>
+        </H.List>
+        <img
+          id="main"
+          src={`${process.env.PUBLIC_URL}/images/Main.svg`}
+          alt="메인"
+        />
       </H.Body>
       <footer>
         <H.Footer>
