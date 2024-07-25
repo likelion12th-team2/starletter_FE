@@ -122,10 +122,10 @@ export const Body = styled.div`
 `;
 
 export const Detail = styled.div`
-  width: 100vw;
+  width: 100%;
 
   #img {
-    width: 100vw;
+    width: 100%;
   }
 `;
 
