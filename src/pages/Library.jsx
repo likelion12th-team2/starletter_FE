@@ -32,14 +32,12 @@ const Library = ({ nickname }) => {
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
+      setToken(token);
     }
     // 최근 검색어 기능
     const storedSearches =
       JSON.parse(localStorage.getItem("recentSearches")) || [];
     setRecentSearches(storedSearches);
-
-    // 책 데이터 불러오기
-    LibraryBooks();
 
     // 클릭 이벤트 리스너 추가
     const handleClickOutside = (event) => {
@@ -59,16 +57,15 @@ const Library = ({ nickname }) => {
     };
   }, []);
 
-  const key = localStorage.getItem("token");
-
   const LibraryBooks = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/bookshelf/");
+      const response = await axios.get("http://127.0.0.1:8000/bookshelf/");
       console.log("API 응답:", response.data); // 응답 데이터 로그 출력
-      setBooksMostMinds(response.data.books_most_minds);
-      setBooksRecent(response.data.books_recent);
+      setBooksMostMinds(response.data.booksMostMinds);
+      setBooksRecent(response.data.booksRecent);
     } catch (error) {
       console.error("책방 책 불러오기 실패:", error);
+      console.log(error.response); // 에러 응답 로그 추가
     }
   };
 
@@ -158,23 +155,29 @@ const Library = ({ nickname }) => {
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const searchValue = searchRef.current.value;
     if (searchValue) {
       saveRecentSearch(searchValue);
-      const allBooks = [...booksMostMinds, ...booksRecent];
-      const filteredBooks = allBooks.filter(
-        (book) =>
-          book.keywordTag.includes(searchValue) ||
-          book.title.includes(searchValue) ||
-          book.author.includes(searchValue)
-      );
-      setSearchResults(filteredBooks);
-      setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트
-      setIsSearchModalOpen(false); // 검색 후 모달 닫기
-      setIsSearchAbsolute(false); // 모달 닫힐 때 position을 static으로 변경
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/bookshelf/?search=${searchValue}`
+        );
+        console.log("검색 결과:", response.data); // 검색 결과 로그 출력
+        setSearchResults(response.data.searchedBooks); // 검색 결과를 상태에 저장
+        setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트
+        setIsSearchModalOpen(false); // 검색 후 모달 닫기
+        setIsSearchAbsolute(false); // 모달 닫힐 때 position을 static으로 변경
+      } catch (error) {
+        console.error("검색 실패:", error);
+        console.log(error.response); // 에러 응답 로그 추가
+      }
     }
   };
+
+  useEffect(() => {
+    console.log("검색 결과 state 변경:", searchResults);
+  }, [searchResults]);
 
   const handleKeywordClick = (keyword) => {
     setSelectedKeyword(keyword);
@@ -382,7 +385,7 @@ const Library = ({ nickname }) => {
                               book.cover ||
                               `${process.env.PUBLIC_URL}/images/mybookCover.png`
                             }
-                            alt="Mycover1"
+                            alt="Mycover"
                           />
                         </L.BookCoverImg>
                         <L.BookCoverText>
