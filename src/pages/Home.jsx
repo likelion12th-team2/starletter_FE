@@ -80,16 +80,44 @@ const Home = () => {
     navigate(`/market`);
   };
 
-  const goMyBook = () => {
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate("/mybook");
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/pets/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+
+        if (response.data.length > 0) {
+          navigate(`/mybook/make`); // 동물 있으면 책 만들기
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:", error);
+      }
     } else {
       navigate("/login");
     }
   };
 
-  const goLib = () => {
-    navigate("/library");
+  const goLib = async () => {
+    if (isLoggedIn) {
+      navigate("/library");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const profile = {
+    // image: 'path_to_profile_image.jpg',
+    name: nickname,
   };
 
   return (

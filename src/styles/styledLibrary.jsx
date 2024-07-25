@@ -114,6 +114,14 @@ export const Account = styled.div`
 `;
 
 // body
+export const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #002951;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
 export const LibContainer = styled.div`
   background: #002951;
   display: flex;
@@ -122,6 +130,7 @@ export const LibContainer = styled.div`
   align-items: center;
 `;
 export const SearchWrap = styled.div`
+  margin-bottom: 220px;
   position: relative;
   margin-top: 90px;
 `;
@@ -181,6 +190,7 @@ export const SearchPlus = styled.div`
 `;
 export const RecentTitle = styled.div`
   margin-bottom: 7px;
+  margin-right: auto;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -216,6 +226,7 @@ export const RecentList = styled.div`
 
 export const RecommendTitle = styled.div`
   margin-bottom: 7px;
+  margin-right: auto;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -244,28 +255,59 @@ export const RecommendList = styled.div`
   }
 `;
 
-//
-export const BookList = styled.div`
-  margin-top: 220px;
-  width: 1113.268px;
-  height: 346px;
-  flex-shrink: 0;
+//검색어 입력 전 메인
+export const LibMain = styled.div``;
+
+export const SMTitle = styled.div``;
+export const SM = styled.div`
+  margin-bottom: 177px;
+`;
+export const SMBooks = styled.div`
+  display: flex;
+  justify-contents: center;
+
+  display: flex;
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
+
+export const Title = styled.div`
+  display: flex;
+
+  margin-bottom: 15px;
+
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.45px;
 `;
 export const Heart = styled.div``;
-export const HeartWrap = styled.div``;
+export const HeartWrap = styled.div`
+  display: flex;
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+`;
+
+export const Book = styled.div`
+  position: relative;
+`;
 export const BookCover = styled.div`
   width: 184.866px;
   height: 250px;
   flex-shrink: 0;
   border-radius: 13.353px;
-  border: linear-gradient(1px, #85858580 50%, #79a3c680 50%);
   background: #87a8cf;
 
   position: relative;
 
   display: flex;
   flex-direction: column;
-  align-item: center;
 `;
 export const BookCoverText = styled.div`
   #title {
@@ -293,10 +335,6 @@ export const BookCoverText = styled.div`
   }
 `;
 export const BookCoverImg = styled.div`
-  width: 386px;
-  height: 353px;
-  flex-shrink: 0;
-  position: relative;
   margin-top: 54.12px;
 
   #MycoverImg {
@@ -306,22 +344,43 @@ export const BookCoverImg = styled.div`
     object-fit: cover;
   }
 `;
-export const Week = styled.div``;
-export const WeektWrap = styled.div``;
-export const Title = styled.div`
+export const BookTitle = styled.div`
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+export const BookWriter = styled.div`
+  color: var(--gray-30, #c2c1c1);
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+export const Recent = styled.div`
+  margin-top: 100px;
+  margin-bottom: 135px;
+`;
+export const RecentWrap = styled.div`
   display: flex;
-
-  margin-bottom: 15px;
-
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+`;
+export const NoResults = styled.div`
   color: #fff;
   font-family: "Pretendard Variable";
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  letter-spacing: 0.45px;
 `;
 
+//검색 결과
+//export const
 // footer
 export const Footer = styled.div`
   bottom: 0;

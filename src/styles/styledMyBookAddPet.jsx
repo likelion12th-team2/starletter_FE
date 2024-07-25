@@ -21,6 +21,7 @@ export const Nav = styled.div`
 `;
 
 export const Logo = styled.div`
+  cursor: pointer;
   margin-left: 80px;
 
   #logo {
@@ -112,192 +113,336 @@ export const Account = styled.div`
   }
 `;
 
-// body
-export const bodyContainer = styled.div`
+export const Body = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  background: #002951;
+  text-align: center;
   align-items: center;
-  background: var(--Color-1, #002951);
+  justify-content: center;
 `;
+
 export const Title = styled.div`
   color: #fff;
   text-align: center;
   font-family: "Pretendard Variable";
   font-size: 35px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   line-height: normal;
-  margin-top: 64px;
-  margin-bottom: 83px;
+  margin-top: 40px;
+  letter-spacing: -0.875px;
 `;
-export const Input = styled.div`
-  width: 892px;
-  height: 350px;
+
+export const ProImg = styled.div`
+  margin-top: 63px;
+  width: 183px;
+  height: 183px;
+  flex-shrink: 0;
+  display: flex;
+
+  #profile {
+    width: 183px;
+    height: 183px;
+    flex-shrink: 0;
+    border-radius: 50%;
+  }
+
+  #edit {
+    position: absolute;
+    margin-top: 139px;
+    margin-left: -39px;
+  }
+
+  #fileInput {
+    display: none;
+  }
+`;
+
+export const Profile = styled.div`
+  margin-top: 63px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 63px;
-`;
-export const PetName = styled.div`
-  display: flex;
-  flex-direction: row;
+  gap: 26px;
+  text-align: center;
   align-items: center;
+  justify-content: center;
+`;
 
-  #petName {
+export const Name = styled.div`
+  display: flex;
+  gap: 49px;
+  flex-direction: row;
+
+  #name {
+    margin-top: 17px;
     color: #fff;
     font-family: "Pretendard Variable";
-    font-size: 25px;
+    font-size: 30px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: normal;
   }
-  #petNameInput {
-    width: 650px;
-    height: 90px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--gray-10, #ebeaea);
-    border: none;
-    margin-left: auto;
+`;
 
-    color: #999797;
+export const NameBox = styled.div`
+  width: 420.566px;
+  height: 69.048px;
+  flex-shrink: 0;
+  border-radius: 5.724px;
+  background: #79a3c6;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+  text-align: left;
+
+  #namebox {
     font-family: "Pretendard Variable";
     font-size: 25px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    float: left;
+    width: 380px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: none;
+    background: transparent;
+    color: #fff;
+  }
 
-    &:focus {
-      outline: none; /* focus 시 아웃라인 제거 */
-      box-shadow: none; /* focus 시 그림자 제거 */
-    }
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    color: #fff;
   }
 `;
+
+export const Type = styled.div`
+  display: flex;
+  gap: 49px;
+  flex-direction: row;
+
+  #type {
+    margin-top: 17px;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+export const TypeBox = styled.div`
+  width: 420.566px;
+  height: 69.048px;
+  flex-shrink: 0;
+  border-radius: 5.724px;
+  background: #79a3c6;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  display: block;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  #typebox {
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    float: left;
+    width: 360px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: none;
+    background: transparent;
+    color: #fff;
+  }
+
+  #plustype {
+    margin-top: 20px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    color: #fff;
+  }
+`;
+
+export const TypeList = styled.div`
+  position: absolute;
+  border-radius: 5.724px;
+  background: #e8f2ff;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+  width: 421px;
+  height: 190px;
+  flex-shrink: 0;
+  z-index: 1;
+  margin-top: 5px;
+
+  label {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    input {
+      margin-right: 10px;
+    }
+`;
+
 export const Birth = styled.div`
   display: flex;
+  gap: 49px;
   flex-direction: row;
-  align-items: center;
 
-  #birth {
+  #birthday {
+    margin-top: 17px;
     color: #fff;
     font-family: "Pretendard Variable";
-    font-size: 25px;
+    font-size: 30px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: normal;
   }
-
-  #DatePickerWrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-
-    width: 650px;
-    height: 90px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--gray-10, #ebeaea);
-  }
-  #dateIcon {
-    width: 35px;
-    height: 35px;
-    flex-shrink: 0;
-    margin-left: auto;
-    margin-right: 33px;
-  }
-`;
-export const DatePicker = styled.div`
-  color: #999797;
-  font-family: "Pretendard Variable";
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
 `;
 
-export const DatePickerInput = styled.input`
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  background: var(--gray-10, #ebeaea);
-  border: none;
+export const BirthBox = styled.div`
+  width: 420.566px;
+  height: 69.048px;
+  flex-shrink: 0;
+  border-radius: 5.724px;
+  background: #79a3c6;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
 
-  .react-datepicker__day--outside-month {
-    color: #a8a8a8 !important;
-    pointer-events: none;
-  }
-  color: #999797;
-  font-family: "Pretendard Variable";
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  &::placeholder {
-    color: #999797;
+  #birthbox {
+    color: rgba(255, 255, 255, 0.8);
     font-family: "Pretendard Variable";
     font-size: 25px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-  }
-  &:focus {
-    outline: none; /* focus 시 아웃라인 제거 */
-    box-shadow: none; /* focus 시 그림자 제거 */
-  }
-`;
-
-export const FixedDate = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  #fixedDate {
-    color: #fff;
-    font-family: "Pretendard Variable";
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-
-  #DatePickerWrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-
-    width: 650px;
-    height: 90px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--gray-10, #ebeaea);
-  }
-  #dateIcon {
-    width: 35px;
-    height: 35px;
-    flex-shrink: 0;
-    margin-left: auto;
-    margin-right: 33px;
-  }
-`;
-
-export const AddPetBtn = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 137px;
-
-  #addPetBtn {
-    width: 221px;
-    height: 70px;
-    flex-shrink: 0;
-
-    border-radius: 50px;
-    background: var(--Color-2, #efd26a);
-    box-shadow: 0px 0px 4px 5px rgba(239, 210, 106, 0.3);
+    float: left;
+    margin-left: 20px;
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 20px;
     border: none;
+    background: transparent;
+  }
 
+  #birthcal {
+    margin-top: 18px;
+    float: right;
+    margin-right: 24px;
+  }
+
+  input:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    color: #fff;
+  }
+`;
+
+export const DatePickerWrapper = styled.div`
+  margin-left: 250px;
+  margin-top: 30px;
+  z-index: 1000; /* 필요에 따라 조정 */
+`;
+
+export const Memorial = styled.div`
+  display: flex;
+  gap: 49px;
+  flex-direction: row;
+
+  #memorial {
+    color: #fff;
+    margin-top: 17px;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+export const MemorialBox = styled.div`
+  width: 420.566px;
+  height: 69.048px;
+  flex-shrink: 0;
+  border-radius: 5.724px;
+  background: #79a3c6;
+  box-shadow: 4.185px 4.185px 4.185px 0px rgba(0, 0, 0, 0.1);
+
+  #memorialbox {
+    color: rgba(255, 255, 255, 0.8);
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    float: left;
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: none;
+    background: transparent;
+    margin-left: 20px;
+  }
+
+  #memcal {
+    margin-top: 18px;
+    float: right;
+    margin-right: 24px;
+  }
+
+  #memorialbox:focus {
+    outline: none;
+    border: none;
+  }
+
+  input::placeholder {
+    color: #fff;
+  }
+`;
+
+export const DatePickerWrapper1 = styled.div`
+  margin-left: 250px;
+  margin-top: 30px;
+  z-index: 1000; /* 필요에 따라 조정 */
+`;
+
+export const Button = styled.div`
+  margin-top: 95px;
+  width: 167.143px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 39.857px;
+  margin-bottom: 65px;
+  background: #efd26a;
+  cursor: pointer;
+
+  #btn {
+    cursor: pointer;
+    margin-top: 15px;
     color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
@@ -305,9 +450,8 @@ export const AddPetBtn = styled.div`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    &:hover {
-      box-shadow: 0px 0px 10px 5px rgba(260, 230, 120, 0.6);
-    }
+    border: none;
+    background: transparent;
   }
 `;
 

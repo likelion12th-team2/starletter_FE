@@ -18,6 +18,7 @@ import MyBookDetail from "./pages/MyBookDetail";
 import MyBookWrite from "./pages/MyBookWrite";
 
 import Library from "./pages/Library";
+import LibraryDetail from "./pages/LibraryDetail";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,6 +51,7 @@ function App() {
         <Route path="/mybook/write" element={<MyBookWrite />} />
 
         <Route path="/library" element={<Library />} />
+        <Route path="/library/:id" element={<LibraryDetail />} />
       </Routes>
     </BrowserRouter>
   );

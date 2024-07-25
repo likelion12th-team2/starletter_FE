@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as MB from "../styles/styledMyBookDetail";
 import Modal from "react-modal"; // 모달
@@ -10,7 +9,6 @@ import MyPageModal from "./MyPageModal";
 const MyBookDetail = ({ pages = [], nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
 
@@ -97,16 +95,25 @@ const MyBookDetail = ({ pages = [], nickname }) => {
 
   // 모달창 상태
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedPostitContent, setSelectedPostitContent] = useState(""); //포스트잇 선택시 해당 내용 보임
+  const [selectedPostitContent, setSelectedPostitContent] = useState(""); // 포스트잇 선택 시 해당 내용 보임
+  const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
 
-  const openModal = (content) => {
+  const openPostitModal = (content) => {
     setSelectedPostitContent(content);
     setModalIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closePostitModal = () => {
     setSelectedPostitContent("");
     setModalIsOpen(false);
+  };
+
+  const openMyPageModal = () => {
+    setIsMyPageModalOpen(true);
+  };
+
+  const closeMyPageModal = () => {
+    setIsMyPageModalOpen(false);
   };
 
   // 포스트잇 (댓글)
@@ -125,7 +132,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
     },
   ];
 
-  //책 구현
+  // 책 구현
   const contents = [
     {
       id: 1,
@@ -207,7 +214,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
               <MB.Account>
                 {isLoggedIn ? (
                   <>
-                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                    <div id="mypage" onClick={openMyPageModal} ref={myPageRef}>
                       마이페이지
                     </div>
                     <div id="logout" onClick={handleLogout}>
@@ -229,7 +236,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
           </MB.NavContent>
         </MB.Nav>
       </header>
-      <body>
+      <MB.Body>
         <MB.BodyContainer>
           <MB.NewBook>
             <MB.BookCover>
@@ -348,7 +355,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
               {postits.map((postit) => (
                 <MB.Postit
                   key={postit.id}
-                  onClick={() => openModal(postit.content)}
+                  onClick={() => openPostitModal(postit.content)}
                 >
                   <div id="content">{postit.content}</div>
                 </MB.Postit>
@@ -356,11 +363,11 @@ const MyBookDetail = ({ pages = [], nickname }) => {
             </MB.PostitList>
           </MB.PostitWrap>
         </MB.BodyContainer>
-      </body>
+      </MB.Body>
       {/*  */}
       <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isMyPageModalOpen}
+        onClose={closeMyPageModal}
         profile={profile}
         anchorRef={myPageRef}
       />
@@ -383,7 +390,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
       {/* 모달창 */}
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={closePostitModal}
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.75)",

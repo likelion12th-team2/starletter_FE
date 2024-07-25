@@ -151,7 +151,7 @@ const MyBook = ({ nickname }) => {
         </M.Nav>
       </header>
       {/*  */}
-      <body>
+      <M.Body>
         <M.bodyContainer>
           <M.Book onClick={goMyBookDetail}>
             <M.BookCoverImg>
@@ -166,7 +166,8 @@ const MyBook = ({ nickname }) => {
             </M.BookCoverText>
           </M.Book>
         </M.bodyContainer>
-      </body>
+      </M.Body>
+
       {/*  */}
       <MyPageModal
         isOpen={isModalOpen}

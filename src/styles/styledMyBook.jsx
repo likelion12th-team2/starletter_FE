@@ -113,6 +113,14 @@ export const Account = styled.div`
   }
 `;
 // body
+export const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #002951;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
 export const bodyContainer = styled.div`
   display: flex;
   justify-content: center;

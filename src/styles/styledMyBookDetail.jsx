@@ -365,6 +365,15 @@ export const ModalContent = styled.div`
 `;
 
 // 책 화면 구현
+export const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #002951;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const BookContainer = styled.div`
   display: flex;
   justify-content: center;
