@@ -115,11 +115,6 @@ const Home = () => {
     }
   };
 
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
-  };
-
   return (
     <H.Container>
       <header>
