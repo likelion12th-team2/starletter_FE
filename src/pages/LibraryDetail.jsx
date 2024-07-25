@@ -20,6 +20,8 @@ const LibraryDetail = ({ nickname }) => {
     }
   }, []);
 
+  const key = localStorage.getItem("token");
+
   const goLogin = () => {
     navigate(`/login`);
   };
@@ -35,7 +37,7 @@ const LibraryDetail = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
