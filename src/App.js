@@ -9,6 +9,7 @@ import Managepet from "./pages/Managepet";
 import Activity from "./pages/Activity";
 import Funeral from "./pages/Funeral";
 import Market from "./pages/Market";
+import EditProfile from "./pages/EditProfile";
 
 import MyBook from "./pages/MyBook";
 import MyBookAddPet from "./pages/MyBookAddPet";
@@ -41,6 +42,7 @@ function App() {
         <Route path="/mypage/bookroom" element={<Activity />} />
         <Route path="/funeral" element={<Funeral />} />
         <Route path="/market" element={<Market />} />
+        <Route path="/mypage/edit" element={<EditProfile />} />
 
         <Route path="/mybook" element={<MyBook />} />
         <Route path="/mybook/addpet" element={<MyBookAddPet />} />

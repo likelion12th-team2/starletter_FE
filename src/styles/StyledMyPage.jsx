@@ -59,7 +59,7 @@ export const Button = styled.div`
   gap: 15px;
 `;
 
-export const Pluspet = styled.div`
+export const Information = styled.div`
   cursor: pointer;
   width: 300px;
   height: 60px;
@@ -68,6 +68,37 @@ export const Pluspet = styled.div`
   border: 1px solid #002951;
   display: flex;
   margin-top: 28px;
+  flex-direction: row;
+
+  #information {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    margin-top: 13px;
+    margin-left: 16px;
+  }
+
+  #detinf {
+    color: #000;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 18px;
+    margin-left: 15px;
+  }
+`;
+
+export const Pluspet = styled.div`
+  cursor: pointer;
+  width: 300px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  border: 1px solid #002951;
+  display: flex;
   flex-direction: row;
 
   #plus {

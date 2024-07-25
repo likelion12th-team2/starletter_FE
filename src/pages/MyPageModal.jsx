@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as P from "../styles/StyledMyPage";
 import { useNavigate, useParams } from "react-router-dom";
 
-const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
+const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
 
@@ -16,6 +16,10 @@ const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
 
   const goBook = () => {
     navigate(`/mypage/bookroom`);
+  };
+
+  const goEdit = () => {
+    navigate(`/mypage/edit`);
   };
 
   useEffect(() => {
@@ -46,8 +50,16 @@ const MyPageModal = ({ isOpen, onClose, profile, anchorRef }) => {
             alt="Profile"
           />
         </P.ProfileImage>
-        <P.Greet>안녕하세요, {profile.name}님</P.Greet>
+        {/* <P.Greet>안녕하세요, {profile.name}님</P.Greet> */}
         <P.Button>
+          <P.Information onClick={goEdit}>
+            <img
+              id="information"
+              src={`${process.env.PUBLIC_URL}/images/Information.svg`}
+              alt="정보수정"
+            />
+            <div id="detinf">내 프로필 수정</div>
+          </P.Information>
           <P.Pluspet onClick={goPlus}>
             <img
               id="plus"
