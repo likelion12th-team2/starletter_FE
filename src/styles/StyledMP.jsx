@@ -114,10 +114,13 @@ export const Account = styled.div`
 `;
 
 // body
-export const BodyContainer = styled.div`
+export const Body = styled.div`
   display: flex;
   flex-direction: column;
   background: #002951;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 
   #title {
     color: #fff;
@@ -132,54 +135,32 @@ export const BodyContainer = styled.div`
   }
 `;
 
-//책 슬라이드
-export const Slider = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 55px;
-  justify-content: center;
-  position: relative;
-  padding-top: 199px;
-  padding-bottom: 88px;
+export const List = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  flex-direction: row;
+  gap: 100px;
+  margin-top: 77px;
+  margin-bottom: 170px;
 `;
 
-export const SlideButton = styled.button`
-  cursor: pointer;
-  background-color: #002951;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  visibility: ${({ show }) => (show ? "visible" : "hidden")};
-`;
-
-export const BookContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 1087px;
-  height: 530px;
-  overflow: hidden;
-`;
-
-export const Book = styled.div`
-  position: absolute;
-  transition: transform 0.5s ease, font-size 0.5s ease;
-  opacity: 0;
+export const Pet = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 30px;
+  text-align: center;
   align-items: center;
   justify-content: center;
 
-  // #img {
-  //   width: 228px;
-  //   height: 228px;
-  //   object-fit: cover;
-  //   flex-shrink: 0;
-  //   border-radius: 228px;
-  //   background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;
-  //   box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  // }
+  #img {
+    width: 186.27px;
+    height: 186.27px;
+    flex-shrink: 0;
+    border-radius: 186.27px;
+    background: url(<path-to-image>) lightgray -34.246px 0px / 155.718% 100% no-repeat;
+    box-shadow: 1.634px 3.268px 3.268px 0px rgba(0, 0, 0, 0.25);
+  }
+
   #name {
     color: #fff;
     text-align: center;
@@ -188,117 +169,7 @@ export const Book = styled.div`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    margin-top: 11px;
   }
-  #date {
-    color: #ebeaea;
-    text-align: center;
-    font-family: "Pretendard Variable";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: -0.6px;
-    margi-top: 9px;
-  }
-
-  #bookbtn {
-    width: 161px;
-    height: 47px;
-    flex-shrink: 0;
-    border-radius: 30px;
-    background: #c4def8;
-    margin-top: 24px;
-    border: none;
-    color: #292c33;
-    text-align: center;
-    font-family: "Pretendard Variable";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-
-    ${({ small }) =>
-      small &&
-      `
-        display: none;
-      `}
-  }
-
-  ${({ large }) =>
-    large &&
-    `
-    transform: translateX(0);
-    font-size: 24px;
-    opacity: 1;
-    width: 373px;
-    height: 522px;
-    flex-shrink: 0;
-    border-radius: 10.909px;
-    border: 0.817px solid rgba(133, 133, 133, 0.50);
-    background: #87A8CF;
-    box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.25);
-
-  `}
-  ${({ small, next }) =>
-    small &&
-    next &&
-    `
-    transform: translateX(400px);
-    width: 246.523px;
-  height: 345px;
-  flex-shrink: 0;
-  border-radius: 8.825px;
-  border: 0.661px solid rgba(133, 133, 133, 0.50);
-  background: #87A8CF;
-
-    font-size: 16px;
-    opacity: 0.7;
-
-    #img{
-      width: 150.69px;
-      height: 150.69px;
-    }
-    #name{
-      font-size: 14.276px;
-    }
-    #date{
-      font-size: 11.897px;
-    }
-  `}
-  ${({ small, prev }) =>
-    small &&
-    prev &&
-    `
-    transform: translateX(-400px);
-    width: 246.523px;
-  height: 345px;
-  flex-shrink: 0;
-  border-radius: 8.825px;
-  border: 0.661px solid rgba(133, 133, 133, 0.50);
-  background: #87A8CF;
-
-    font-size: 16px;
-    opacity: 0.7;
-
-    #img{
-      width: 150.69px;
-      height: 150.69px;
-    }
-    #name{
-      font-size: 14.276px;
-    }
-    #date{
-      font-size: 11.897px;
-    }
-    
-  `}
-  ${({ hidden }) =>
-    hidden &&
-    `
-    opacity: 0;
-    pointer-events: none;
-  `}
 `;
 
 export const Footer = styled.div`

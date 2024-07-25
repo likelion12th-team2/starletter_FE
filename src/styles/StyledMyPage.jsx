@@ -41,6 +41,7 @@ export const ProfileImage = styled.div`
   height: 70px;
   flex-shrink: 0;
   margin-top: 40px;
+  margin-bottom: 20px;
 `;
 
 export const Greet = styled.div`

@@ -131,6 +131,7 @@ export const Body = styled.div`
 export const List = styled.div`
   // margin-top: 80px;
   display: flex;
+  margin-top: -50px;
   flex-direction: column;
   gap: 33px;
   width: 200px;
