@@ -57,6 +57,8 @@ const Library = ({ nickname }) => {
     };
   }, []);
 
+  const key = localStorage.getItem("token");
+
   const LibraryBooks = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/bookshelf/");
