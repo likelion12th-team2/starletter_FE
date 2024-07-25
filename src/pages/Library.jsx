@@ -164,7 +164,8 @@ const Library = ({ nickname }) => {
       const filteredBooks = allBooks.filter(
         (book) =>
           book.keywordTag.includes(searchValue) ||
-          book.title.includes(searchValue)
+          book.title.includes(searchValue) ||
+          book.author.includes(searchValue)
       );
       setSearchResults(filteredBooks);
       setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트
