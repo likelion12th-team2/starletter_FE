@@ -114,6 +114,14 @@ export const Account = styled.div`
 `;
 
 // body
+export const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #002951;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
 export const LibContainer = styled.div`
   background: #002951;
   display: flex;
@@ -182,6 +190,7 @@ export const SearchPlus = styled.div`
 `;
 export const RecentTitle = styled.div`
   margin-bottom: 7px;
+  margin-right: auto;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -217,6 +226,7 @@ export const RecentList = styled.div`
 
 export const RecommendTitle = styled.div`
   margin-bottom: 7px;
+  margin-right: auto;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -247,6 +257,21 @@ export const RecommendList = styled.div`
 
 //검색어 입력 전 메인
 export const LibMain = styled.div``;
+
+export const SMTitle = styled.div``;
+export const SM = styled.div`
+  margin-bottom: 177px;
+`;
+export const SMBooks = styled.div`
+  display: flex;
+  justify-contents: center;
+
+  display: flex;
+  gap: 45px;
+  width: 1105px;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
 
 export const Title = styled.div`
   display: flex;
@@ -344,6 +369,14 @@ export const RecentWrap = styled.div`
   gap: 45px;
   width: 1105px;
   flex-wrap: wrap;
+`;
+export const NoResults = styled.div`
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `;
 
 //검색 결과

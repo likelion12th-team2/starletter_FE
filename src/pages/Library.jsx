@@ -6,11 +6,9 @@ import axios from "axios";
 import styled from "styled-components";
 
 // 기존 스타일드 컴포넌트를 확장하여 조건부 스타일링을 적용하는 방법
-const Search = styled(L.Search).attrs((props) => ({
-  style: {
-    position: props.isAbsolute ? "absolute" : "static",
-  },
-}))``;
+const Search = styled(({ isAbsolute, ...props }) => <L.Search {...props} />)`
+  position: ${(props) => (props.isAbsolute ? "absolute" : "static")};
+`;
 
 const Library = ({ nickname }) => {
   const navigate = useNavigate();
@@ -18,6 +16,10 @@ const Library = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false); // State for SearchPlus modal 추가
   const [isSearchAbsolute, setIsSearchAbsolute] = useState(false); // State for L.Search position 추가
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과를 저장할 상태 변수
+  const [isSearchExecuted, setIsSearchExecuted] = useState(false); // 검색 실행 여부 상태 변수
+  const [booksMostMinds, setBooksMostMinds] = useState([]); // 공감 많이 받은 책 상태 변수
+  const [booksRecent, setBooksRecent] = useState([]); // 최근 책 상태 변수
   const myPageRef = useRef(null);
   const searchRef = useRef(null); // Ref for search input
   const searchWrapRef = useRef(null); // Ref for search wrap 추가
@@ -36,6 +38,9 @@ const Library = ({ nickname }) => {
       JSON.parse(localStorage.getItem("recentSearches")) || [];
     setRecentSearches(storedSearches);
 
+    // 책 데이터 불러오기
+    LibraryBooks();
+
     // 클릭 이벤트 리스너 추가
     const handleClickOutside = (event) => {
       if (
@@ -53,6 +58,17 @@ const Library = ({ nickname }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const LibraryBooks = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/bookshelf/");
+      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+      setBooksMostMinds(response.data.books_most_minds);
+      setBooksRecent(response.data.books_recent);
+    } catch (error) {
+      console.error("책방 책 불러오기 실패:", error);
+    }
+  };
 
   const goHome = () => {
     navigate(`/`);
@@ -144,6 +160,14 @@ const Library = ({ nickname }) => {
     const searchValue = searchRef.current.value;
     if (searchValue) {
       saveRecentSearch(searchValue);
+      const allBooks = [...booksMostMinds, ...booksRecent];
+      const filteredBooks = allBooks.filter(
+        (book) =>
+          book.keywordTag.includes(searchValue) ||
+          book.title.includes(searchValue)
+      );
+      setSearchResults(filteredBooks);
+      setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트
       setIsSearchModalOpen(false); // 검색 후 모달 닫기
       setIsSearchAbsolute(false); // 모달 닫힐 때 position을 static으로 변경
     }
@@ -153,58 +177,9 @@ const Library = ({ nickname }) => {
     setSelectedKeyword(keyword);
     if (searchRef.current) {
       searchRef.current.value = keyword;
+      handleSearch();
     }
   };
-
-  //공감 많이 받은 책
-  const booksMostMinds = [
-    {
-      id: 1,
-      title: "마루는 강쥐",
-      pet: 1,
-      author: "핑핑이",
-      description: "마루야 안녕 잘지내",
-      cover: "http://127.0.0.1:8000/media/book_covers/파일명",
-      lastUpdated: "2024-07-01",
-      keywordTag: "일상",
-    },
-    {
-      id: 2,
-      title: "나비안녕",
-      pet: 2,
-      author: "이유저",
-      description: "",
-      cover: null,
-      lastUpdated: "2024-07-10",
-      keywordTag: "공감",
-    },
-  ];
-
-  //최근 책
-  const booksRecent = [
-    {
-      id: 3,
-      title: "앵무 귀여워",
-      pet: 4,
-      author: "핑핑이",
-      description: "",
-      cover: null,
-      lastUpdated: "2024-07-22",
-      keywordTag: "공감",
-    },
-    {
-      id: 5,
-      title: "김구름의 하루",
-      pet: 7,
-      author: "핑핑이",
-      description: "잘 살아",
-      cover: "http://127.0.0.1:8000/media/book_covers/파일명",
-      lastUpdated: "2024-07-22",
-      keywordTag: "일상",
-    },
-  ];
-
-  //책 클릭시 책 상세로 이동
 
   return (
     <L.Container>
@@ -259,7 +234,7 @@ const Library = ({ nickname }) => {
           </L.NavContent>
         </L.Nav>
       </header>
-      <div>
+      <L.Main>
         <L.LibContainer>
           <L.SearchWrap ref={searchWrapRef}>
             {" "}
@@ -316,69 +291,115 @@ const Library = ({ nickname }) => {
           </L.SearchWrap>
 
           {/* 검색어 입력 전 메인 */}
-          <L.LibMain>
-            <L.Heart>
-              <L.Title>공감 많이 받은 책</L.Title>
-              <L.HeartWrap>
-                {/* 책 */}
-                {booksMostMinds.slice(0, 5).map((bookMostMinds) => (
-                  <L.Book
-                    key={bookMostMinds.id}
-                    onClick={() => {
-                      navigate(`/library/${bookMostMinds.id}`);
-                    }}
-                  >
-                    <L.BookCover>
-                      <L.BookCoverImg>
-                        <img
-                          id="MycoverImg"
-                          src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                          alt="Mycover1"
-                        />
-                      </L.BookCoverImg>
-                      <L.BookCoverText>
-                        <div id="title">{bookMostMinds.title}</div>
-                      </L.BookCoverText>
-                    </L.BookCover>
-                    <L.BookTitle>{bookMostMinds.title}</L.BookTitle>
-                    <L.BookWriter>{bookMostMinds.author}</L.BookWriter>
-                  </L.Book>
-                ))}
-              </L.HeartWrap>
-            </L.Heart>
-            <L.Recent>
-              <L.Title>이주의 책</L.Title>
-              <L.RecentWrap>
-                {/* 책 */}
-
-                {booksRecent.slice(0, 5).map((bookRecent) => (
-                  <L.Book
-                    key={bookRecent.id}
-                    onClick={() => {
-                      navigate(`/library/${bookRecent.id}`);
-                    }}
-                  >
-                    <L.BookCover>
-                      <L.BookCoverImg>
-                        <img
-                          id="MycoverImg"
-                          src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                          alt="Mycover1"
-                        />
-                      </L.BookCoverImg>
-                      <L.BookCoverText>
-                        <div id="title">{bookRecent.title}</div>
-                      </L.BookCoverText>
-                    </L.BookCover>
-                    <L.BookTitle>{bookRecent.title}</L.BookTitle>
-                    <L.BookWriter>{bookRecent.author}</L.BookWriter>
-                  </L.Book>
-                ))}
-              </L.RecentWrap>
-            </L.Recent>
-          </L.LibMain>
+          {!isSearchExecuted && (
+            <L.LibMain>
+              <L.Heart>
+                <L.Title>공감 많이 받은 책</L.Title>
+                <L.HeartWrap>
+                  {/* 책 */}
+                  {booksMostMinds.slice(0, 5).map((bookMostMinds) => (
+                    <L.Book
+                      key={bookMostMinds.id}
+                      onClick={() => {
+                        navigate(`/library/${bookMostMinds.id}`);
+                      }}
+                    >
+                      <L.BookCover>
+                        <L.BookCoverImg>
+                          <img
+                            id="MycoverImg"
+                            src={
+                              bookMostMinds.cover ||
+                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                            }
+                            alt="Mycover1"
+                          />
+                        </L.BookCoverImg>
+                        <L.BookCoverText>
+                          <div id="title">{bookMostMinds.title}</div>
+                        </L.BookCoverText>
+                      </L.BookCover>
+                      <L.BookTitle>{bookMostMinds.title}</L.BookTitle>
+                      <L.BookWriter>{bookMostMinds.author}</L.BookWriter>
+                    </L.Book>
+                  ))}
+                </L.HeartWrap>
+              </L.Heart>
+              <L.Recent>
+                <L.Title>이주의 책</L.Title>
+                <L.RecentWrap>
+                  {/* 책 */}
+                  {booksRecent.slice(0, 5).map((bookRecent) => (
+                    <L.Book
+                      key={bookRecent.id}
+                      onClick={() => {
+                        navigate(`/library/${bookRecent.id}`);
+                      }}
+                    >
+                      <L.BookCover>
+                        <L.BookCoverImg>
+                          <img
+                            id="MycoverImg"
+                            src={
+                              bookRecent.cover ||
+                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                            }
+                            alt="Mycover1"
+                          />
+                        </L.BookCoverImg>
+                        <L.BookCoverText>
+                          <div id="title">{bookRecent.title}</div>
+                        </L.BookCoverText>
+                      </L.BookCover>
+                      <L.BookTitle>{bookRecent.title}</L.BookTitle>
+                      <L.BookWriter>{bookRecent.author}</L.BookWriter>
+                    </L.Book>
+                  ))}
+                </L.RecentWrap>
+              </L.Recent>
+            </L.LibMain>
+          )}
+          {/* 검색어 입력 후 메인 */}
+          {isSearchExecuted && (
+            <L.SM>
+              {searchResults.length > 0 ? (
+                <L.SMBooks>
+                  {searchResults.map((book) => (
+                    <L.Book
+                      key={book.id}
+                      onClick={() => {
+                        navigate(`/library/${book.id}`);
+                      }}
+                    >
+                      <L.BookCover>
+                        <L.BookCoverImg>
+                          <img
+                            id="MycoverImg"
+                            src={
+                              book.cover ||
+                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                            }
+                            alt="Mycover1"
+                          />
+                        </L.BookCoverImg>
+                        <L.BookCoverText>
+                          <div id="title">{book.title}</div>
+                        </L.BookCoverText>
+                      </L.BookCover>
+                      <L.BookTitle>{book.title}</L.BookTitle>
+                      <L.BookWriter>{book.author}</L.BookWriter>
+                    </L.Book>
+                  ))}
+                </L.SMBooks>
+              ) : (
+                <L.NoResults>
+                  <div>검색 결과가 없습니다</div>
+                </L.NoResults>
+              )}
+            </L.SM>
+          )}
         </L.LibContainer>
-      </div>
+      </L.Main>
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}

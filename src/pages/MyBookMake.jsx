@@ -213,7 +213,7 @@ const MyBookMake = ({ nickname }) => {
         </MM.Nav>
       </header>
 
-      <main>
+      <MM.Body>
         <MM.bodyContainer>
           <MM.Slider>
             <MM.Button onClick={prevBook} show={showButtons}>
@@ -321,7 +321,7 @@ const MyBookMake = ({ nickname }) => {
             </MM.Button>
           </MM.Slider>
         </MM.bodyContainer>
-      </main>
+      </MM.Body>
       <footer>
         <MM.Footer>
           <MM.Introduction>

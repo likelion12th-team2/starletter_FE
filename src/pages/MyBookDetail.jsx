@@ -236,7 +236,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
           </MB.NavContent>
         </MB.Nav>
       </header>
-      <body>
+      <MB.Body>
         <MB.BodyContainer>
           <MB.NewBook>
             <MB.BookCover>
@@ -363,7 +363,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
             </MB.PostitList>
           </MB.PostitWrap>
         </MB.BodyContainer>
-      </body>
+      </MB.Body>
       {/*  */}
       <MyPageModal
         isOpen={isMyPageModalOpen}
