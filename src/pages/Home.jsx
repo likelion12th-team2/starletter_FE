@@ -196,7 +196,7 @@ const Home = () => {
           <H.Fun onClick={goFun}>
             <img
               id="funeral"
-              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              src={`${process.env.PUBLIC_URL}/images/Funeral.svg`}
               alt="장례식장"
             />
             <div id="detfun">장례식장</div>
@@ -204,7 +204,7 @@ const Home = () => {
           <H.Mar onClick={goMarket}>
             <img
               id="market"
-              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              src={`${process.env.PUBLIC_URL}/images/Market.svg`}
               alt="마켓"
             />
             <div id="detmar">마켓</div>
