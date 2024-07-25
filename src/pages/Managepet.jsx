@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as MP from "../styles/StyledMP";
 import axios from "axios";
+import PetModal from "./PetModal";
 
 const Managepet = () => {
   const navigate = useNavigate();
@@ -26,15 +27,6 @@ const Managepet = () => {
 
   const key = localStorage.getItem("token");
 
-  const [current, setCurrent] = useState(0);
-  const nextpet = () => {
-    setCurrent((prev) => (prev + 1) % pets.length);
-  };
-  const prevpet = () => {
-    setCurrent((prev) => (prev - 1 + pets.length) % pets.length);
-  };
-  const showButtons = pets.length > 1;
-
   useEffect(() => {
     const fetchPets = async () => {
       try {
@@ -47,7 +39,6 @@ const Managepet = () => {
           }
         );
         setPets(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching pets:", error);
         setErrorMessage("펫 목록을 불러오는 중 오류가 발생했습니다.");
@@ -115,6 +106,32 @@ const Managepet = () => {
       console.error("로그아웃 실패:", error);
     }
   };
+  const [modalIsOpen1, setModalIsOpen1] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);
+
+  const openModal1 = (petId) => {
+    // 특정 펫의 세부 정보를 가져오기 위해 API 요청
+    console.log(`Opening modal for pet id: ${petId}`);
+    axios
+      .get(`http://127.0.0.1:8000/accounts/pets/${petId}/`, {
+        headers: {
+          Authorization: `Token ${key}`, // 인증 헤더 추가
+        },
+      })
+      .then((response) => {
+        console.log("Pet details fetched:", response.data);
+        setSelectedPet(response.data);
+        setModalIsOpen1(true);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the pet details!", error);
+      });
+  };
+
+  const closeModal1 = () => {
+    setModalIsOpen1(false);
+    setSelectedPet(null);
+  };
 
   return (
     <MP.Container>
@@ -174,61 +191,28 @@ const Managepet = () => {
         onClose={closeModal}
         anchorRef={myPageRef}
       />
-      <MP.BodyContainer>
+      <MP.Body>
         <div id="title">나의 반려동물 관리</div>
-        <MP.Slider>
-          <MP.SlideButton onClick={prevpet}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/Back.svg`}
-              alt="Previous"
-            />
-          </MP.SlideButton>
-          <MP.BookContainer>
-            {pets.map((pet, index) => {
-              let large = index === current;
-              let small =
-                (index === (current + 1) % pets.length &&
-                  current !== pets.length - 1) ||
-                (index === (current - 1 + pets.length) % pets.length &&
-                  current !== 0);
-              let next =
-                index === (current + 1) % pets.length &&
-                current !== pets.length - 1;
-              let prev =
-                index === (current - 1 + pets.length) % pets.length &&
-                current !== 0;
-              let hidden = !(large || small);
+        <MP.List>
+          {pets.map((pet) => (
+            <MP.Pet key={pet.id}>
+              <img
+                id="img"
+                src={pet.petImage || "default-image-url.jpg"}
+                alt="photo"
+                onClick={() => openModal1(pet.id)}
+              />
+              <div id="name">{pet.petName}</div>
+            </MP.Pet>
+          ))}
+        </MP.List>
 
-              if (pets.length === 1) {
-                large = true;
-                small = false;
-                next = false;
-                prev = false;
-                hidden = false;
-              }
-
-              return (
-                <MP.Book
-                  key={pet.id}
-                  className={`${large ? "large" : ""} ${small ? "small" : ""} ${
-                    next ? "next" : ""
-                  } ${prev ? "prev" : ""} ${hidden ? "hidden" : ""}`}
-                >
-                  <img id="img" src={pet.petImage} alt={pet.petName} />
-                  <div id="name">{pet.petName}</div>
-                  <div id="date">
-                    {pet.petBirth}~{pet.petAnniv}
-                  </div>
-                  <button id="bookbtn">서재 바로가기</button>
-                </MP.Book>
-              );
-            })}
-          </MP.BookContainer>
-          <MP.SlideButton onClick={nextpet} show={showButtons}>
-            <img src={`${process.env.PUBLIC_URL}/images/Next.svg`} />
-          </MP.SlideButton>
-        </MP.Slider>
-      </MP.BodyContainer>
+        <PetModal
+          isOpen={modalIsOpen1}
+          onClose={closeModal1}
+          pet={selectedPet}
+        />
+      </MP.Body>
       <MP.Footer>
         <MP.Introduction>
           <div id="introduce">나의 별에게 보내는 편지</div>

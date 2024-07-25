@@ -12,6 +12,7 @@ const EditProfile = () => {
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
   const [name, setName] = useState("");
+  const [name1, setName1] = useState("");
   const [nickname, setNickname] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -134,6 +135,27 @@ const EditProfile = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/myinfo/",
+          {
+            headers: {
+              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+            },
+          }
+        );
+        setName1(response.data.name);
+      } catch (error) {
+        console.error("Error fetching name:", error);
+        setErrorMessage("사용자 이름을 불러오는 중 오류가 발생했습니다.");
+      }
+    };
+
+    fetchName();
+  }, []);
+
   return (
     <E.Container>
       <header>
@@ -194,7 +216,7 @@ const EditProfile = () => {
       />
       <form onSubmit={handleSubmit}>
         <E.Body>
-          <E.Title>안녕하세요, 님</E.Title>
+          <E.Title>안녕하세요, {name1} 님</E.Title>
           <E.Profile>
             <E.Name>
               <div id="name">이름</div>

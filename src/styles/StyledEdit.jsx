@@ -129,7 +129,7 @@ export const Title = styled.div`
   font-family: "Pretendard Variable";
   font-size: 35px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 800;
   line-height: normal;
   letter-spacing: 0.525px;
   margin-top: 91px;
