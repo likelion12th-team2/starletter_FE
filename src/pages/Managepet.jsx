@@ -5,21 +5,26 @@ import MyPageModal from "./MyPageModal";
 import * as MP from "../styles/StyledMP";
 import axios from "axios";
 
-const Managepet = ({ nickname }) => {
+const Managepet = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
+    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
   }, []);
+
   const [pets, setPets] = useState([]);
+
+  const key = localStorage.getItem("token");
 
   const [current, setCurrent] = useState(0);
   const nextpet = () => {
@@ -29,6 +34,28 @@ const Managepet = ({ nickname }) => {
     setCurrent((prev) => (prev - 1 + pets.length) % pets.length);
   };
   const showButtons = pets.length > 1;
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/pets/",
+          {
+            headers: {
+              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+            },
+          }
+        );
+        setPets(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+        setErrorMessage("펫 목록을 불러오는 중 오류가 발생했습니다.");
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const goLogin = () => {
     navigate("/login");
@@ -73,7 +100,7 @@ const Managepet = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -88,44 +115,6 @@ const Managepet = ({ nickname }) => {
       console.error("로그아웃 실패:", error);
     }
   };
-
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
-  };
-
-  useEffect(() => {
-    const fetchPets = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found");
-        navigate("/login"); // 토큰이 없을 시 로그인 페이지로 이동
-        return;
-      }
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/pets/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
-        setPets(response.data);
-      } catch (error) {
-        console.error(
-          "조회불가: ",
-          error.response ? error.response.data : error.message
-        );
-        if (error.response && error.response.status === 401) {
-          // 토큰이 유효하지 않을 경우 로그인 페이지로 이동
-          navigate("/login");
-        }
-      }
-    };
-
-    fetchPets();
-  }, [navigate]);
 
   return (
     <MP.Container>
@@ -183,7 +172,6 @@ const Managepet = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       <MP.BodyContainer>
