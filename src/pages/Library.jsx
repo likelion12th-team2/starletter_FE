@@ -87,8 +87,8 @@ const Library = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
+  const goMyBookDetail = (bookId) => {
+    navigate(`/library/${bookId}`, { state: { bookId } });
   };
 
   const goFun = () => {
@@ -107,7 +107,7 @@ const Library = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
+  // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
@@ -335,7 +335,7 @@ const Library = ({ nickname }) => {
                     <L.Book
                       key={bookMostMinds.id}
                       onClick={() => {
-                        navigate(`/library/${bookMostMinds.id}`);
+                        goMyBookDetail(bookMostMinds.id);
                       }}
                     >
                       <L.BookCover>
@@ -367,7 +367,7 @@ const Library = ({ nickname }) => {
                     <L.Book
                       key={bookRecent.id}
                       onClick={() => {
-                        navigate(`/library/${bookRecent.id}`);
+                        goMyBookDetail(bookRecent.id);
                       }}
                     >
                       <L.BookCover>
@@ -402,7 +402,7 @@ const Library = ({ nickname }) => {
                     <L.Book
                       key={book.id}
                       onClick={() => {
-                        navigate(`/library/${book.id}`);
+                        goMyBookDetail(book.id);
                       }}
                     >
                       <L.BookCover>

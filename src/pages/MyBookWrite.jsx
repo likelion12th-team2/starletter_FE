@@ -145,9 +145,9 @@ const MyBookWrite = ({ nickname }) => {
     const formData = new FormData();
     formData.append("body", body);
     formData.append("createdAt", new Date().toISOString());
-    formData.append("isPublic", visibility === "public" ? false : true);
+    formData.append("isPublic", visibility === "public");
 
-    images.forEach((image, index) => {
+    images.forEach((image) => {
       formData.append(`images`, image);
     });
 

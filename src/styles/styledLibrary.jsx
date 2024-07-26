@@ -135,7 +135,7 @@ export const SearchWrap = styled.div`
   margin-top: 90px;
 `;
 export const Search = styled.div`
-  position: absolute;
+  // position: absolute;
   z-index: 2;
 
   display: flex;
@@ -351,7 +351,16 @@ export const BookTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  width: 184.866px;
+
+  // 제목 길면 생략
+  white-space: nowrap; /* 텍스트를 한 줄로 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 부분을 ...으로 표시 */
+  }
 `;
+
 export const BookWriter = styled.div`
   color: var(--gray-30, #c2c1c1);
   font-family: "Pretendard Variable";

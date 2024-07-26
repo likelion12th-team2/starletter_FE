@@ -272,11 +272,11 @@ const MyBookDetail = () => {
                             <div id="date">
                               {pages[currentPage - 1].createdAt}
                             </div>
-                            {pages[currentPage - 1].isPublic && (
+                            {!pages[currentPage - 1].isPublic && (
                               <img
                                 id="public"
                                 src={`${process.env.PUBLIC_URL}/images/public.png`}
-                                alt="공개 페이지"
+                                alt="비공개 페이지"
                               />
                             )}
                           </div>
@@ -305,11 +305,11 @@ const MyBookDetail = () => {
                     <MB.PageContent>
                       <div id="wrap">
                         <div id="date">{pages[currentPage].createdAt}</div>
-                        {pages[currentPage].isPublic && (
+                        {!pages[currentPage].isPublic && (
                           <img
                             id="public"
                             src={`${process.env.PUBLIC_URL}/images/public.png`}
-                            alt="공개 페이지"
+                            alt="비공개 페이지"
                           />
                         )}
                       </div>
@@ -343,7 +343,7 @@ const MyBookDetail = () => {
             <MB.PostitList>
               {notes.map((note) => (
                 <MB.Postit
-                  key={notes.id}
+                  key={note.id}
                   onClick={() => openPostitModal(note.body)}
                 >
                   <div id="content">{note.body}</div>

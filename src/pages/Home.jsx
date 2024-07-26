@@ -111,11 +111,12 @@ const Home = () => {
   };
 
   const goLib = async () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
+    navigate("/library");
+    // if (isLoggedIn) {
+    //   navigate("/library");
+    // } else {
+    //   navigate("/login");
+    // }
   };
 
   return (
