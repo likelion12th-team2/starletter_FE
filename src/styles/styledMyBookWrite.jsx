@@ -153,6 +153,8 @@ export const Write = styled.div`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
+    white-space: pre-wrap;
   }
   # writebook:: placeholder {
     color: var(--gray-0, #999);
@@ -216,6 +218,7 @@ export const AddedImg = styled.div`
     flex-shrink: 0;
     border-radius: 10px;
     background-size: contain;
+    object-fit: cover;
   }
 `;
 

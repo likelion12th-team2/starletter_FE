@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as MW from "../styles/styledMyBookWrite";
 import axios from "axios";
 import MyPageModal from "./MyPageModal";
@@ -12,12 +12,15 @@ const MyBookWrite = ({ nickname }) => {
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
 
+  const location = useLocation();
+  const { bookId } = location.state || {};
+
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
+      setToken(token);
     }
   }, []);
 
@@ -34,7 +37,7 @@ const MyBookWrite = ({ nickname }) => {
   };
 
   const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
+    navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
   };
 
   const goFun = () => {
@@ -53,9 +56,31 @@ const MyBookWrite = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const goMyBook = () => {
+  //내서재 수정
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate("/mybook");
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
     } else {
       navigate("/login");
     }
@@ -76,12 +101,11 @@ const MyBookWrite = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -93,56 +117,57 @@ const MyBookWrite = ({ nickname }) => {
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
 
-  //공개 비공개
   const [visibility, setVisibility] = useState("public");
 
   const handleVisibilityChange = (event) => {
     setVisibility(event.target.value);
   };
 
-  // const handleSubmit = () => {
-  //   // 여기에 글 작성 내용을 백엔드로 전송하는 로직을 추가합니다.
-  //   const data = {
-  //     content: document.getElementById("writebook").value,
-  //     visibility: visibility,
-  //   };
-
-  //   // 예시: fetch를 사용하여 POST 요청
-  //   fetch("/api/write", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Success:", data);
-  //       // 작성 완료 후 다른 페이지로 이동
-  //       navigate("/success");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
-
-  //이미지 추가하기
   const [images, setImages] = useState([]);
+  const [body, setBody] = useState("");
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files
-      .slice(0, 2 - images.length)
-      .map((file) => URL.createObjectURL(file));
+    const newImages = files.slice(0, 2 - images.length); // 최대 2개의 이미지만 추가 가능
     setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
   const removeImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
+  const handleWrite = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("body", body);
+    formData.append("createdAt", new Date().toISOString());
+    formData.append("isPublic", visibility === "public" ? false : true);
+
+    images.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
+
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/mybooks/${bookId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("페이지 작성 성공:", response.data);
+      goMyBookDetail();
+    } catch (error) {
+      console.error("페이지 작성 실패:", error);
+      console.log(error.response);
+    }
   };
 
   return (
@@ -198,7 +223,6 @@ const MyBookWrite = ({ nickname }) => {
           </MW.NavContent>
         </MW.Nav>
       </header>
-      {/*  */}
       <main>
         <MW.WriteContainer>
           <MW.WriteWrap>
@@ -206,6 +230,8 @@ const MyBookWrite = ({ nickname }) => {
               <textarea
                 id="writebook"
                 placeholder="| 본문을 입력해 주세요"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
               ></textarea>
               <div id="line"></div>
               <MW.AddImgWrap>
@@ -230,7 +256,11 @@ const MyBookWrite = ({ nickname }) => {
                 <MW.AddedImg>
                   {images.map((image, index) => (
                     <div key={index} onClick={() => removeImage(index)}>
-                      <img id="addedImgs" src={image} alt={`added-${index}`} />
+                      <img
+                        id="addedImgs"
+                        src={URL.createObjectURL(image)}
+                        alt={`added-${index}`}
+                      />
                     </div>
                   ))}
                 </MW.AddedImg>
@@ -263,13 +293,12 @@ const MyBookWrite = ({ nickname }) => {
           </MW.WriteWrap>
           <MW.WriteButton>
             <div id="writeWarning">등록한 후엔 수정 및 삭제할 수 없어요</div>
-            <button id="writeBtn" onClick={goMyBookDetail}>
+            <button id="writeBtn" onClick={handleWrite}>
               발행하기
             </button>
           </MW.WriteButton>
         </MW.WriteContainer>
       </main>
-      {/*  */}
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}

@@ -164,24 +164,38 @@ export const Book = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   #img {
-    width: 228px;
-    height: 228px;
+    margin-top: 25%;
+    width: 100%;
+    height: 353px;
     object-fit: cover;
     flex-shrink: 0;
-    border-radius: 228px;
     background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;
-    box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
   #title {
-    color: #fff;
+    color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
-    font-size: 21.6px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
+    writing-mode: vertical-rl;
+
+    background: #fff;
+    padding-top: 5.57px;
+    padding-right: 4%;
+    padding-left: 7%;
+    padding-bottom: 20px;
+
+    position: absolute;
+    top: 1px;
+    left: 70%;
+    border-radius: 0px 0px 9.28px 9.28px;
+    box-shadow: 0px 7.424px 7.424px 0px rgba(0, 0, 0, 0.25);
   }
   #author {
     color: var(--gray-10, #ebeaea);
@@ -214,11 +228,135 @@ export const Book = styled.div`
     `
     transform: translateX(400px);
     width: 246.523px;
-  height: 345px;
-  flex-shrink: 0;
-  border-radius: 8.825px;
-  border: 0.661px solid rgba(133, 133, 133, 0.50);
-  background: #87A8CF;
+    height: 345px;
+    flex-shrink: 0;
+    border-radius: 8.825px;
+    border: 0.661px solid rgba(133, 133, 133, 0.50);
+    background: #87A8CF;
+
+    font-size: 16px;
+    opacity: 0.7;
+
+    #img{
+      width: 100%;
+      height: 230px;
+    }
+    #title{
+      font-size: 14.276px;
+    }
+    #author{
+      font-size: 11.897px;
+    }
+    #addbtn{
+      width: 51.045px;
+      height: 51.045px;
+    }
+   
+  `}
+  ${({ small, prev }) =>
+    small &&
+    prev &&
+    `
+    transform: translateX(-400px);
+    width: 246.523px;
+    height: 345px;
+    flex-shrink: 0;
+    border-radius: 8.825px;
+    border: 0.661px solid rgba(133, 133, 133, 0.50);
+    background: #87A8CF;
+
+    font-size: 16px;
+    opacity: 0.7;
+
+    #img{
+     
+      width: 100%;
+      height: 230px;
+    }
+    #title{
+      font-size: 14.276px;
+    }
+    #author{
+      font-size: 11.897px;
+    }
+    #addbtn{
+      width: 51.045px;
+      height: 51.045px;
+    }
+    
+  `}
+  ${({ hidden }) =>
+    hidden &&
+    `
+    opacity: 0;
+    pointer-events: none;
+  `}
+`;
+
+export const NoBook = styled.div`
+  position: absolute;
+  transition: transform 0.5s ease, font-size 0.5s ease;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  #img {
+    width: 228px;
+    height: 228px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 228px;
+    background: url(<path-to-image>) lightgray -41.918px 0px / 155.718% 100% no-repeat;
+    box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  #title {
+    color: #fff;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 21.6px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 14.4px;
+  }
+  #author {
+    color: var(--gray-10, #ebeaea);
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 45px;
+  }
+
+  ${({ large }) =>
+    large &&
+    `
+    transform: translateX(0);
+    font-size: 24px;
+    opacity: 1;
+    width: 373px;
+    height: 522px;
+    flex-shrink: 0;
+    border-radius: 13.353px;
+    border: 1px solid rgba(133, 133, 133, 0.5);
+    background: #87a8cf;
+
+  `}
+  ${({ small, next }) =>
+    small &&
+    next &&
+    `
+    transform: translateX(400px);
+    width: 246.523px;
+    height: 345px;
+    flex-shrink: 0;
+    border-radius: 8.825px;
+    border: 0.661px solid rgba(133, 133, 133, 0.50);
+    background: #87A8CF;
 
     font-size: 16px;
     opacity: 0.7;
@@ -244,11 +382,11 @@ export const Book = styled.div`
     `
     transform: translateX(-400px);
     width: 246.523px;
-  height: 345px;
-  flex-shrink: 0;
-  border-radius: 8.825px;
-  border: 0.661px solid rgba(133, 133, 133, 0.50);
-  background: #87A8CF;
+    height: 345px;
+    flex-shrink: 0;
+    border-radius: 8.825px;
+    border: 0.661px solid rgba(133, 133, 133, 0.50);
+    background: #87A8CF;
 
     font-size: 16px;
     opacity: 0.7;
@@ -284,6 +422,7 @@ export const AddBtn = styled.button`
   height: 77px;
   cursor: pointer;
   background: #87a8cf;
+  cursor: pointer;
   #addbtn {
   }
 `;
@@ -347,21 +486,23 @@ export const BookCoverText = styled.div`
     padding-top: 13px;
     padding-right: 11px;
     padding-left: 42px;
-    padding-bottom: 110px;
+    padding-bottom: 30px;
 
     position: absolute;
     top: 0px;
     left: 70%;
-    // transform: translate(10px, 10px);
+
+    letter-spacing: 1.5px;
   }
 `;
 export const BookCoverImg = styled.div`
-  width: 386px;
-  height: 353px;
-  flex-shrink: 0;
-  position: relative;
-  margin-top: 120px;
-  background: #e7f3ff;
+  #adding {
+    width: 386px;
+    height: 353px;
+    flex-shrink: 0;
+    position: relative;
+    margin-top: 120px;
+  }
 `;
 export const Cover = styled.div``;
 export const CoverText = styled.div`
@@ -463,6 +604,8 @@ export const DescriptionText = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    white-space: pre-wrap;
   }
 `;
 

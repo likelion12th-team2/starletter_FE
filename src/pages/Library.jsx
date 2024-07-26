@@ -59,6 +59,10 @@ const Library = ({ nickname }) => {
 
   const key = localStorage.getItem("token");
 
+  useEffect(() => {
+    LibraryBooks();
+  }, []);
+
   const LibraryBooks = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/bookshelf/");
@@ -103,9 +107,31 @@ const Library = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const goMyBook = () => {
+  //내서재 수정
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate("/mybook");
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
     } else {
       navigate("/login");
     }
@@ -318,7 +344,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               bookMostMinds.cover ||
-                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                              `${process.env.PUBLIC_URL}/images/bookCover.png`
                             }
                             alt="Mycover1"
                           />
@@ -350,7 +376,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               bookRecent.cover ||
-                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                              `${process.env.PUBLIC_URL}/images/bookCover.png`
                             }
                             alt="Mycover1"
                           />
@@ -385,7 +411,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               book.cover ||
-                              `${process.env.PUBLIC_URL}/images/mybookCover.png`
+                              `${process.env.PUBLIC_URL}/images/bookCover.png`
                             }
                             alt="Mycover"
                           />
