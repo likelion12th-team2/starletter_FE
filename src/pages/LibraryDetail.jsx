@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import Modal from "react-modal"; // 모달
 import * as LD from "../styles/styledLD";
@@ -11,6 +11,13 @@ const LibraryDetail = ({ nickname }) => {
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
   const [isHeartClicked, setIsHeartClicked] = useState(false); // 공감하기
+
+  const [pages, setPages] = useState([]);
+  const [notes, setNotes] = useState([]);
+  const [isPublic, setIsPublic] = useState([]);
+  const [isMinded, setIsMinded] = useState(false);
+  const location = useLocation();
+  const { bookId } = location.state || {};
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -96,28 +103,12 @@ const LibraryDetail = ({ nickname }) => {
   };
 
   const goLib = async () => {
-    if (isLoggedIn) {
-      try {
-        // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/pets/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
-        if (response.data.length > 0) {
-          navigate(`/mybook/make`); // 동물 있으면 책 만들기
-        } else {
-          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
-        }
-      } catch (error) {
-        console.error("동물 기록 확인 실패:", error);
-      }
-    } else {
-      navigate("/login");
-    }
+    navigate("/library");
+    // if (isLoggedIn) {
+    //   navigate("/library");
+    // } else {
+    //   navigate("/login");
+    // }
   };
 
   const profile = {
@@ -125,47 +116,10 @@ const LibraryDetail = ({ nickname }) => {
     name: nickname,
   };
 
-  // 책 구현
-  const contents = [
-    {
-      id: 1,
-      date: "2024.07.02",
-      content:
-        "제작년 봄이었나? 날이 풀려서 쪼꼬랑 노들섬 피크닉 갔던 날 엄마가 사준 손수건 두르고 여기저기 뛰어다녔다 바구니에 자꾸 들어가려고 해서 처음에는 안 된다고 했는데 귀여워서 냅뒀다.. 쪼꼬는 귀여워서 모든게 용서되는듯 그니까 언니 놔두고 간 것두 용서할게 쪼꼬 영.사.해. 영원히 사랑한다는 뜻",
-      img1: "/images/mybookimg1.png",
-      img2: "/images/mybookimg2.png",
-      public: "public",
-    },
-    {
-      id: 2,
-      date: "2024.07.07",
-      content:
-        "쪼꼬랑 유채꽃 보러 갔을 때 쪼꼬가 엄청 행복하게 웃었는데 카메라 고장나서 사진 없음 이슈... 쪼꼬야 보고싶어",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-    {
-      id: 3,
-      date: "2024.07.01",
-      content: "음하하3",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-    {
-      id: 4,
-      date: "2024.07.07",
-      content: "음하하4",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-  ];
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleNextPage = () => {
-    if (currentPage < contents.length - 1) {
+    if (currentPage < pages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -179,6 +133,7 @@ const LibraryDetail = ({ nickname }) => {
   // 책 공감하기
   const handleHeartClick = () => {
     setIsHeartClicked(!isHeartClicked);
+    // TODO: 백엔드에 공감 상태를 업데이트하는 API 호출
   };
 
   // 모달창 상태
@@ -216,29 +171,43 @@ const LibraryDetail = ({ nickname }) => {
 
   const handleAddPostit = () => {
     const newPostit = {
-      id: postits.length + 1,
+      id: notes.length + 1,
       content: newPostitContent,
     };
-    setPostits([...postits, newPostit]);
+    setNotes([...notes, newPostit]);
     setNewPostitContent("");
     closeAddPostitModal();
   };
 
-  // 포스트잇 (댓글)
-  const [postits, setPostits] = useState([
-    {
-      id: 1,
-      content: "쪼꼬야 이모도 쪼고 보고싶어",
-    },
-    {
-      id: 2,
-      content: "쪼꼬도 우리 보고있을거라고 생각해",
-    },
-    {
-      id: 3,
-      content: "언니는 쪼꼬 절대 못잊을거야! 쪼꼬도 우리 잊지마",
-    },
-  ]);
+  //책 구현
+  useEffect(() => {
+    if (bookId) {
+      ShowBookDetail();
+    } else {
+      console.error("No bookId provided");
+    }
+  }, [bookId]);
+
+  const ShowBookDetail = async () => {
+    console.log(`Fetching details for bookId: ${bookId}`);
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/bookshelf/${bookId}/`,
+        {
+          headers: key ? { Authorization: `Token ${key}` } : {},
+        }
+      );
+      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+
+      setPages(response.data.pages);
+      setNotes(response.data.notes);
+      setIsMinded(response.data.isMinded);
+      setIsPublic(response.data.isPublic);
+    } catch (error) {
+      console.error("책 상세정보 불러오기 실패:", error);
+      console.log(error.response); // 에러 응답 로그 추가
+    }
+  };
 
   return (
     <LD.Container>
@@ -363,15 +332,50 @@ const LibraryDetail = ({ nickname }) => {
       {/*  */}
       <LD.Body>
         <LD.Book>
-          <LD.PageTitle>아기돼지삼형제님의 서재</LD.PageTitle>
+          <LD.PageTitle>{pages.book}</LD.PageTitle>
           <LD.BookContainer>
-            <LD.Page onClick={handlePrevPage} disabled={currentPage === 0}>
-              <LD.PageContent>
-                {currentPage > 0 && (
-                  <>
+            {pages.length > 0 && (
+              <>
+                <LD.Page onClick={handlePrevPage} disabled={currentPage === 0}>
+                  <LD.PageContent>
+                    {currentPage > 0 && (
+                      <>
+                        <div id="date">
+                          {pages[currentPage - 1]?.createdAt}
+                          {!pages[currentPage - 1]?.isPublic && (
+                            <img
+                              id="public"
+                              src={`${process.env.PUBLIC_URL}/images/public.png`}
+                              alt="공개 페이지"
+                            />
+                          )}
+                        </div>
+
+                        <div id="images">
+                          {pages[currentPage - 1]?.images.map(
+                            (image, index) => (
+                              <img
+                                key={index}
+                                id="img"
+                                src={image.images}
+                                alt={`페이지 내용 ${index}`}
+                              />
+                            )
+                          )}
+                        </div>
+                        <div id="content">{pages[currentPage - 1]?.body}</div>
+                      </>
+                    )}
+                  </LD.PageContent>
+                </LD.Page>
+                <LD.Page
+                  onClick={handleNextPage}
+                  disabled={currentPage >= pages.length - 1}
+                >
+                  <LD.PageContent>
                     <div id="date">
-                      {contents[currentPage - 1].date}
-                      {contents[currentPage - 1].public && (
+                      {pages[currentPage]?.createdAt}
+                      {!pages[currentPage]?.isPublic && (
                         <img
                           id="public"
                           src={`${process.env.PUBLIC_URL}/images/public.png`}
@@ -379,66 +383,21 @@ const LibraryDetail = ({ nickname }) => {
                         />
                       )}
                     </div>
-
                     <div id="images">
-                      {contents[currentPage - 1].img1 && (
+                      {pages[currentPage]?.images.map((image, index) => (
                         <img
+                          key={index}
                           id="img"
-                          src={`${process.env.PUBLIC_URL}${
-                            contents[currentPage - 1].img1
-                          }`}
-                          alt="페이지 내용"
+                          src={image.images}
+                          alt={`페이지 내용 ${index}`}
                         />
-                      )}
-                      {contents[currentPage - 1].img2 && (
-                        <img
-                          id="img"
-                          src={`${process.env.PUBLIC_URL}${
-                            contents[currentPage - 1].img2
-                          }`}
-                          alt="페이지 내용"
-                        />
-                      )}
+                      ))}
                     </div>
-                    <div id="content">{contents[currentPage - 1].content}</div>
-                  </>
-                )}
-              </LD.PageContent>
-            </LD.Page>
-            <LD.Page
-              onClick={handleNextPage}
-              disabled={currentPage >= contents.length - 1}
-            >
-              <LD.PageContent>
-                <div id="date">
-                  {contents[currentPage].date}
-                  {contents[currentPage].public && (
-                    <img
-                      id="public"
-                      src={`${process.env.PUBLIC_URL}/images/public.png`}
-                      alt="공개 페이지"
-                    />
-                  )}
-                </div>
-                <div id="images">
-                  {contents[currentPage].img1 && (
-                    <img
-                      id="img"
-                      src={`${process.env.PUBLIC_URL}${contents[currentPage].img1}`}
-                      alt="페이지 내용"
-                    />
-                  )}
-                  {contents[currentPage].img2 && (
-                    <img
-                      id="img"
-                      src={`${process.env.PUBLIC_URL}${contents[currentPage].img2}`}
-                      alt="페이지 내용"
-                    />
-                  )}
-                </div>
-                <div id="content">{contents[currentPage].content}</div>
-              </LD.PageContent>
-            </LD.Page>
+                    <div id="content">{pages[currentPage]?.body}</div>
+                  </LD.PageContent>
+                </LD.Page>
+              </>
+            )}
           </LD.BookContainer>
         </LD.Book>
         <LD.HeartBtn onClick={handleHeartClick}>
@@ -456,12 +415,12 @@ const LibraryDetail = ({ nickname }) => {
         </LD.Section>
         <LD.PostitWrap>
           <LD.PostitList>
-            {postits.map((postit) => (
+            {notes.map((note) => (
               <LD.Postit
-                key={postit.id}
-                onClick={() => openPostitModal(postit.content)}
+                key={note.id}
+                onClick={() => openPostitModal(note.body)}
               >
-                <div id="content">{postit.content}</div>
+                <div id="content">{note.body}</div>
               </LD.Postit>
             ))}
             <LD.Postit onClick={openAddPostitModal}>
