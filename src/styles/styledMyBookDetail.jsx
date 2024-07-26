@@ -185,8 +185,8 @@ export const BookDetail = styled.div`
   width: 515px;
   height: 428px;
   flex-shrink: 0;
-  display: flex;
   flex-direction: column;
+  display: flex;
   gap: 16px;
 
   #title {
@@ -196,6 +196,9 @@ export const BookDetail = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    display: flex;
+    margin-right: auto;
   }
   #writer {
     color: #fff;
@@ -204,6 +207,9 @@ export const BookDetail = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    display: flex;
+    margin-right: auto;
   }
   #writtendate {
     color: var(--gray-0, #999);
@@ -212,6 +218,9 @@ export const BookDetail = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    display: flex;
+    margin-right: auto;
   }
   #ps {
     margin-top: 29px;
@@ -222,6 +231,11 @@ export const BookDetail = styled.div`
     font-weight: 400;
     line-height: 30px; /* 120% */
     letter-spacing: 0.5px;
+
+    display: flex;
+    margin-right: auto;
+
+    white-space: pre-wrap;
   }
 `;
 export const MyBook = styled.div`
@@ -362,6 +376,9 @@ export const ModalContent = styled.div`
   line-height: normal;
 
   padding: 40px;
+  white-space: pre-wrap;
+
+  white-space: pre-wrap;
 `;
 
 // 책 화면 구현
@@ -412,6 +429,9 @@ export const PageContent = styled.div`
   padding-bottom: 30px;
   box-sizing: border-box;
 
+  #wrap {
+    display: flex;
+  }
   #date {
     display: flex;
     align-items: center;
@@ -429,6 +449,10 @@ export const PageContent = styled.div`
     height: 30px;
   }
   #content {
+    text-align: justify;
+    text-justify: inter-word;
+
+    display: flex;
     color: #000;
     font-family: "Pretendard Variable";
     font-size: 20px;
@@ -438,6 +462,7 @@ export const PageContent = styled.div`
     letter-spacing: 0.375px;
 
     line-height: normal;
+    white-space: pre-wrap;
   }
   #images {
     display: flex;

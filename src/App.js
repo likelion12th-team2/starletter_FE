@@ -47,7 +47,7 @@ function App() {
         <Route path="/mybook" element={<MyBook />} />
         <Route path="/mybook/addpet" element={<MyBookAddPet />} />
         <Route path="/mybook/make" element={<MyBookMake />} />
-        <Route path="/mybook/detail" element={<MyBookDetail />} />
+        <Route path="/mybook/detail/:id" element={<MyBookDetail />} />
         <Route path="/mybook/write" element={<MyBookWrite />} />
 
         <Route path="/library" element={<Library />} />

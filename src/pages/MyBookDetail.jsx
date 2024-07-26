@@ -1,25 +1,51 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as MB from "../styles/styledMyBookDetail";
-import Modal from "react-modal"; // 모달
-import PropTypes from "prop-types"; // 책 구현
+import Modal from "react-modal";
 import axios from "axios";
 import MyPageModal from "./MyPageModal";
 
-const MyBookDetail = ({ pages = [], nickname }) => {
+const MyBookDetail = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
+  const [book, setBook] = useState({});
+  const [pages, setPages] = useState([]);
+  const [notes, setNotes] = useState([]);
+  const location = useLocation();
+  const { bookId } = location.state || {};
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
+      setToken(storedToken);
+      fetchBookDetail(storedToken);
     }
-  }, []);
+  }, [bookId]);
+
+  const fetchBookDetail = async (token) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/mybooks/${bookId}/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+      setBook(response.data.book);
+      setPages(response.data.pages);
+      setNotes(response.data.notes);
+    } catch (error) {
+      console.error("책 상세내용 확인 실패", error);
+      console.log(error.response); // 에러 응답 로그 추가
+    }
+  };
 
   const goHome = () => {
     navigate(`/`);
@@ -45,9 +71,31 @@ const MyBookDetail = ({ pages = [], nickname }) => {
     navigate(`/market`);
   };
 
-  const goMyBook = () => {
+  //내서재 수정
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate("/mybook");
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
     } else {
       navigate("/login");
     }
@@ -62,7 +110,7 @@ const MyBookDetail = ({ pages = [], nickname }) => {
   };
 
   const goMyBookWrite = () => {
-    navigate(`/mybook/write`);
+    navigate(`/mybook/write`, { state: { bookId } });
   };
 
   const handleLogout = async () => {
@@ -72,12 +120,11 @@ const MyBookDetail = ({ pages = [], nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -89,13 +136,11 @@ const MyBookDetail = ({ pages = [], nickname }) => {
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+    name: "닉네임",
   };
 
-  // 모달창 상태
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedPostitContent, setSelectedPostitContent] = useState(""); // 포스트잇 선택 시 해당 내용 보임
+  const [selectedPostitContent, setSelectedPostitContent] = useState("");
   const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
 
   const openPostitModal = (content) => {
@@ -116,63 +161,10 @@ const MyBookDetail = ({ pages = [], nickname }) => {
     setIsMyPageModalOpen(false);
   };
 
-  // 포스트잇 (댓글)
-  const postits = [
-    {
-      id: 1,
-      content: "쪼꼬야 이모도 쪼고 보고싶어",
-    },
-    {
-      id: 2,
-      content: "쪼꼬도 우리 보고있을거라고 생각해",
-    },
-    {
-      id: 3,
-      content: "언니는 쪼꼬 절대 못잊을거야! 쪼꼬도 우리 잊지마",
-    },
-  ];
-
-  // 책 구현
-  const contents = [
-    {
-      id: 1,
-      date: "2024.07.02",
-      content:
-        "제작년 봄이었나? 날이 풀려서 쪼꼬랑 노들섬 피크닉 갔던 날 엄마가 사준 손수건 두르고 여기저기 뛰어다녔다 바구니에 자꾸 들어가려고 해서 처음에는 안 된다고 했는데 귀여워서 냅뒀다.. 쪼꼬는 귀여워서 모든게 용서되는듯 그니까 언니 놔두고 간 것두 용서할게 쪼꼬 영.사.해. 영원히 사랑한다는 뜻",
-      img1: "/images/mybookimg1.png",
-      img2: "/images/mybookimg2.png",
-      public: "public",
-    },
-    {
-      id: 2,
-      date: "2024.07.07",
-      content:
-        "쪼꼬랑 유채꽃 보러 갔을 때 쪼꼬가 엄청 행복하게 웃었는데 카메라 고장나서 사진 없음 이슈... 쪼꼬야 보고싶어",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-    {
-      id: 3,
-      date: "2024.07.01",
-      content: "음하하3",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-    {
-      id: 4,
-      date: "2024.07.07",
-      content: "음하하4",
-      img1: "",
-      img2: "",
-      public: "",
-    },
-  ];
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleNextPage = () => {
-    if (currentPage < contents.length - 1) {
+    if (currentPage < pages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -182,6 +174,10 @@ const MyBookDetail = ({ pages = [], nickname }) => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  if (!bookId) {
+    return <div>책 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  }
 
   return (
     <MB.Container>
@@ -243,34 +239,73 @@ const MyBookDetail = ({ pages = [], nickname }) => {
               <MB.BookCoverImg>
                 <img
                   id="MycoverImg"
-                  src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
+                  src={
+                    book.cover ||
+                    `${process.env.PUBLIC_URL}/images/default_cover.png`
+                  }
                   alt="Mycover1"
                 />
               </MB.BookCoverImg>
               <MB.BookCoverText>
-                <div id="title">쪼꼬랑 누나 여행기록</div>
+                <div id="title">{book.title}</div>
               </MB.BookCoverText>
             </MB.BookCover>
             <MB.BookDetail>
-              <div id="title">쪼꼬랑 누나 여행기록</div>
-              <div id="writer">김별</div>
-              <div id="writtendate">마지막 수정일: 2024.07.17</div>
-              <div id="ps">
-                쪼꼬는 12살 푸들할머니 그래도 내 눈에는 영원히 애기 산책나가면
-                인기 짱 많은 아파트 인싸 강아지 12년간 이곳저곳 놀러다녔던
-                기억을 모아🌈🐕
-              </div>
+              <div id="title">{book.title}</div>
+              <div id="writer">{book.author}</div>
+              <div id="writtendate">마지막 수정일: {book.lastUpdated}</div>
+              <div id="ps">{book.description}</div>
             </MB.BookDetail>
           </MB.NewBook>
           <MB.MyBook>
             <MB.BookContainer>
-              <MB.Page onClick={handlePrevPage} disabled={currentPage === 0}>
-                <MB.PageContent>
-                  {currentPage > 0 && (
-                    <>
-                      <div id="date">
-                        {contents[currentPage - 1].date}
-                        {contents[currentPage - 1].public && (
+              {pages.length > 0 && (
+                <>
+                  <MB.Page
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 0}
+                  >
+                    <MB.PageContent>
+                      {currentPage > 0 && (
+                        <>
+                          <div id="wrap">
+                            <div id="date">
+                              {pages[currentPage - 1].createdAt}
+                            </div>
+                            {pages[currentPage - 1].isPublic && (
+                              <img
+                                id="public"
+                                src={`${process.env.PUBLIC_URL}/images/public.png`}
+                                alt="공개 페이지"
+                              />
+                            )}
+                          </div>
+
+                          <div id="images">
+                            {pages[currentPage - 1].images.map(
+                              (image, index) => (
+                                <img
+                                  key={index}
+                                  id="img"
+                                  src={image.images}
+                                  alt={`페이지 내용 ${index}`}
+                                />
+                              )
+                            )}
+                          </div>
+                          <div id="content">{pages[currentPage - 1].body}</div>
+                        </>
+                      )}
+                    </MB.PageContent>
+                  </MB.Page>
+                  <MB.Page
+                    onClick={handleNextPage}
+                    disabled={currentPage >= pages.length - 1}
+                  >
+                    <MB.PageContent>
+                      <div id="wrap">
+                        <div id="date">{pages[currentPage].createdAt}</div>
+                        {pages[currentPage].isPublic && (
                           <img
                             id="public"
                             src={`${process.env.PUBLIC_URL}/images/public.png`}
@@ -280,70 +315,24 @@ const MyBookDetail = ({ pages = [], nickname }) => {
                       </div>
 
                       <div id="images">
-                        {contents[currentPage - 1].img1 && (
+                        {pages[currentPage].images.map((image, index) => (
                           <img
+                            key={index}
                             id="img"
-                            src={`${process.env.PUBLIC_URL}${
-                              contents[currentPage - 1].img1
-                            }`}
-                            alt="페이지 내용"
+                            src={image.images}
+                            alt={`페이지 내용 ${index}`}
                           />
-                        )}
-                        {contents[currentPage - 1].img2 && (
-                          <img
-                            id="img"
-                            src={`${process.env.PUBLIC_URL}${
-                              contents[currentPage - 1].img2
-                            }`}
-                            alt="페이지 내용"
-                          />
-                        )}
+                        ))}
                       </div>
-                      <div id="content">
-                        {contents[currentPage - 1].content}
-                      </div>
-                    </>
-                  )}
-                </MB.PageContent>
-              </MB.Page>
-              <MB.Page
-                onClick={handleNextPage}
-                disabled={currentPage >= contents.length - 1}
-              >
-                <MB.PageContent>
-                  <div id="date">
-                    {contents[currentPage].date}
-                    {contents[currentPage].public && (
-                      <img
-                        id="public"
-                        src={`${process.env.PUBLIC_URL}/images/public.png`}
-                        alt="공개 페이지"
-                      />
-                    )}
-                  </div>
-                  <div id="images">
-                    {contents[currentPage].img1 && (
-                      <img
-                        id="img"
-                        src={`${process.env.PUBLIC_URL}${contents[currentPage].img1}`}
-                        alt="페이지 내용"
-                      />
-                    )}
-                    {contents[currentPage].img2 && (
-                      <img
-                        id="img"
-                        src={`${process.env.PUBLIC_URL}${contents[currentPage].img2}`}
-                        alt="페이지 내용"
-                      />
-                    )}
-                  </div>
-                  <div id="content">{contents[currentPage].content}</div>
-                </MB.PageContent>
-              </MB.Page>
+                      <div id="content">{pages[currentPage].body}</div>
+                    </MB.PageContent>
+                  </MB.Page>
+                </>
+              )}
             </MB.BookContainer>
           </MB.MyBook>
           <MB.WriteNewPage>
-            <button id="writeNewPage" onClick={goMyBookWrite}>
+            <button id="writeNewPage" onClick={() => goMyBookWrite(book.id)}>
               새 페이지 쓰기
             </button>
           </MB.WriteNewPage>
@@ -352,19 +341,18 @@ const MyBookDetail = ({ pages = [], nickname }) => {
           </MB.Section>
           <MB.PostitWrap>
             <MB.PostitList>
-              {postits.map((postit) => (
+              {notes.map((note) => (
                 <MB.Postit
-                  key={postit.id}
-                  onClick={() => openPostitModal(postit.content)}
+                  key={notes.id}
+                  onClick={() => openPostitModal(note.body)}
                 >
-                  <div id="content">{postit.content}</div>
+                  <div id="content">{note.body}</div>
                 </MB.Postit>
               ))}
             </MB.PostitList>
           </MB.PostitWrap>
         </MB.BodyContainer>
       </MB.Body>
-      {/*  */}
       <MyPageModal
         isOpen={isMyPageModalOpen}
         onClose={closeMyPageModal}
@@ -386,8 +374,6 @@ const MyBookDetail = ({ pages = [], nickname }) => {
           </MB.Introduction>
         </MB.Footer>
       </footer>
-
-      {/* 모달창 */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closePostitModal}
@@ -412,14 +398,6 @@ const MyBookDetail = ({ pages = [], nickname }) => {
       </Modal>
     </MB.Container>
   );
-};
-
-MyBookDetail.propTypes = {
-  pages: PropTypes.arrayOf(PropTypes.node),
-};
-
-MyBookDetail.defaultProps = {
-  pages: [],
 };
 
 export default MyBookDetail;

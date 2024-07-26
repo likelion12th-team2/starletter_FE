@@ -46,15 +46,6 @@ const MyBookAddPet = ({ nickname }) => {
     }
   };
 
-  // useEffect(() => {
-  //   // localStorage에 저장된 모든 항목을 콘솔에 출력
-  //   for (let i = 0; i < localStorage.length; i++) {
-  //     const key = localStorage.key(i);
-  //     const value = localStorage.getItem(key);
-  //     console.log(`Key: ${key}, Value: ${value}`);
-  //   }
-  // }, []);
-
   const handleDateChange = (date) => {
     setPet_Birth(date);
     setShowDatePicker(false); // 날짜 선택 시 달력 닫기
@@ -87,26 +78,15 @@ const MyBookAddPet = ({ nickname }) => {
           .replace(/-$/, "")
       : "";
 
-    const petImage = file;
-
-    if (!file) {
-      alert("파일을 선택해주세요.");
-      return;
-    }
-
-    console.log(petName);
-    console.log(petBirth);
-    console.log(petAnniv);
-    console.log(petType);
-    console.log(petImage);
-
     try {
       const formData = new FormData();
       formData.append("petName", petName);
       formData.append("petBirth", petBirth);
       formData.append("petAnniv", petAnniv);
       formData.append("petType", petType);
-      formData.append("petImage", file);
+      if (file) {
+        formData.append("petImage", file);
+      }
 
       const response = await axios.post(
         "http://127.0.0.1:8000/accounts/pets/",
@@ -118,8 +98,12 @@ const MyBookAddPet = ({ nickname }) => {
           },
         }
       );
-      localStorage.setItem("token", response.data.key);
-      navigate(`/mybook/make`);
+
+      // 토큰을 로컬 스토리지에 저장합니다.
+      localStorage.setItem("token", token);
+
+      // 토큰을 상태로 전달하면서 페이지를 이동합니다.
+      navigate(`/mybook/make`, { state: { token } });
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
       console.log(error.response.data);
@@ -146,8 +130,34 @@ const MyBookAddPet = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  const goMyBook = () => {
-    navigate(`/mybook`);
+  //내서재 수정
+  const goMyBook = async () => {
+    if (isLoggedIn) {
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
+    } else {
+      navigate("/login");
+    }
   };
 
   const goLib = () => {

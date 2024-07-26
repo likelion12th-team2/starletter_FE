@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
 import axios from "axios";
@@ -13,7 +13,6 @@ const MyBook = ({ nickname }) => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
     if (token) {
       console.log("로그인 되어있음");
@@ -33,16 +32,16 @@ const MyBook = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
-  };
-
   const goFun = () => {
     navigate(`/funeral`);
   };
 
   const goMarket = () => {
     navigate(`/market`);
+  };
+
+  const goMyBookDetail = (bookId) => {
+    navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
   };
 
   const openModal = () => {
@@ -53,11 +52,33 @@ const MyBook = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const goMyBook = () => {
+  //내서재 수정
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate(`/bookroom`);
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
     } else {
-      navigate(`/login`);
+      navigate("/login");
     }
   };
 
@@ -76,12 +97,11 @@ const MyBook = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -93,9 +113,15 @@ const MyBook = ({ nickname }) => {
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
+
+  const location = useLocation();
+  const { book } = location.state || { book: null };
+
+  if (!book) {
+    return <div>책 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  }
 
   return (
     <M.Container>
@@ -150,25 +176,25 @@ const MyBook = ({ nickname }) => {
           </M.NavContent>
         </M.Nav>
       </header>
-      {/*  */}
       <M.Body>
         <M.bodyContainer>
-          <M.Book onClick={goMyBookDetail}>
+          <M.Book onClick={() => goMyBookDetail(book.id)}>
             <M.BookCoverImg>
               <img
                 id="MycoverImg"
-                src={`${process.env.PUBLIC_URL}/images/mybookCover.png`}
-                alt="Mycover1"
+                src={
+                  book.cover ||
+                  `${process.env.PUBLIC_URL}/images/default_cover.png`
+                }
+                alt="cover"
               />
             </M.BookCoverImg>
             <M.BookCoverText>
-              <div id="title">우리집 김쪼꼬</div>
+              <div id="title">{book.title}</div>
             </M.BookCoverText>
           </M.Book>
         </M.bodyContainer>
       </M.Body>
-
-      {/*  */}
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}

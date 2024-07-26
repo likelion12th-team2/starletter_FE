@@ -80,9 +80,35 @@ const Funeral = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  const goMyBook = () => {
+  //내서재 수정
+  const goMyBook = async () => {
     if (isLoggedIn) {
-      navigate("/mybook");
+      try {
+        const storedToken = token || localStorage.getItem("token");
+        if (!storedToken) {
+          navigate("/login");
+          return;
+        }
+        const response = await axios.get(
+          "http://127.0.0.1:8000/mybooks/list/",
+          {
+            headers: {
+              Authorization: `Token ${storedToken}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data);
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`);
+        } else {
+          navigate(`/mybook/addpet`);
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:", error);
+      }
     } else {
       navigate("/login");
     }
