@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
-import * as P from "../styles/StyledPluspet";
+import * as A from "../styles/StyledManagepetAdd";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 
-const Pluspet = ({ nickname }) => {
+const ManagePetAdd = ({ nickname }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showDatePicker1, setShowDatePicker1] = useState(false);
 
@@ -14,7 +14,6 @@ const Pluspet = ({ nickname }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
-  const [message, setMessage] = useState("");
 
   const [petName, setPet_Name] = useState("");
   const [petType, setPetType] = useState("");
@@ -130,7 +129,6 @@ const Pluspet = ({ nickname }) => {
       console.log(response.data);
       navigate(`/mypage/managepet`);
     } catch (error) {
-      setMessage(error.response.data.message);
       console.log(`추가 실패: ${error.message}`);
       console.log(error.response.data);
     }
@@ -243,19 +241,19 @@ const Pluspet = ({ nickname }) => {
   };
 
   return (
-    <P.Container>
+    <A.Container>
       <header>
-        <P.Nav>
-          <P.NavContent>
-            <P.Logo onClick={goHome}>
+        <A.Nav>
+          <A.NavContent>
+            <A.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
                 alt="logo"
               />
-            </P.Logo>
-            <P.Menu>
-              <P.MovingContent>
+            </A.Logo>
+            <A.Menu>
+              <A.MovingContent>
                 <div id="library" onClick={goMyBook}>
                   내 서재
                 </div>
@@ -268,9 +266,9 @@ const Pluspet = ({ nickname }) => {
                 <div id="market" onClick={goMarket}>
                   마켓
                 </div>
-              </P.MovingContent>
+              </A.MovingContent>
               <div id="bar"> | </div>
-              <P.Account>
+              <A.Account>
                 {isLoggedIn ? (
                   <>
                     <div id="mypage" onClick={openModal} ref={myPageRef}>
@@ -290,10 +288,10 @@ const Pluspet = ({ nickname }) => {
                     </div>
                   </>
                 )}
-              </P.Account>
-            </P.Menu>
-          </P.NavContent>
-        </P.Nav>
+              </A.Account>
+            </A.Menu>
+          </A.NavContent>
+        </A.Nav>
       </header>
       <MyPageModal
         isOpen={isModalOpen}
@@ -302,9 +300,9 @@ const Pluspet = ({ nickname }) => {
         anchorRef={myPageRef}
       />
       <form onSubmit={handleSubmit}>
-        <P.Body>
-          <P.Title>반려동물 추가</P.Title>
-          <P.ProImg>
+        <A.Body>
+          <A.Title>아직 등록한 반려동물이 없어요</A.Title>
+          <A.ProImg>
             <img id="profile" src={profileImage} alt="프로필" />
             <label htmlFor="fileInput">
               <img
@@ -319,11 +317,11 @@ const Pluspet = ({ nickname }) => {
               accept="image/*"
               onChange={handleImageChange}
             />
-          </P.ProImg>
-          <P.Profile>
-            <P.Name>
+          </A.ProImg>
+          <A.Profile>
+            <A.Name>
               <div id="name">이름</div>
-              <P.NameBox>
+              <A.NameBox>
                 <input
                   id="namebox"
                   type="text"
@@ -332,11 +330,11 @@ const Pluspet = ({ nickname }) => {
                   onChange={(e) => setPet_Name(e.target.value)}
                   required
                 />
-              </P.NameBox>
-            </P.Name>
-            <P.Type>
+              </A.NameBox>
+            </A.Name>
+            <A.Type>
               <div id="type">타입</div>
-              <P.TypeBox>
+              <A.TypeBox>
                 <input
                   id="typebox"
                   type="text"
@@ -352,7 +350,7 @@ const Pluspet = ({ nickname }) => {
                   onClick={toggleTypeList}
                 />
                 {showTypeList && (
-                  <P.TypeList>
+                  <A.TypeList>
                     {["강아지", "고양이", "소동물", "기타"].map((type) => (
                       <label key={type}>
                         <input
@@ -362,13 +360,13 @@ const Pluspet = ({ nickname }) => {
                         {type}
                       </label>
                     ))}
-                  </P.TypeList>
+                  </A.TypeList>
                 )}
-              </P.TypeBox>
-            </P.Type>
-            <P.Birth>
+              </A.TypeBox>
+            </A.Type>
+            <A.Birth>
               <div id="birthday">생일</div>
-              <P.BirthBox>
+              <A.BirthBox>
                 <input
                   id="birthbox"
                   type="text"
@@ -383,19 +381,19 @@ const Pluspet = ({ nickname }) => {
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
                 {showDatePicker && (
-                  <P.DatePickerWrapper>
+                  <A.DatePickerWrapper>
                     <DatePicker
                       selected={pet_birth1}
                       onChange={handleDateChange}
                       inline
                     />
-                  </P.DatePickerWrapper>
+                  </A.DatePickerWrapper>
                 )}
-              </P.BirthBox>
-            </P.Birth>
-            <P.Memorial>
+              </A.BirthBox>
+            </A.Birth>
+            <A.Memorial>
               <div id="memorial">기일</div>
-              <P.MemorialBox>
+              <A.MemorialBox>
                 <input
                   id="memorialbox"
                   type="text"
@@ -410,7 +408,7 @@ const Pluspet = ({ nickname }) => {
                   onClick={() => setShowDatePicker1(!showDatePicker1)}
                 />
                 {showDatePicker1 && (
-                  <P.DatePickerWrapper1>
+                  <A.DatePickerWrapper1>
                     <DatePicker
                       selected={pet_anniv1}
                       onChange={(date1) => {
@@ -419,22 +417,21 @@ const Pluspet = ({ nickname }) => {
                       }}
                       inline
                     />
-                  </P.DatePickerWrapper1>
+                  </A.DatePickerWrapper1>
                 )}
-              </P.MemorialBox>
-            </P.Memorial>
-          </P.Profile>
-          {message && <P.Message>{message}</P.Message>}
-          <P.Button>
+              </A.MemorialBox>
+            </A.Memorial>
+          </A.Profile>
+          <A.Button>
             <button type="submit" id="btn">
               추가하기
             </button>
-          </P.Button>
-        </P.Body>
+          </A.Button>
+        </A.Body>
       </form>
       <footer>
-        <P.Footer>
-          <P.Introduction>
+        <A.Footer>
+          <A.Introduction>
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
@@ -444,11 +441,11 @@ const Pluspet = ({ nickname }) => {
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
             <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
             <div id="sns">인스타 아이디</div>
-          </P.Introduction>
-        </P.Footer>
+          </A.Introduction>
+        </A.Footer>
       </footer>
-    </P.Container>
+    </A.Container>
   );
 };
 
-export default Pluspet;
+export default ManagePetAdd;

@@ -144,6 +144,7 @@ export const Lib = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   #library {
     margin-right: auto;
@@ -167,6 +168,7 @@ export const Book = styled.div`
   display: flex;
   flex-direction: row;
   gap: 28px;
+  cursor: pointer;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -196,6 +198,7 @@ export const Fun = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   #funeral {
     margin-right: auto;
@@ -219,6 +222,7 @@ export const Mar = styled.div`
   display: flex;
   flex-direction: row;
   gap: 28px;
+  cursor: pointer;
   text-align: center;
   align-items: center;
   justify-content: center;

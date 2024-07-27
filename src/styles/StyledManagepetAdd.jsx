@@ -435,16 +435,6 @@ export const DatePickerWrapper1 = styled.div`
   z-index: 1000; /* 필요에 따라 조정 */
 `;
 
-export const Message = styled.div`
-  margin-top: 50px;
-  color: #ff6161;
-  font-family: "Pretendard Variable";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
-
 export const Button = styled.div`
   margin-top: 95px;
   width: 167.143px;

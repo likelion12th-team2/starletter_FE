@@ -52,6 +52,7 @@ export const Image = styled.div`
     height: 379px;
     flex-shrink: 0;
     border-radius: 20px;
+    object-fit: cover;
   }
 `;
 
