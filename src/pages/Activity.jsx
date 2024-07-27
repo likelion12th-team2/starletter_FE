@@ -5,7 +5,7 @@ import MyPageModal from "./MyPageModal";
 import * as A from "../styles/StyledMB";
 import axios from "axios";
 
-const Activity = ({ nickname }) => {
+const Activity = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +20,8 @@ const Activity = ({ nickname }) => {
       setIsLoggedIn(true);
     }
   }, []);
+
+  const key = localStorage.getItem("token");
 
   const goHome = () => {
     navigate(`/`);
@@ -50,7 +52,7 @@ const Activity = ({ nickname }) => {
           "http://127.0.0.1:8000/mybooks/list/",
           {
             headers: {
-              Authorization: `Token ${storedToken}`,
+              Authorization: `Token ${key}`,
             },
           }
         );
@@ -94,7 +96,7 @@ const Activity = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -110,9 +112,56 @@ const Activity = ({ nickname }) => {
     }
   };
 
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+  const [mindBooks, setMindBooks] = useState([]);
+  const [myNotes, setMyNotes] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!key) {
+        setErrorMessage("토큰이 필요합니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/activity/",
+          {
+            headers: {
+              Authorization: `Token ${key}`,
+            },
+          }
+        );
+        console.log("Fetched data:", response.data);
+        setMindBooks(response.data.mindBooks);
+        setMyNotes(response.data.myNotes);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/accounts/activity/`,
+        {
+          headers: {
+            Authorization: `Token ${key}`,
+          },
+        }
+      );
+      console.log(response.data);
+      // 댓글 삭제 후 추가적인 동작이 필요하다면 여기에 작성하세요.
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+    } finally {
+      setIsConfirmOpen(false);
+    }
   };
 
   return (
@@ -171,7 +220,6 @@ const Activity = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       <A.Body>
@@ -187,14 +235,19 @@ const Activity = ({ nickname }) => {
               <div id="heart">공감</div>
             </A.Heart>
             <A.Symlist>
-              <A.Book>
-                <img
-                  id="bookcover"
-                  src={`${process.env.PUBLIC_URL}/images/Bookcover.svg`}
-                  alt="표지"
-                />
-                <div id="title">보고 싶은 우리집 아기돼지</div>
-              </A.Book>
+              {mindBooks.map((book) => (
+                <A.Book key={book.id}>
+                  <img
+                    id="bookcover"
+                    src={
+                      book.cover ||
+                      `${process.env.PUBLIC_URL}/images/Bookcover.svg`
+                    }
+                    alt="표지"
+                  />
+                  <div id="title">{book.title}</div>
+                </A.Book>
+              ))}
             </A.Symlist>
           </A.Sympathy>
           <A.Comment>
@@ -207,18 +260,38 @@ const Activity = ({ nickname }) => {
               <div id="comment">댓글</div>
             </A.Detail>
             <A.Comlist>
-              <A.Post>
-                <div id="detail">
-                  아기돼지야 너 정말 귀엽구나 너 덕분에 나도 행복해 고마워
-                </div>
-                <A.Del>
-                  <button id="btn">삭제</button>
-                </A.Del>
-              </A.Post>
+              {myNotes.map((note) => (
+                <A.Post key={note.id}>
+                  <div id="detail">{note.body}</div>
+                  <A.Del>
+                    <button id="btn">삭제</button>
+                  </A.Del>
+                </A.Post>
+              ))}
             </A.Comlist>
           </A.Comment>
         </A.Act>
       </A.Body>
+
+      {isConfirmOpen && (
+        <A.ConfirmModal>
+          <A.ModalContent>
+            <A.Detail1>
+              <div id="really">정말 </div>
+              <div id="delete">삭제</div>
+              <div id="do">하시겠습니까?</div>
+            </A.Detail1>
+            <A.ModalButton>
+              <button id="yes" onClick={handleDelete}>
+                예
+              </button>
+              <button id="no" onClick={() => setIsConfirmOpen(false)}>
+                아니오
+              </button>
+            </A.ModalButton>
+          </A.ModalContent>
+        </A.ConfirmModal>
+      )}
       <footer>
         <A.Footer>
           <A.Introduction>

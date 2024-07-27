@@ -344,3 +344,112 @@ export const Introduction = styled.div`
     margin-top: 7px;
   }
 `;
+
+export const ConfirmModal = styled.div`
+  width: 332px;
+  height: 233px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 2px solid #002951;
+  background: #e8f2ff;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+`;
+
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 75px;
+`;
+
+export const Detail1 = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  #really {
+    color: #000;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #delete {
+    color: #ff2020;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #do {
+    color: #000;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+`;
+
+export const ModalButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 37px;
+  gap: 50px;
+
+  #yes {
+    display: flex;
+    width: 90px;
+    height: 47px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: #b2d9ff;
+    border: none;
+    color: #000;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  #no {
+    display: flex;
+    width: 90px;
+    height: 47px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    border: none;
+    background: #b2d9ff;
+    color: #000;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+`;

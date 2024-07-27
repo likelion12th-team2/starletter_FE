@@ -20,6 +20,8 @@ const MyBook = ({ nickname }) => {
     }
   }, []);
 
+  const key = localStorage.getItem("token");
+
   const goHome = () => {
     navigate(`/`);
   };
@@ -61,7 +63,7 @@ const MyBook = ({ nickname }) => {
           "http://127.0.0.1:8000/mybooks/list/",
           {
             headers: {
-              Authorization: `Token ${token}`,
+              Authorization: `Token ${key}`,
             },
           }
         );
@@ -97,7 +99,7 @@ const MyBook = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Token ${key}`,
           },
         }
       );

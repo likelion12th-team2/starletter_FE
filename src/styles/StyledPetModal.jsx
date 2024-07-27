@@ -47,6 +47,7 @@ export const Content = styled.div`
     border-radius: 186.27px;
     background: url(<path-to-image>) lightgray -34.246px 0px / 155.718% 100% no-repeat;
     box-shadow: 1.634px 3.268px 3.268px 0px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
   }
 
   #name {
