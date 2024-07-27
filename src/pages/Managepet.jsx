@@ -39,6 +39,9 @@ const Managepet = () => {
           }
         );
         setPets(response.data);
+        if (response.data.length === 0) {
+          navigate("/mypage/managepet/pluspet");
+        }
       } catch (error) {
         console.error("Error fetching pets:", error);
         setErrorMessage("펫 목록을 불러오는 중 오류가 발생했습니다.");
@@ -80,7 +83,7 @@ const Managepet = () => {
           "http://127.0.0.1:8000/mybooks/list/",
           {
             headers: {
-              Authorization: `Token ${storedToken}`,
+              Authorization: `Token ${key}`,
             },
           }
         );
@@ -227,7 +230,10 @@ const Managepet = () => {
             <MP.Pet key={pet.id}>
               <img
                 id="img"
-                src={pet.petImage || "default-image-url.jpg"}
+                src={
+                  pet.petImage ||
+                  "${process.env.PUBLIC_URL}/images/ProfileImg.svg"
+                }
                 alt="photo"
                 onClick={() => openModal1(pet.id)}
               />
