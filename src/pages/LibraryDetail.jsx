@@ -5,12 +5,15 @@ import Modal from "react-modal"; // 모달
 import * as LD from "../styles/styledLD";
 import axios from "axios";
 
+Modal.setAppElement("#root"); // 모달 설정
+
 const LibraryDetail = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
   const [isHeartClicked, setIsHeartClicked] = useState(false); // 공감하기
+  const [isOwner, setIsOwner] = useState(false); // 책 소유 여부
 
   const [pages, setPages] = useState([]);
   const [notes, setNotes] = useState([]);
@@ -25,7 +28,12 @@ const LibraryDetail = ({ nickname }) => {
       setToken(storedToken);
       setIsLoggedIn(true);
     }
-  }, []);
+
+    const storedHeartState = localStorage.getItem(`heartClicked-${bookId}`);
+    if (storedHeartState) {
+      setIsHeartClicked(JSON.parse(storedHeartState));
+    }
+  }, [bookId]);
 
   const key = localStorage.getItem("token");
 
@@ -104,15 +112,9 @@ const LibraryDetail = ({ nickname }) => {
 
   const goLib = async () => {
     navigate("/library");
-    // if (isLoggedIn) {
-    //   navigate("/library");
-    // } else {
-    //   navigate("/login");
-    // }
   };
 
   const profile = {
-    // image: 'path_to_profile_image.jpg',
     name: nickname,
   };
 
@@ -128,12 +130,6 @@ const LibraryDetail = ({ nickname }) => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
-  };
-
-  // 책 공감하기
-  const handleHeartClick = () => {
-    setIsHeartClicked(!isHeartClicked);
-    // TODO: 백엔드에 공감 상태를 업데이트하는 API 호출
   };
 
   // 모달창 상태
@@ -169,17 +165,80 @@ const LibraryDetail = ({ nickname }) => {
     setIsAddPostitModalOpen(false);
   };
 
-  const handleAddPostit = () => {
-    const newPostit = {
-      id: notes.length + 1,
-      content: newPostitContent,
-    };
-    setNotes([...notes, newPostit]);
-    setNewPostitContent("");
-    closeAddPostitModal();
+  // 책 공감하기
+  const handleHeartClick = async () => {
+    if (!key) {
+      console.error("로그인 되어있지 않습니다.");
+      return;
+    }
+    const previousState = isHeartClicked;
+    setIsHeartClicked(!isHeartClicked);
+    localStorage.setItem(
+      `heartClicked-${bookId}`,
+      JSON.stringify(!isHeartClicked)
+    );
+    try {
+      await handleAddHeart();
+    } catch (error) {
+      setIsHeartClicked(previousState);
+      localStorage.setItem(
+        `heartClicked-${bookId}`,
+        JSON.stringify(previousState)
+      );
+    }
   };
 
-  //책 구현
+  const handleAddHeart = async () => {
+    if (!key) {
+      console.error("로그인 되어있지 않습니다.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/bookshelf/${bookId}/mind/`,
+        {},
+        {
+          headers: { Authorization: `Token ${key}` },
+        }
+      );
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("본인의 책은 공감할 수 없습니다.");
+      console.log(error.response);
+      throw error;
+    }
+  };
+
+  // 포스트잇 붙이기
+  const handleAddPostit = async (event) => {
+    event.preventDefault();
+
+    if (!key) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/bookshelf/${bookId}/`,
+        {
+          body: newPostitContent,
+        },
+        {
+          headers: { Authorization: `Token ${key}` },
+        }
+      );
+      const newNote = response.data;
+      setNotes([...notes, newNote]);
+      setNewPostitContent("");
+      closeAddPostitModal();
+    } catch (error) {
+      console.error("포스트잇 추가 실패:", error);
+      console.log(error.response);
+    }
+  };
+
+  // 책 구현
   useEffect(() => {
     if (bookId) {
       ShowBookDetail();
@@ -293,42 +352,46 @@ const LibraryDetail = ({ nickname }) => {
         <LD.ModalContent>{selectedPostitContent}</LD.ModalContent>
       </Modal>
       {/* 추가 포스트잇 모달창 추가 */}
-      <Modal
-        isOpen={isAddPostitModalOpen}
-        onRequestClose={closeAddPostitModal}
-        style={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-          },
-          content: {
-            width: "471px",
-            height: "444px",
-            background: "#C4DEF8",
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            borderRadius: "10px",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
-      >
-        <LD.ModalContent>
-          <textarea
-            id="addPostit"
-            value={newPostitContent}
-            onChange={(e) => setNewPostitContent(e.target.value)}
-            placeholder="포스트잇 내용을 작성하시오"
-          />
-          <button
-            id="addPostitBtn"
-            onClick={handleAddPostit}
-            disabled={!newPostitContent.trim()}
-          >
-            등록하기
-          </button>
-        </LD.ModalContent>
-      </Modal>
+      {token && ( // 토큰이 있는 경우에만 모달을 표시
+        <Modal
+          isOpen={isAddPostitModalOpen}
+          onRequestClose={closeAddPostitModal}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+            },
+            content: {
+              width: "471px",
+              height: "444px",
+              background: "#C4DEF8",
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              borderRadius: "10px",
+              transform: "translate(-50%, -50%)",
+            },
+          }}
+        >
+          <LD.ModalContent>
+            <form id="wrap" onSubmit={handleAddPostit}>
+              <textarea
+                id="addPostit"
+                value={newPostitContent}
+                onChange={(e) => setNewPostitContent(e.target.value)}
+                placeholder="포스트잇 내용을 작성하시오"
+              />
+              <button
+                id="addPostitBtn"
+                type="submit"
+                disabled={!newPostitContent.trim()}
+              >
+                등록하기
+              </button>
+            </form>
+          </LD.ModalContent>
+        </Modal>
+      )}
       {/*  */}
       <LD.Body>
         <LD.Book>
@@ -417,19 +480,22 @@ const LibraryDetail = ({ nickname }) => {
           <LD.PostitList>
             {notes.map((note) => (
               <LD.Postit
+                id="postit"
                 key={note.id}
                 onClick={() => openPostitModal(note.body)}
               >
                 <div id="content">{note.body}</div>
               </LD.Postit>
             ))}
-            <LD.Postit onClick={openAddPostitModal}>
-              <img
-                id="postitPlus"
-                src={`${process.env.PUBLIC_URL}/images/postitPlus.png`}
-                alt="plus"
-              />
-            </LD.Postit>
+            {token && (
+              <LD.Postit id="plusmodal" onClick={openAddPostitModal}>
+                <img
+                  id="postitPlus"
+                  src={`${process.env.PUBLIC_URL}/images/postitPlus.png`}
+                  alt="plus"
+                />
+              </LD.Postit>
+            )}
           </LD.PostitList>
         </LD.PostitWrap>
       </LD.Body>
