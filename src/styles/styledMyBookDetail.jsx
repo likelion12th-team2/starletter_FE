@@ -304,7 +304,7 @@ export const PostitList = styled.div`
   display: flex;
   width: 1190px;
   gap: 40px;
-  }
+  flex-wrap: wrap;
 `;
 
 export const Postit = styled.div`
@@ -323,6 +323,15 @@ export const Postit = styled.div`
   line-height: normal;
 
   cursor: pointer;
+  white-space: pre-wrap;
+
+  #content {
+    width: 170px;
+    height: 190px;
+    display: flex;
+
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  }
 `;
 
 export const Footer = styled.div`

@@ -272,12 +272,14 @@ export const PostitList = styled.div`
 `;
 
 export const Postit = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 206px;
   height: 225px;
   flex-shrink: 0;
   border-radius: 5px;
   background: #c4def8;
-  padding: 18px;
 
   color: #000;
   font-family: "Pretendard Variable";
@@ -287,12 +289,21 @@ export const Postit = styled.div`
   line-height: normal;
 
   cursor: pointer;
+  white-space: pre-wrap;
+
+  #content {
+    width: 170px;
+    height: 190px;
+    display: flex;
+    align-items: left;
+
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  }
 
   #postitPlus {
     width: 51.045px;
     height: 51.045px;
     flex-shrink: 0;
-    margin-top: 40%;
   }
 `;
 export const ModalContent = styled.div`
@@ -308,6 +319,14 @@ export const ModalContent = styled.div`
 
   padding: 20px;
 
+  cursor: pointer;
+  white-space: pre-wrap;
+
+  #wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
   #addPostit {
     resize: none;
     width: 100%;
@@ -334,12 +353,15 @@ export const ModalContent = styled.div`
     color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
-    font-size: 10.714px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
 
     border: none;
+    cursor: pointer;
+
+    margin-left: 40%;
   }
 `;
 
