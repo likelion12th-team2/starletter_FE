@@ -391,6 +391,7 @@ const MyBookDetail = () => {
             bottom: "auto",
             borderRadius: "10px",
             transform: "translate(-50%, -50%)",
+            textAlign: "left",
           },
         }}
       >

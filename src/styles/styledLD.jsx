@@ -298,6 +298,7 @@ export const Postit = styled.div`
     align-items: left;
 
     overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-align: left;
   }
 
   #postitPlus {
