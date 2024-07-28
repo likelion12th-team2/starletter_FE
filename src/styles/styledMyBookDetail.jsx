@@ -233,9 +233,9 @@ export const BookDetail = styled.div`
     letter-spacing: 0.5px;
 
     display: flex;
-    margin-right: auto;
 
     white-space: pre-wrap;
+    text-align: left;
   }
 `;
 export const MyBook = styled.div`
