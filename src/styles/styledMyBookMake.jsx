@@ -556,6 +556,8 @@ export const ModalTitle = styled.div`
     font-weight: 400;
     line-height: normal;
     border:none;
+    margin-top: 5px;
+    margin-left: 10px;
 
     &::placeholder {
       color: var(--gray-30, #C2C1C1);

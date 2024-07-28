@@ -29,6 +29,8 @@ const ManagePetAdd = ({ nickname }) => {
     }
   }, []);
 
+  const key = localStorage.getItem("token");
+
   const [profileImage, setProfileImage] = useState(
     `${process.env.PUBLIC_URL}/images/ProfileImg.svg`
   );
@@ -207,7 +209,7 @@ const ManagePetAdd = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );

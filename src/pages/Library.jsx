@@ -138,11 +138,7 @@ const Library = ({ nickname }) => {
   };
 
   const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
+    navigate("/library");
   };
 
   const handleLogout = async () => {

@@ -168,6 +168,8 @@ const LibraryDetail = ({ nickname }) => {
   // 책 공감하기
   const handleHeartClick = async () => {
     if (!key) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
       console.error("로그인 되어있지 않습니다.");
       return;
     }

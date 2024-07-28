@@ -57,6 +57,18 @@ const Login = () => {
     navigate(`/`);
   };
 
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
+  const goLib = () => {
+    navigate("/library");
+  };
+
   return (
     <L.Container>
       <header>
@@ -72,9 +84,15 @@ const Login = () => {
             <L.Menu>
               <L.MovingContent>
                 <div id="library">내 서재</div>
-                <div id="bookroom">책방</div>
-                <div id="comparison">장례식장 비교</div>
-                <div id="market">마켓</div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
               </L.MovingContent>
               <div id="bar"> | </div>
               <L.Account>

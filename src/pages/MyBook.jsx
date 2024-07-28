@@ -200,7 +200,6 @@ const MyBook = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       <footer>

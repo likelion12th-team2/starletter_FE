@@ -140,6 +140,7 @@ export const ProImg = styled.div`
   height: 183px;
   flex-shrink: 0;
   display: flex;
+  object-fit: cover;
 
   #profile {
     width: 183px;

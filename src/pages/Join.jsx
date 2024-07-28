@@ -62,6 +62,18 @@ const Join = () => {
     navigate(`/`);
   };
 
+  const goFun = () => {
+    navigate(`/funeral`);
+  };
+
+  const goMarket = () => {
+    navigate(`/market`);
+  };
+
+  const goLib = () => {
+    navigate("/library");
+  };
+
   return (
     <J.Container>
       <header>
@@ -77,9 +89,15 @@ const Join = () => {
             <J.Menu>
               <J.MovingContent>
                 <div id="library">내 서재</div>
-                <div id="bookroom">책방</div>
-                <div id="comparison">장례식장 비교</div>
-                <div id="market">마켓</div>
+                <div id="bookroom" onClick={goLib}>
+                  책방
+                </div>
+                <div id="comparison" onClick={goFun}>
+                  장례식장 비교
+                </div>
+                <div id="market" onClick={goMarket}>
+                  마켓
+                </div>
               </J.MovingContent>
               <div id="bar"> | </div>
               <J.Account>

@@ -73,6 +73,10 @@ const Activity = () => {
     }
   };
 
+  const goMyBookDetail = (bookId) => {
+    navigate(`/library/${bookId}`, { state: { bookId } });
+  };
+
   const goLib = () => {
     navigate(`/library`);
   };
@@ -96,7 +100,7 @@ const Activity = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -144,6 +148,12 @@ const Activity = () => {
   }, []);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+
+  const openConfirmModal = (id) => {
+    setSelectedNoteId(id);
+    setIsConfirmOpen(true);
+  };
 
   const handleDelete = async () => {
     try {
@@ -153,10 +163,13 @@ const Activity = () => {
           headers: {
             Authorization: `Token ${key}`,
           },
+          data: {
+            note_id: selectedNoteId,
+          },
         }
       );
       console.log(response.data);
-      // 댓글 삭제 후 추가적인 동작이 필요하다면 여기에 작성하세요.
+      window.location.reload();
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
     } finally {
@@ -236,17 +249,27 @@ const Activity = () => {
             </A.Heart>
             <A.Symlist>
               {mindBooks.map((book) => (
-                <A.Book key={book.id}>
-                  <img
-                    id="bookcover"
-                    src={
-                      book.cover ||
-                      `${process.env.PUBLIC_URL}/images/Bookcover.svg`
-                    }
-                    alt="표지"
-                  />
-                  <div id="title">{book.title}</div>
-                </A.Book>
+                <A.BookCover key={book.id}>
+                  <A.Book
+                    onClick={() => {
+                      goMyBookDetail(book.id);
+                    }}
+                  >
+                    <img
+                      id="bookcover"
+                      src={
+                        book.cover ||
+                        `${process.env.PUBLIC_URL}/images/Bookcover.svg`
+                      }
+                      alt="표지"
+                    />
+                    <div id="title">{book.title}</div>
+                  </A.Book>
+                  <A.BookDetail>
+                    <div id="title">{book.title}</div>
+                    <div id="author">{book.author}</div>
+                  </A.BookDetail>
+                </A.BookCover>
               ))}
             </A.Symlist>
           </A.Sympathy>
@@ -264,7 +287,9 @@ const Activity = () => {
                 <A.Post key={note.id}>
                   <div id="detail">{note.body}</div>
                   <A.Del>
-                    <button id="btn">삭제</button>
+                    <button id="btn" onClick={() => openConfirmModal(note.id)}>
+                      삭제
+                    </button>
                   </A.Del>
                 </A.Post>
               ))}
