@@ -608,6 +608,7 @@ export const DescriptionText = styled.div`
     line-height: normal;
 
     white-space: pre-wrap;
+    padding: 10px;
   }
 `;
 

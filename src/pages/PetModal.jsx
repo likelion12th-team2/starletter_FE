@@ -38,7 +38,14 @@ const PetModal = ({ isOpen, onClose, pet }) => {
         />
       </P.Close>
       <P.Content>
-        <img id="img" src={pet.petImage} alt={pet.petName} />
+        <img
+          id="img"
+          src={
+            pet.petImage ||
+            `${process.env.PUBLIC_URL}/images/default_pet_image.png`
+          }
+          alt={pet.petName}
+        />
         <div id="name">{pet.petName}</div>
         <div id="birth">
           {pet.petBirth} ~ {pet.petAnniv}

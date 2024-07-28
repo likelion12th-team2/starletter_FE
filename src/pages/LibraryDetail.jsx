@@ -28,14 +28,31 @@ const LibraryDetail = ({ nickname }) => {
       setToken(storedToken);
       setIsLoggedIn(true);
     }
+  }, []);
 
-    const storedHeartState = localStorage.getItem(`heartClicked-${bookId}`);
-    if (storedHeartState) {
-      setIsHeartClicked(JSON.parse(storedHeartState));
+  useEffect(() => {
+    if (bookId && token) {
+      checkHeartState();
     }
-  }, [bookId]);
+  }, [bookId, token]);
 
   const key = localStorage.getItem("token");
+
+  const checkHeartState = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/bookshelf/${bookId}`,
+        {
+          headers: {
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+          },
+        }
+      );
+      setIsHeartClicked(response.data.isMinded);
+    } catch (error) {
+      console.error("Error checking heart state:", error);
+    }
+  };
 
   const goLogin = () => {
     navigate(`/login`);
@@ -175,18 +192,10 @@ const LibraryDetail = ({ nickname }) => {
     }
     const previousState = isHeartClicked;
     setIsHeartClicked(!isHeartClicked);
-    localStorage.setItem(
-      `heartClicked-${bookId}`,
-      JSON.stringify(!isHeartClicked)
-    );
     try {
       await handleAddHeart();
     } catch (error) {
       setIsHeartClicked(previousState);
-      localStorage.setItem(
-        `heartClicked-${bookId}`,
-        JSON.stringify(previousState)
-      );
     }
   };
 
