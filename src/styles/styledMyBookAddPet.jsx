@@ -145,7 +145,12 @@ export const ProImg = styled.div`
     width: 183px;
     height: 183px;
     flex-shrink: 0;
-    border-radius: 50%;
+    border-radius: 50%; /* 완전히 동그랗게 만들기 */
+    background-size: cover; /* 이미지가 찌부되지 않고 동그랗게 자르기 */
+    background-position: center; /* 중앙을 기준으로 자르기 */
+    clip-path: circle(50%); /* 원형으로 자르기 */
+    box-shadow: 1.634px 3.268px 3.268px 0px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
   }
 
   #edit {

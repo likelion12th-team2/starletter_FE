@@ -194,28 +194,73 @@ export const Book = styled.div`
     // background: url(<path-to-image>) lightgray 50% / cover no-repeat;
     margin-left: -1px;
     margin-top: 54px;
+    object-fit: cover;
   }
 
   #title {
     margin-left: 170px;
     position: absolute;
-    width: 44.723px;
-    height: 143.838px;
+    // width: 44.723px;
+    // height: 143.838px;
     flex-shrink: 0;
     background: #fff;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 0px 9.28px 9.28px;
+    box-shadow: 0px 7.424px 7.424px 0px rgba(0, 0, 0, 0.25);
+
     color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
-    font-size: 9.64px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     margin-right: 5px;
+
+    background: #fff;
+    padding-top: 5.57px;
+    padding-right: 5.74px;
+    padding-left: 20.21px;
+    padding-bottom: 20px;
+
     writing-mode: vertical-rl;
-    text-orientation: mixed;
-    // transform: rotate(90deg);
+
+    white-space: nowrap; /* 텍스트를 한 줄로 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 부분을 ...으로 표시 */
   }
+`;
+
+export const BookDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  float: left;
+  margin-right: auto;
+
+  #title {
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 2px;
+  }
+
+  #author {
+    color: var(--gray-30, #c2c1c1);
+    font-family: "Pretendard Variable";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-right: auto;
+  }
+`;
+
+export const BookCover = styled.div`
+  display: flex;
+  flex-direction: column;
+  float: left;
 `;
 
 export const Comment = styled.div`
@@ -263,12 +308,13 @@ export const Post = styled.div`
   background: #c4def8;
   text-align: center;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between; /* 내부 요소들을 위아래로 분리 */
   display: flex;
   flex-direction: column;
 
   #detail {
-    width: 200px;
+    width: 190px;
+    height: 300px;
     color: #000;
     margin-top: 18px;
     font-family: "Pretendard Variable";
@@ -276,11 +322,14 @@ export const Post = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 부분을 ...으로 표시 */
   }
 `;
 
 export const Del = styled.div`
-  margin-top: 20px;
+  margin-bottom: 16px;
   width: 97px;
   height: 45px;
   flex-shrink: 0;

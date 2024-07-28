@@ -229,7 +229,7 @@ const MyBookWrite = ({ nickname }) => {
             <MW.Write>
               <textarea
                 id="writebook"
-                placeholder="| 본문을 입력해 주세요"
+                placeholder="본문을 입력해 주세요"
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
               ></textarea>
