@@ -232,7 +232,7 @@ const Managepet = () => {
                 id="img"
                 src={
                   pet.petImage ||
-                  "${process.env.PUBLIC_URL}/images/ProfileImg.svg"
+                  `${process.env.PUBLIC_URL}/images/default_pet_image.png`
                 }
                 alt="photo"
                 onClick={() => openModal1(pet.id)}

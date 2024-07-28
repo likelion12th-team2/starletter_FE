@@ -323,7 +323,7 @@ const MyBookAddPet = ({ nickname }) => {
                 />
                 {showTypeList && (
                   <AP.TypeList>
-                    {["강아지", "고양이", "소동물", "특수동물"].map((type) => (
+                    {["강아지", "고양이", "소동물", "기타"].map((type) => (
                       <label key={type}>
                         <input
                           type="checkbox"
