@@ -173,6 +173,9 @@ export const Symlist = styled.div`
   display: flex;
   flex-direction: row;
   gap: 45px;
+  // flex-wrap: wrap;
+  justify-content: ${(props) => (props.center ? "center" : "flex-start")};
+  align-items: center;
 `;
 
 export const Book = styled.div`
@@ -263,6 +266,35 @@ export const BookCover = styled.div`
   float: left;
 `;
 
+export const Symnull = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 84px;
+
+  #sym1 {
+    color: #fff;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.625px;
+  }
+
+  #sym2 {
+    color: #c2c1c1;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.375px;
+  }
+`;
+
 export const Comment = styled.div`
   margin-top: 122px;
   display: flex;
@@ -297,6 +329,9 @@ export const Comlist = styled.div`
   flex-direction: row;
   gap: 30px;
   float: left;
+  // flex-wrap: wrap;
+  justify-content: ${(props) => (props.center ? "center" : "flex-start")};
+  align-items: ${(props) => (props.center ? "center" : "flex-start")};
 `;
 
 export const Post = styled.div`
@@ -350,6 +385,38 @@ export const Del = styled.div`
     background: transparent;
     margin-top: 11px;
     line-height: normal;
+  }
+`;
+
+export const Comnull = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 124px;
+
+  #com1 {
+    color: #fff;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.625px;
+  }
+
+  #com2 {
+    color: #c2c1c1;
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.375px;
   }
 `;
 

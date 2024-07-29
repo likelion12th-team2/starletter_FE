@@ -247,30 +247,39 @@ const Activity = () => {
               />
               <div id="heart">공감</div>
             </A.Heart>
-            <A.Symlist>
-              {mindBooks.map((book) => (
-                <A.BookCover key={book.id}>
-                  <A.Book
-                    onClick={() => {
-                      goMyBookDetail(book.id);
-                    }}
-                  >
-                    <img
-                      id="bookcover"
-                      src={
-                        book.cover ||
-                        `${process.env.PUBLIC_URL}/images/Bookcover.svg`
-                      }
-                      alt="표지"
-                    />
-                    <div id="title">{book.title}</div>
-                  </A.Book>
-                  <A.BookDetail>
-                    <div id="title">{book.title}</div>
-                    <div id="author">{book.author}</div>
-                  </A.BookDetail>
-                </A.BookCover>
-              ))}
+            <A.Symlist center={mindBooks.length === 0}>
+              {mindBooks.length > 0 ? (
+                mindBooks.map((book) => (
+                  <A.BookCover key={book.id}>
+                    <A.Book
+                      onClick={() => {
+                        goMyBookDetail(book.id);
+                      }}
+                    >
+                      <img
+                        id="bookcover"
+                        src={
+                          book.cover ||
+                          `${process.env.PUBLIC_URL}/images/Bookcover.svg`
+                        }
+                        alt="표지"
+                      />
+                      <div id="title">{book.title}</div>
+                    </A.Book>
+                    <A.BookDetail>
+                      <div id="title">{book.title}</div>
+                      <div id="author">{book.author}</div>
+                    </A.BookDetail>
+                  </A.BookCover>
+                ))
+              ) : (
+                <A.Symnull>
+                  <div id="sym1">공감한 책이 없습니다.</div>
+                  <div id="sym2">
+                    책방에서 공감해요를 누른 책들이 여기에 표시됩니다.
+                  </div>
+                </A.Symnull>
+              )}
             </A.Symlist>
           </A.Sympathy>
           <A.Comment>
@@ -282,17 +291,27 @@ const Activity = () => {
               />
               <div id="comment">댓글</div>
             </A.Detail>
-            <A.Comlist>
-              {myNotes.map((note) => (
-                <A.Post key={note.id}>
-                  <div id="detail">{note.body}</div>
-                  <A.Del>
-                    <button id="btn" onClick={() => openConfirmModal(note.id)}>
-                      삭제
-                    </button>
-                  </A.Del>
-                </A.Post>
-              ))}
+            <A.Comlist center={myNotes.length === 0}>
+              {myNotes.length > 0 ? (
+                myNotes.map((note) => (
+                  <A.Post key={note.id}>
+                    <div id="detail">{note.body}</div>
+                    <A.Del>
+                      <button
+                        id="btn"
+                        onClick={() => openConfirmModal(note.id)}
+                      >
+                        삭제
+                      </button>
+                    </A.Del>
+                  </A.Post>
+                ))
+              ) : (
+                <A.Comnull>
+                  <div id="com1">댓글을 남기지 않았습니다.</div>
+                  <div id="com2">책방에서 댓글을 남기면 여기에 표시됩니다.</div>
+                </A.Comnull>
+              )}
             </A.Comlist>
           </A.Comment>
         </A.Act>
