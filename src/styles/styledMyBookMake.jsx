@@ -502,6 +502,7 @@ export const BookCoverImg = styled.div`
     flex-shrink: 0;
     position: relative;
     margin-top: 120px;
+    object-fit: cover;
   }
 `;
 export const Cover = styled.div``;
@@ -524,12 +525,14 @@ export const CoverImg = styled.div`
     border-radius: 10px;
     border: 1px dashed #000;
     background: #fff;
+    object-fit: cover;
   }
 
   #addimg {
     width: 40px;
     height: 30px;
     flex-shrink: 0;
+    object-fit: cover;
   }
 `;
 export const Text = styled.div`
@@ -707,8 +710,34 @@ export const Introduction = styled.div`
   #name {
     margin-top: 7px;
   }
+`;
 
-  #sns {
+export const Git = styled.div`
+  margin-top: 7px;
+  display: flex;
+  flex-direction: row;
+
+  #github {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  #gitback {
+    margin-left: 10px;
+    color: #fff;
+    margin-top: 7px;
+  }
+
+  #slash {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: #fff;
+    margin-top: 7px;
+  }
+
+  #gitfront {
+    color: #fff;
     margin-top: 7px;
   }
 `;

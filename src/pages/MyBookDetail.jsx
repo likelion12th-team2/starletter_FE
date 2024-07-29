@@ -370,7 +370,30 @@ const MyBookDetail = () => {
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
             <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
-            <div id="sns">인스타 아이디</div>
+            <MB.Git>
+              <img
+                id="github"
+                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                alt="깃허브"
+              />
+              <a
+                id="gitback"
+                href="https://github.com/likelion12th-team2/starletter_BE"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                BE
+              </a>
+              <div id="slash"> / </div>
+              <a
+                id="gitfront"
+                href="https://github.com/likelion12th-team2/starletter_FE"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FE
+              </a>
+            </MB.Git>
           </MB.Introduction>
         </MB.Footer>
       </footer>

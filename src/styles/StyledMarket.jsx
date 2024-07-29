@@ -252,8 +252,34 @@ export const Introduction = styled.div`
   #name {
     margin-top: 7px;
   }
+`;
 
-  #sns {
+export const Git = styled.div`
+  margin-top: 7px;
+  display: flex;
+  flex-direction: row;
+
+  #github {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  #gitback {
+    margin-left: 10px;
+    color: #fff;
+    margin-top: 7px;
+  }
+
+  #slash {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: #fff;
+    margin-top: 7px;
+  }
+
+  #gitfront {
+    color: #fff;
     margin-top: 7px;
   }
 `;

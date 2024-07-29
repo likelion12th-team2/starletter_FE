@@ -122,6 +122,8 @@ const Funeral = ({ nickname }) => {
     }
   };
 
+  const key = localStorage.getItem("token");
+
   const profile = {
     // image: 'path_to_profile_image.jpg',
     name: nickname,
@@ -134,7 +136,7 @@ const Funeral = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -257,7 +259,14 @@ const Funeral = ({ nickname }) => {
             onClick={handleSearch}
           />
         </F.Search>
-        {showAd && <F.Ad>광고 내용</F.Ad>}
+        {showAd && (
+          <F.Ad>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/Advertisement.svg`}
+              alt="광고내용"
+            />
+          </F.Ad>
+        )}
         {searchMessage && <F.Title>{searchMessage}</F.Title>}
         <F.FunList>
           {funerals.map((funeral) => (
@@ -285,7 +294,30 @@ const Funeral = ({ nickname }) => {
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
             <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
-            <div id="sns">인스타 아이디</div>
+            <F.Git>
+              <img
+                id="github"
+                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                alt="깃허브"
+              />
+              <a
+                id="gitback"
+                href="https://github.com/likelion12th-team2/starletter_BE"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                BE
+              </a>
+              <div id="slash"> / </div>
+              <a
+                id="gitfront"
+                href="https://github.com/likelion12th-team2/starletter_FE"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FE
+              </a>
+            </F.Git>
           </F.Introduction>
         </F.Footer>
       </footer>
