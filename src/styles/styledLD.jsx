@@ -202,6 +202,7 @@ export const PageContent = styled.div`
     letter-spacing: 0.375px;
 
     line-height: normal;
+    text-align: left;
   }
   #images {
     display: flex;
@@ -308,7 +309,6 @@ export const Postit = styled.div`
   }
 `;
 export const ModalContent = styled.div`
-  display: flex;
   flex-direction: column;
   align-items: center;
   color: #000;
@@ -321,6 +321,7 @@ export const ModalContent = styled.div`
   padding: 20px;
 
   cursor: pointer;
+  text-align: left;
   white-space: pre-wrap;
 
   #wrap {
@@ -331,7 +332,7 @@ export const ModalContent = styled.div`
   #addPostit {
     resize: none;
     width: 100%;
-    height: 270px;
+    height: 265px;
     border: none;
     outline: none;
     background: #c4def8;
@@ -344,9 +345,8 @@ export const ModalContent = styled.div`
     line-height: normal;
   }
   #addPostitBtn {
-    width: 94.714px;
-    height: 30px;
-    flex-shrink: 0;
+    width: 120px;
+    height: 45px;
     border-radius: 21.429px;
     background: var(--Color-2, #efd26a);
     margin-top: 50px;
@@ -354,7 +354,7 @@ export const ModalContent = styled.div`
     color: #000;
     text-align: center;
     font-family: "Pretendard Variable";
-    font-size: 15px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -362,7 +362,7 @@ export const ModalContent = styled.div`
     border: none;
     cursor: pointer;
 
-    margin-left: 40%;
+    margin-left: 35%;
   }
 `;
 
