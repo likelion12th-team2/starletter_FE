@@ -329,10 +329,22 @@ export const ModalContent = styled.div`
     flex-direction: column;
     width: 100%;
   }
+  #text_length {
+    display: flex;
+
+    color: #767676;
+    font-family: "Pretendard Variable";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    margin-left: auto;
+  }
   #addPostit {
     resize: none;
     width: 100%;
-    height: 265px;
+    height: 290px;
     border: none;
     outline: none;
     background: #c4def8;
@@ -349,7 +361,7 @@ export const ModalContent = styled.div`
     height: 45px;
     border-radius: 21.429px;
     background: var(--Color-2, #efd26a);
-    margin-top: 50px;
+    margin-top: 5px;
 
     color: #000;
     text-align: center;
