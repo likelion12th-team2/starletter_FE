@@ -215,6 +215,7 @@ const LibraryDetail = ({ nickname }) => {
       console.log(response.data.message);
     } catch (error) {
       console.error("본인의 책은 공감할 수 없습니다.");
+      alert("본인의 책은 공감할 수 없습니다.");
       console.log(error.response);
       throw error;
     }
