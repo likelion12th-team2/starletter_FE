@@ -129,10 +129,13 @@ const MyBookWrite = ({ nickname }) => {
   const [images, setImages] = useState([]);
   const [body, setBody] = useState("");
 
+  const fileInputRef = useRef(null); // 파일 입력 요소에 접근하기 위한 useRef
+
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
     const newImages = files.slice(0, 2 - images.length); // 최대 2개의 이미지만 추가 가능
     setImages((prevImages) => [...prevImages, ...newImages]);
+    fileInputRef.current.value = null; // 파일 입력 요소 초기화
   };
 
   const removeImage = (index) => {
@@ -243,6 +246,7 @@ const MyBookWrite = ({ nickname }) => {
                     multiple
                     onChange={handleImageChange}
                     style={{ display: "none" }}
+                    ref={fileInputRef} // useRef를 사용하여 파일 입력 요소에 접근
                   />
                   <label htmlFor="addimg" id="addBtn">
                     <img

@@ -241,16 +241,6 @@ export const BookDetail = styled.div`
 export const MyBook = styled.div`
   margin-top: 224px;
 `;
-export const MyBookL = styled.div`
-  width: 423px;
-  height: 550.517px;
-  transform: rotate(90deg);
-  flex-shrink: 0;
-
-  opacity: 0.08;
-  background: linear-gradient(70deg, #122b43 4.17%, rgba(13, 38, 63, 0) 44.9%);
-`;
-export const MyBookR = styled.div``;
 
 export const WriteNewPage = styled.div`
   display: flex;
@@ -409,10 +399,7 @@ export const ModalContent = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-
-  padding: 40px;
-  white-space: pre-wrap;
-
+  padding: 20px;
   white-space: pre-wrap;
 `;
 
@@ -484,7 +471,6 @@ export const PageContent = styled.div`
     height: 30px;
   }
   #content {
-    text-align: justify;
     text-justify: inter-word;
 
     display: flex;
@@ -498,6 +484,7 @@ export const PageContent = styled.div`
 
     line-height: normal;
     white-space: pre-wrap;
+    text-align: left;
   }
   #images {
     display: flex;
