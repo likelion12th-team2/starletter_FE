@@ -155,6 +155,7 @@ const LibraryDetail = ({ nickname }) => {
   const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
   const [isAddPostitModalOpen, setIsAddPostitModalOpen] = useState(false); // 추가된 상태 변수
   const [newPostitContent, setNewPostitContent] = useState("");
+  const [postitTextLength, setPostitTextLength] = useState(0); // 추가된 상태 변수
 
   const openPostitModal = (content) => {
     setSelectedPostitContent(content);
@@ -180,6 +181,12 @@ const LibraryDetail = ({ nickname }) => {
 
   const closeAddPostitModal = () => {
     setIsAddPostitModalOpen(false);
+  };
+
+  const handleNewPostitContentChange = (e) => {
+    const content = e.target.value;
+    setNewPostitContent(content);
+    setPostitTextLength(content.length);
   };
 
   // 책 공감하기
@@ -241,6 +248,7 @@ const LibraryDetail = ({ nickname }) => {
       const newNote = response.data;
       setNotes([...notes, newNote]);
       setNewPostitContent("");
+      setPostitTextLength(0);
       closeAddPostitModal();
     } catch (error) {
       console.error("포스트잇 추가 실패:", error);
@@ -388,9 +396,12 @@ const LibraryDetail = ({ nickname }) => {
               <textarea
                 id="addPostit"
                 value={newPostitContent}
-                onChange={(e) => setNewPostitContent(e.target.value)}
+                onChange={handleNewPostitContentChange}
                 placeholder="포스트잇 내용을 작성하시오"
               />
+              <div id="text_length">
+                (<span id="postit_text_length">{postitTextLength}</span>/500)
+              </div>
               <button
                 id="addPostitBtn"
                 type="submit"
