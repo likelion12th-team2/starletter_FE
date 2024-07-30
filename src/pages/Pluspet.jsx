@@ -53,6 +53,10 @@ const Pluspet = ({ nickname }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!petName || !selectedType || !pet_birth1 || !pet_anniv1) {
+      alert("모든 필드를 작성해 주세요.");
+      return;
+    }
 
     const petBirth = pet_birth1
       ? pet_birth1
@@ -212,6 +216,36 @@ const Pluspet = ({ nickname }) => {
     setShowTypeList(false);
   };
 
+  const datePickerRef = useRef(null);
+  const datePickerRef1 = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target)
+    ) {
+      setShowDatePicker(false);
+    }
+    if (
+      datePickerRef1.current &&
+      !datePickerRef1.current.contains(event.target)
+    ) {
+      setShowDatePicker1(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDatePicker || showDatePicker1) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDatePicker, showDatePicker1]);
+
   return (
     <P.Container>
       <header>
@@ -273,7 +307,7 @@ const Pluspet = ({ nickname }) => {
       />
       <form onSubmit={handleSubmit}>
         <P.Body>
-          <P.Title>아직 등록한 반려동물이 없어요</P.Title>
+          <P.Title>새로 추가할 반려동물의 정보를 입력하세요</P.Title>
           <P.ProImg>
             <img id="profile" src={profileImage} alt="프로필" />
             <label htmlFor="fileInput">
@@ -314,6 +348,7 @@ const Pluspet = ({ nickname }) => {
                   value={selectedType}
                   onChange={(e) => setPetType(e.target.value)}
                   readOnly
+                  required
                 />
                 <img
                   id="plustype"
@@ -345,6 +380,7 @@ const Pluspet = ({ nickname }) => {
                   placeholder="연도-월-일"
                   value={pet_birth1 ? pet_birth1.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="birthcal"
@@ -353,11 +389,14 @@ const Pluspet = ({ nickname }) => {
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
                 {showDatePicker && (
-                  <P.DatePickerWrapper>
+                  <P.DatePickerWrapper ref={datePickerRef}>
                     <DatePicker
                       selected={pet_birth1}
                       onChange={handleDateChange}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </P.DatePickerWrapper>
                 )}
@@ -372,6 +411,7 @@ const Pluspet = ({ nickname }) => {
                   placeholder="연도-월-일"
                   value={pet_anniv1 ? pet_anniv1.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="memcal"
@@ -380,7 +420,7 @@ const Pluspet = ({ nickname }) => {
                   onClick={() => setShowDatePicker1(!showDatePicker1)}
                 />
                 {showDatePicker1 && (
-                  <P.DatePickerWrapper1>
+                  <P.DatePickerWrapper1 ref={datePickerRef1}>
                     <DatePicker
                       selected={pet_anniv1}
                       onChange={(date1) => {
@@ -388,6 +428,9 @@ const Pluspet = ({ nickname }) => {
                         setShowDatePicker1(false);
                       }}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </P.DatePickerWrapper1>
                 )}

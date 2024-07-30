@@ -357,9 +357,11 @@ export const Post = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-align: left;
 
     overflow: hidden; /* 넘치는 텍스트를 숨김 */
     text-overflow: ellipsis; /* 넘치는 부분을 ...으로 표시 */
+    white-space: pre-wrap; /* 줄바꿈을 허용 */
   }
 `;
 

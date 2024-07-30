@@ -15,6 +15,8 @@ const EditProfile = () => {
   const [name1, setName1] = useState("");
   const [nickname, setNickname] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [dlfma, setDlfma] = useState("");
+  const [slr, setSlr] = useState("");
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -173,6 +175,7 @@ const EditProfile = () => {
           }
         );
         setName1(response.data.name);
+        setSlr(response.data.nickname);
       } catch (error) {
         console.error("Error fetching name:", error);
         setErrorMessage("사용자 이름을 불러오는 중 오류가 발생했습니다.");
@@ -250,7 +253,7 @@ const EditProfile = () => {
                 <input
                   id="inname"
                   type="text"
-                  value={name}
+                  value={name || name1}
                   onChange={handleNameChange}
                 />
               </E.DetName>
@@ -261,7 +264,7 @@ const EditProfile = () => {
                 <input
                   id="innick"
                   type="text"
-                  value={nickname}
+                  value={nickname || slr}
                   onChange={handleNicknameChange}
                 />
               </E.DetNick>

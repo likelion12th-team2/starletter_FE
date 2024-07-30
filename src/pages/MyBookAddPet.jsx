@@ -53,6 +53,10 @@ const MyBookAddPet = ({ nickname }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!petName || !selectedType || !pet_birth1 || !pet_anniv1) {
+      alert("모든 필드를 작성해 주세요.");
+      return;
+    }
 
     const petBirth = pet_birth1
       ? pet_birth1
@@ -212,6 +216,36 @@ const MyBookAddPet = ({ nickname }) => {
     setShowTypeList(false);
   };
 
+  const datePickerRef = useRef(null);
+  const datePickerRef1 = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target)
+    ) {
+      setShowDatePicker(false);
+    }
+    if (
+      datePickerRef1.current &&
+      !datePickerRef1.current.contains(event.target)
+    ) {
+      setShowDatePicker1(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDatePicker || showDatePicker1) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDatePicker, showDatePicker1]);
+
   return (
     <AP.Container>
       <header>
@@ -353,11 +387,14 @@ const MyBookAddPet = ({ nickname }) => {
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
                 {showDatePicker && (
-                  <AP.DatePickerWrapper>
+                  <AP.DatePickerWrapper ref={datePickerRef}>
                     <DatePicker
                       selected={pet_birth1}
                       onChange={handleDateChange}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </AP.DatePickerWrapper>
                 )}
@@ -380,7 +417,7 @@ const MyBookAddPet = ({ nickname }) => {
                   onClick={() => setShowDatePicker1(!showDatePicker1)}
                 />
                 {showDatePicker1 && (
-                  <AP.DatePickerWrapper1>
+                  <AP.DatePickerWrapper1 ref={datePickerRef1}>
                     <DatePicker
                       selected={pet_anniv1}
                       onChange={(date1) => {
@@ -388,6 +425,9 @@ const MyBookAddPet = ({ nickname }) => {
                         setShowDatePicker1(false);
                       }}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </AP.DatePickerWrapper1>
                 )}
