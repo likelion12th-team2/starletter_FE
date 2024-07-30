@@ -76,16 +76,7 @@ const Market = ({ nickname }) => {
   };
 
   const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
+    navigate("/library");
   };
 
   const handleLogout = async () => {
@@ -199,7 +190,6 @@ const Market = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       <M.Body>

@@ -115,19 +115,10 @@ const Funeral = ({ nickname }) => {
   };
 
   const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
+    navigate("/library");
   };
 
   const key = localStorage.getItem("token");
-
-  const profile = {
-    // image: 'path_to_profile_image.jpg',
-    name: nickname,
-  };
 
   const handleLogout = async () => {
     try {
@@ -239,7 +230,6 @@ const Funeral = ({ nickname }) => {
       <MyPageModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        profile={profile}
         anchorRef={myPageRef}
       />
       <F.Body>

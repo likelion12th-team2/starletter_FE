@@ -39,6 +39,7 @@ const Login = () => {
         setMessage("로그인 응답에 토큰이 없습니다.");
       }
     } catch (error) {
+      setMessage(error.message);
       if (error.response && error.response.status === 401) {
         console.log("잘못된 아이디 또는 비밀번호입니다.");
         setMessage("잘못된 아이디 또는 비밀번호입니다.");

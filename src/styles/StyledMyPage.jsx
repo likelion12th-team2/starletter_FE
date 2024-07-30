@@ -8,7 +8,7 @@ export const ModalOverlay = styled.div`
   flex-direction: column;
   background: #e8f2ff;
   z-index: 1000;
-  position: fixed;
+  position: absolute;
   pointer-events: auto;
   top: 100px;
   right: 80px;
@@ -40,12 +40,12 @@ export const ProfileImage = styled.div`
   width: 70px;
   height: 70px;
   flex-shrink: 0;
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 20px;
 `;
 
 export const Greet = styled.div`
-  margin-top: 8px;
+  // margin-top: 8px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -68,7 +68,7 @@ export const Information = styled.div`
   border-radius: 30px;
   border: 1px solid #002951;
   display: flex;
-  margin-top: 28px;
+  margin-top: 18px;
   flex-direction: row;
 
   #information {

@@ -53,6 +53,10 @@ const ManagePetAdd = ({ nickname }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!petName || !selectedType || !pet_birth1 || !pet_anniv1) {
+      alert("모든 필드를 작성해 주세요.");
+      return;
+    }
 
     const petBirth = pet_birth1
       ? pet_birth1
@@ -212,6 +216,36 @@ const ManagePetAdd = ({ nickname }) => {
     setShowTypeList(false);
   };
 
+  const datePickerRef = useRef(null);
+  const datePickerRef1 = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target)
+    ) {
+      setShowDatePicker(false);
+    }
+    if (
+      datePickerRef1.current &&
+      !datePickerRef1.current.contains(event.target)
+    ) {
+      setShowDatePicker1(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDatePicker || showDatePicker1) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDatePicker, showDatePicker1]);
+
   return (
     <A.Container>
       <header>
@@ -314,6 +348,7 @@ const ManagePetAdd = ({ nickname }) => {
                   value={selectedType}
                   onChange={(e) => setPetType(e.target.value)}
                   readOnly
+                  required
                 />
                 <img
                   id="plustype"
@@ -345,6 +380,7 @@ const ManagePetAdd = ({ nickname }) => {
                   placeholder="연도-월-일"
                   value={pet_birth1 ? pet_birth1.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="birthcal"
@@ -353,11 +389,14 @@ const ManagePetAdd = ({ nickname }) => {
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
                 {showDatePicker && (
-                  <A.DatePickerWrapper>
+                  <A.DatePickerWrapper ref={datePickerRef}>
                     <DatePicker
                       selected={pet_birth1}
                       onChange={handleDateChange}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </A.DatePickerWrapper>
                 )}
@@ -372,6 +411,7 @@ const ManagePetAdd = ({ nickname }) => {
                   placeholder="연도-월-일"
                   value={pet_anniv1 ? pet_anniv1.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="memcal"
@@ -380,7 +420,7 @@ const ManagePetAdd = ({ nickname }) => {
                   onClick={() => setShowDatePicker1(!showDatePicker1)}
                 />
                 {showDatePicker1 && (
-                  <A.DatePickerWrapper1>
+                  <A.DatePickerWrapper1 ref={datePickerRef1}>
                     <DatePicker
                       selected={pet_anniv1}
                       onChange={(date1) => {
@@ -388,6 +428,9 @@ const ManagePetAdd = ({ nickname }) => {
                         setShowDatePicker1(false);
                       }}
                       inline
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
                     />
                   </A.DatePickerWrapper1>
                 )}

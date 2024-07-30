@@ -1,10 +1,36 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as P from "../styles/StyledMyPage";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
+  const [name1, setName1] = useState("");
+  const [slr, setSlr] = useState("");
+
+  const key = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/myinfo/",
+          {
+            headers: {
+              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+            },
+          }
+        );
+        setName1(response.data.name);
+        setSlr(response.data.nickname);
+      } catch (error) {
+        console.error("Error fetching name:", error);
+      }
+    };
+
+    fetchName();
+  }, []);
 
   const goPlus = () => {
     navigate(`/mypage/pluspet`);
@@ -50,7 +76,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
             alt="Profile"
           />
         </P.ProfileImage>
-        {/* <P.Greet>안녕하세요, {profile.name}님</P.Greet> */}
+        <P.Greet>{name1}님</P.Greet>
         <P.Button>
           <P.Information onClick={goEdit}>
             <img

@@ -17,7 +17,7 @@ const Join = () => {
     event.preventDefault();
 
     if (password !== password2) {
-      setMessage1("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+      setMessage("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
       return;
     }
 
@@ -155,7 +155,6 @@ const Join = () => {
                 />
               </J.ReBox>
             </J.RePw>
-            {message1 && <J.Message>{message1}</J.Message>}
             <J.Name>
               <div id="name">보호자 이름*</div>
               <J.NameBox>
