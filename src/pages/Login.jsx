@@ -150,8 +150,8 @@ const Login = () => {
             <div id="join" onClick={goJoin}>
               회원가입하기
             </div>
-            <div id="bar"> | </div>
-            <div id="pw">비밀번호 찾기</div>
+            {/* <div id="bar"> | </div>
+            <div id="pw">비밀번호 찾기</div> */}
           </L.Condition>
         </L.Content>
       </form>
