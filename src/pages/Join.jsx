@@ -49,7 +49,7 @@ const Join = () => {
           setMessage(error.response.data.message);
         }
       } else {
-        setMessage(`회원가입 실패: ${error.message}`);
+        setMessage(error.response.data.message);
       }
     }
   };
