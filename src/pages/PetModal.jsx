@@ -12,9 +12,12 @@ const PetModal = ({ isOpen, onClose, pet }) => {
 
   const key = localStorage.getItem("token");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/accounts/pets/${pet.id}/`, {
+      await axios.delete(`http://13.209.13.101/accounts/pets/${pet.id}/`, {
         headers: {
           Authorization: `Token ${key}`,
         },

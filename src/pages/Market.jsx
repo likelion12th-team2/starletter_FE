@@ -12,6 +12,9 @@ const Market = ({ nickname }) => {
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
@@ -50,14 +53,11 @@ const Market = ({ nickname }) => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -82,7 +82,7 @@ const Market = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
@@ -118,7 +118,7 @@ const Market = ({ nickname }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/market/"); // 실제 API 엔드포인트로 변경
+      const response = await axios.get(`http://13.209.13.101/market/`); // 실제 API 엔드포인트로 변경
       console.log("Fetched product data:", response.data); // 콘솔에 데이터 출력
       setProducts(response.data);
     } catch (error) {

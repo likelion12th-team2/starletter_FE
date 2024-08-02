@@ -12,6 +12,9 @@ const Activity = () => {
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     console.log("Stored Token:", token);
@@ -48,14 +51,11 @@ const Activity = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${key}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${key}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -96,7 +96,7 @@ const Activity = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `${API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -129,7 +129,7 @@ const Activity = () => {
 
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/activity/",
+          `http://13.209.13.101/accounts/activity/`,
           {
             headers: {
               Authorization: `Token ${key}`,
@@ -158,7 +158,7 @@ const Activity = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/accounts/activity/`,
+        `http://13.209.13.101/accounts/activity/`,
         {
           headers: {
             Authorization: `Token ${key}`,

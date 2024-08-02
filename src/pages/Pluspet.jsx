@@ -21,6 +21,9 @@ const Pluspet = ({ nickname }) => {
   const [pet_anniv1, setPet_Anniv] = useState(null);
   const [token, setToken] = useState("");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -93,7 +96,7 @@ const Pluspet = ({ nickname }) => {
       }
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/pets/",
+        `http://13.209.13.101/accounts/pets/`,
         formData,
         {
           headers: {
@@ -139,14 +142,11 @@ const Pluspet = ({ nickname }) => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -179,7 +179,7 @@ const Pluspet = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {

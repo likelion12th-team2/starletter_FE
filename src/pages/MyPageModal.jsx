@@ -11,11 +11,14 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
 
   const key = localStorage.getItem("token");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchName = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/myinfo/",
+          `http://13.209.13.101/accounts/myinfo/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가

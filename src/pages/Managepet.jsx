@@ -14,6 +14,9 @@ const Managepet = () => {
   const [token, setToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
     const token = localStorage.getItem("token");
@@ -31,7 +34,7 @@ const Managepet = () => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/pets/",
+          `http://13.209.13.101/accounts/pets/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
@@ -79,14 +82,11 @@ const Managepet = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${key}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${key}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -119,7 +119,7 @@ const Managepet = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
@@ -145,7 +145,7 @@ const Managepet = () => {
     // 특정 펫의 세부 정보를 가져오기 위해 API 요청
     console.log(`Opening modal for pet id: ${petId}`);
     axios
-      .get(`http://127.0.0.1:8000/accounts/pets/${petId}/`, {
+      .get(`http://13.209.13.101/accounts/pets/${petId}/`, {
         headers: {
           Authorization: `Token ${key}`, // 인증 헤더 추가
         },

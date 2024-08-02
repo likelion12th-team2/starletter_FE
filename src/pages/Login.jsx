@@ -10,13 +10,16 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("폼 제출됨");
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/login/",
+        `http://13.209.13.101/accounts/login/`,
         {
           username: username,
           password: password,

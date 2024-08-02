@@ -13,6 +13,9 @@ const Join = () => {
   const [message1, setMessage1] = useState("");
   const [message, setMessage] = useState("");
 
+  // 환경 변수에서 API URL을 가져옵니다.
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,7 +31,7 @@ const Join = () => {
     console.log("nickname:", nickname);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/register/",
+        `http://13.209.13.101/accounts/register/`,
         {
           username: username,
           password: password,
