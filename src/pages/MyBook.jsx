@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
 import axios from "axios";
@@ -11,16 +10,34 @@ const MyBook = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
 
-  const key = localStorage.getItem("token");
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setBooks(response.data.books);
+      } catch (error) {
+        console.error("책 목록을 불러오는 데 실패했습니다:", error);
+      }
+    };
+
+    if (token) {
+      fetchBooks();
+    }
+  }, [token]);
 
   const goHome = () => {
     navigate(`/`);
@@ -54,30 +71,30 @@ const MyBook = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${key}`,
-            },
-          }
-        );
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        const storedToken = token || localStorage.getItem("token");
+        if (!storedToken) {
+          navigate("/login");
+          return;
+        }
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
+        console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
         ) {
-          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+          navigate(`/mybook/make`);
         } else {
-          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+          navigate(`/mybook/addpet`);
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
@@ -95,11 +112,11 @@ const MyBook = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${key}`,
+            Authorization: `Token ${token}`,
           },
         }
       );
@@ -113,17 +130,6 @@ const MyBook = ({ nickname }) => {
       console.error("로그아웃 실패:", error);
     }
   };
-
-  const profile = {
-    name: nickname,
-  };
-
-  const location = useLocation();
-  const { book } = location.state || { book: null };
-
-  if (!book) {
-    return <div>책 데이터를 불러오는 중 오류가 발생했습니다.</div>;
-  }
 
   return (
     <M.Container>
@@ -180,21 +186,23 @@ const MyBook = ({ nickname }) => {
       </header>
       <M.Body>
         <M.bodyContainer>
-          <M.Book onClick={() => goMyBookDetail(book.id)}>
-            <M.BookCoverImg>
-              <img
-                id="MycoverImg"
-                src={
-                  book.cover ||
-                  `${process.env.PUBLIC_URL}/images/default_cover.png`
-                }
-                alt="cover"
-              />
-            </M.BookCoverImg>
-            <M.BookCoverText>
-              <div id="title">{book.title}</div>
-            </M.BookCoverText>
-          </M.Book>
+          {books.map((book) => (
+            <M.Book key={book.id} onClick={() => goMyBookDetail(book.id)}>
+              <M.BookCoverImg>
+                <img
+                  id="MycoverImg"
+                  src={
+                    book.cover ||
+                    `${process.env.PUBLIC_URL}/images/default_cover.png`
+                  }
+                  alt="cover"
+                />
+              </M.BookCoverImg>
+              <M.BookCoverText>
+                <div id="title">{book.title}</div>
+              </M.BookCoverText>
+            </M.Book>
+          ))}
         </M.bodyContainer>
       </M.Body>
       <MyPageModal

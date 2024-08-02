@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPetModal";
 import axios from "axios";
@@ -14,7 +14,7 @@ const PetModal = ({ isOpen, onClose, pet }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/accounts/pets/${pet.id}/`, {
+      await axios.delete(`http://13.209.13.101/accounts/pets/${pet.id}/`, {
         headers: {
           Authorization: `Token ${key}`,
         },

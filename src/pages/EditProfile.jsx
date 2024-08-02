@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as E from "../styles/StyledEdit";
 import axios from "axios";
@@ -10,12 +9,10 @@ const EditProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
-  const [token, setToken] = useState("");
   const [name, setName] = useState("");
   const [name1, setName1] = useState("");
   const [nickname, setNickname] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [dlfma, setDlfma] = useState("");
   const [slr, setSlr] = useState("");
 
   const handleNameChange = (e) => {
@@ -28,8 +25,8 @@ const EditProfile = () => {
 
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
@@ -57,23 +54,14 @@ const EditProfile = () => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
-          navigate("/login");
-          return;
-        }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${key}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -102,7 +90,7 @@ const EditProfile = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
@@ -113,9 +101,7 @@ const EditProfile = () => {
       console.log("로그아웃 성공:", response.data);
       // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
-      setToken("");
       navigate(`/`);
     } catch (error) {
       console.error("로그아웃 실패:", error);
@@ -135,10 +121,10 @@ const EditProfile = () => {
     console.log("Form submitted"); // 폼 제출 로그 추가
     try {
       const response = await axios.put(
-        "http://127.0.0.1:8000/accounts/myinfo/",
+        `http://13.209.13.101/accounts/myinfo/`,
         {
-          name: name,
-          nickname: nickname,
+          name: name || name1,
+          nickname: nickname || slr,
         },
         {
           headers: {
@@ -167,7 +153,7 @@ const EditProfile = () => {
     const fetchName = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/myinfo/",
+          `http://13.209.13.101/accounts/myinfo/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
@@ -183,7 +169,7 @@ const EditProfile = () => {
     };
 
     fetchName();
-  }, []);
+  }, [key]);
 
   return (
     <E.Container>

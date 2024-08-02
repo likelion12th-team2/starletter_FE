@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as MP from "../styles/StyledMP";
 import axios from "axios";
@@ -11,30 +10,25 @@ const Managepet = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
-  const [token, setToken] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [token]);
 
   const [pets, setPets] = useState([]);
-
-  const key = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/pets/",
+          `http://13.209.13.101/accounts/pets/`,
           {
             headers: {
-              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+              Authorization: `Token ${token}`,
             },
           }
         );
@@ -44,12 +38,11 @@ const Managepet = () => {
         }
       } catch (error) {
         console.error("Error fetching pets:", error);
-        setErrorMessage("펫 목록을 불러오는 중 오류가 발생했습니다.");
       }
     };
 
     fetchPets();
-  }, []);
+  }, [token, navigate]);
 
   const goLogin = () => {
     navigate("/login");
@@ -79,14 +72,11 @@ const Managepet = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${key}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -119,18 +109,16 @@ const Managepet = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate("/");
@@ -138,16 +126,16 @@ const Managepet = () => {
       console.error("로그아웃 실패:", error);
     }
   };
+
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [selectedPet, setSelectedPet] = useState(null);
 
   const openModal1 = (petId) => {
-    // 특정 펫의 세부 정보를 가져오기 위해 API 요청
     console.log(`Opening modal for pet id: ${petId}`);
     axios
-      .get(`http://127.0.0.1:8000/accounts/pets/${petId}/`, {
+      .get(`http://13.209.13.101/accounts/pets/${petId}/`, {
         headers: {
-          Authorization: `Token ${key}`, // 인증 헤더 추가
+          Authorization: `Token ${token}`,
         },
       })
       .then((response) => {
@@ -174,7 +162,7 @@ const Managepet = () => {
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
-                alt="logo"
+                alt="홈으로 이동"
               />
             </MP.Logo>
             <MP.Menu>
@@ -234,7 +222,7 @@ const Managepet = () => {
                   pet.petImage ||
                   `${process.env.PUBLIC_URL}/images/default_pet_image.png`
                 }
-                alt="photo"
+                alt={`${pet.petName} 사진`}
                 onClick={() => openModal1(pet.id)}
               />
               <div id="name">{pet.petName}</div>
@@ -254,7 +242,7 @@ const Managepet = () => {
           <img
             id="logo"
             src={`${process.env.PUBLIC_URL}/images/logo.png`}
-            alt="logo"
+            alt="로고"
           />
           <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
           <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>

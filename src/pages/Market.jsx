@@ -1,11 +1,10 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as M from "../styles/StyledMarket";
 import axios from "axios";
 
-const Market = ({ nickname }) => {
+const Market = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,10 +12,9 @@ const Market = ({ nickname }) => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -41,7 +39,6 @@ const Market = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
@@ -50,14 +47,11 @@ const Market = ({ nickname }) => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -82,16 +76,15 @@ const Market = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -118,7 +111,7 @@ const Market = ({ nickname }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/market/"); // 실제 API 엔드포인트로 변경
+      const response = await axios.get(`http://13.209.13.101/market/`); // 실제 API 엔드포인트로 변경
       console.log("Fetched product data:", response.data); // 콘솔에 데이터 출력
       setProducts(response.data);
     } catch (error) {

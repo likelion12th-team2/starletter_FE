@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as H from "../styles/StyledHome";
 import axios from "axios";
@@ -19,15 +19,6 @@ const Home = () => {
       setIsLoggedIn(true);
     }
   }, []);
-
-  // useEffect(() => {
-  //   // localStorage에 저장된 모든 항목을 콘솔에 출력
-  //   for (let i = 0; i < localStorage.length; i++) {
-  //     const key = localStorage.key(i);
-  //     const value = localStorage.getItem(key);
-  //     console.log(`Key: ${key}, Value: ${value}`);
-  //   }
-  // }, []);
 
   const goLogin = () => {
     navigate(`/login`);
@@ -48,7 +39,7 @@ const Home = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
@@ -85,14 +76,11 @@ const Home = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -112,11 +100,6 @@ const Home = () => {
 
   const goLib = async () => {
     navigate("/library");
-    // if (isLoggedIn) {
-    //   navigate("/library");
-    // } else {
-    //   navigate("/login");
-    // }
   };
 
   return (

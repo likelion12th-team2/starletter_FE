@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as MB from "../styles/styledMyBookDetail";
 import Modal from "react-modal";
@@ -16,6 +16,30 @@ const MyBookDetail = () => {
   const location = useLocation();
   const { bookId } = location.state || {};
 
+  const fetchBookDetail = useCallback(
+    async (token) => {
+      try {
+        const response = await axios.get(
+          `http://13.209.13.101/mybooks/${bookId}/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        setBook(response.data.book);
+        setPages(response.data.pages);
+        setNotes(response.data.notes);
+      } catch (error) {
+        console.error("책 상세내용 확인 실패", error);
+        console.log(error.response); // 에러 응답 로그 추가
+      }
+    },
+    [bookId]
+  );
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -24,28 +48,7 @@ const MyBookDetail = () => {
       setToken(storedToken);
       fetchBookDetail(storedToken);
     }
-  }, [bookId]);
-
-  const fetchBookDetail = async (token) => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/mybooks/${bookId}/`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
-
-      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
-      setBook(response.data.book);
-      setPages(response.data.pages);
-      setNotes(response.data.notes);
-    } catch (error) {
-      console.error("책 상세내용 확인 실패", error);
-      console.log(error.response); // 에러 응답 로그 추가
-    }
-  };
+  }, [fetchBookDetail]);
 
   const goHome = () => {
     navigate(`/`);
@@ -57,10 +60,6 @@ const MyBookDetail = () => {
 
   const goJoin = () => {
     navigate(`/join`);
-  };
-
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
   };
 
   const goFun = () => {
@@ -76,14 +75,11 @@ const MyBookDetail = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -94,7 +90,7 @@ const MyBookDetail = () => {
           navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
@@ -116,7 +112,7 @@ const MyBookDetail = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {

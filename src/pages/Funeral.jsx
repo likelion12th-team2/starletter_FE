@@ -1,12 +1,11 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as F from "../styles/StyledFuneral";
 import FuneralModal from "./FuneralModal";
 import axios from "axios";
 
-const Funeral = ({ nickname }) => {
+const Funeral = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,10 +27,10 @@ const Funeral = ({ nickname }) => {
   };
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       console.log("로그인 되어있음");
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -42,7 +41,7 @@ const Funeral = ({ nickname }) => {
 
   const fetchInitialFunerals = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/funeralhalls/");
+      const response = await axios.get(`http://13.209.13.101/funeralhalls/`);
       setFunerals(response.data);
     } catch (error) {
       console.error("Error fetching initial funeral data:", error);
@@ -51,7 +50,7 @@ const Funeral = ({ nickname }) => {
 
   const fetchFunerals = async (query) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/funeralhalls/`, {
+      const response = await axios.get(`http://13.209.13.101/funeralhalls/`, {
         params: { search: query },
       });
       setFunerals(response.data);
@@ -80,23 +79,14 @@ const Funeral = ({ nickname }) => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
-          navigate("/login");
-          return;
-        }
-        const response = await axios.get(
-          "http://127.0.0.1:8000/mybooks/list/",
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -118,16 +108,14 @@ const Funeral = ({ nickname }) => {
     navigate("/library");
   };
 
-  const key = localStorage.getItem("token");
-
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -152,7 +140,6 @@ const Funeral = ({ nickname }) => {
   };
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
   const [showAd, setShowAd] = useState(true);
   const [searchMessage, setSearchMessage] = useState("");
 

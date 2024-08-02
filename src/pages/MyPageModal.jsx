@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as P from "../styles/StyledMyPage";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const [name1, setName1] = useState("");
-  const [slr, setSlr] = useState("");
 
   const key = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchName = async () => {
+      if (!key) return; // key가 없으면 API 호출을 하지 않음
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/myinfo/",
+          `http://13.209.13.101/accounts/myinfo/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
@@ -23,14 +23,13 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           }
         );
         setName1(response.data.name);
-        setSlr(response.data.nickname);
       } catch (error) {
         console.error("Error fetching name:", error);
       }
     };
 
     fetchName();
-  }, []);
+  }, [key]);
 
   const goPlus = () => {
     navigate(`/mypage/pluspet`);
@@ -69,7 +68,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           alt="닫기"
         />
       </P.CloseButton>
-      <P.Content>
+      <P.Content ref={modalRef}>
         <P.ProfileImage>
           <img
             src={`${process.env.PUBLIC_URL}/images/Myprofile.svg`}
