@@ -15,10 +15,10 @@ const ManagePetAdd = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
 
-  const [petName, setPet_Name] = useState("");
+  const [petName, setPetName] = useState("");
   const [petType, setPetType] = useState("");
-  const [pet_birth1, setPet_Birth] = useState(null);
-  const [pet_anniv1, setPet_Anniv] = useState(null);
+  const [petBirth, setPetBirth] = useState(null);
+  const [petAnniv, setPetAnniv] = useState(null);
   const [token, setToken] = useState("");
 
   useEffect(() => {
@@ -47,19 +47,24 @@ const ManagePetAdd = ({ nickname }) => {
   };
 
   const handleDateChange = (date) => {
-    setPet_Birth(date);
+    setPetBirth(date);
     setShowDatePicker(false); // 날짜 선택 시 달력 닫기
+  };
+
+  const handleAnnivChange = (date) => {
+    setPetAnniv(date);
+    setShowDatePicker1(false); // 날짜 선택 시 달력 닫기
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!petName || !selectedType || !pet_birth1 || !pet_anniv1) {
+    if (!petName || !petType || !petBirth || !petAnniv) {
       alert("모든 필드를 작성해 주세요.");
       return;
     }
 
-    const petBirth = pet_birth1
-      ? pet_birth1
+    const formattedPetBirth = petBirth
+      ? petBirth
           .toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "2-digit",
@@ -70,8 +75,8 @@ const ManagePetAdd = ({ nickname }) => {
           .replace(/-$/, "")
       : "";
 
-    const petAnniv = pet_anniv1
-      ? pet_anniv1
+    const formattedPetAnniv = petAnniv
+      ? petAnniv
           .toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "2-digit",
@@ -85,29 +90,21 @@ const ManagePetAdd = ({ nickname }) => {
     try {
       const formData = new FormData();
       formData.append("petName", petName);
-      formData.append("petBirth", petBirth);
-      formData.append("petAnniv", petAnniv);
+      formData.append("petBirth", formattedPetBirth);
+      formData.append("petAnniv", formattedPetAnniv);
       formData.append("petType", petType);
       if (file) {
         formData.append("petImage", file);
       }
 
-      const response = await axios.post(
-        `http://13.209.13.101/accounts/pets/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`http://13.209.13.101/accounts/pets/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      // 토큰을 로컬 스토리지에 저장합니다.
-      localStorage.setItem("token", token);
-
-      // 토큰을 상태로 전달하면서 페이지를 이동합니다.
-      navigate(`/mypage/managepet`, { state: { token } });
+      navigate(`/mypage/managepet`);
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
       console.log(error.response.data);
@@ -134,11 +131,10 @@ const ManagePetAdd = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  //내서재 수정
+  // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        // 동물 있는지 없는지 판별
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
             Authorization: `Token ${token}`,
@@ -330,7 +326,7 @@ const ManagePetAdd = ({ nickname }) => {
                   type="text"
                   placeholder="반려동물의 이름을 입력해 주세요"
                   value={petName}
-                  onChange={(e) => setPet_Name(e.target.value)}
+                  onChange={(e) => setPetName(e.target.value)}
                   required
                 />
               </A.NameBox>
@@ -375,7 +371,7 @@ const ManagePetAdd = ({ nickname }) => {
                   id="birthbox"
                   type="text"
                   placeholder="연도-월-일"
-                  value={pet_birth1 ? pet_birth1.toLocaleDateString() : ""}
+                  value={petBirth ? petBirth.toLocaleDateString() : ""}
                   readOnly
                   required
                 />
@@ -388,7 +384,7 @@ const ManagePetAdd = ({ nickname }) => {
                 {showDatePicker && (
                   <A.DatePickerWrapper ref={datePickerRef}>
                     <DatePicker
-                      selected={pet_birth1}
+                      selected={petBirth}
                       onChange={handleDateChange}
                       inline
                       showYearDropdown
@@ -406,7 +402,7 @@ const ManagePetAdd = ({ nickname }) => {
                   id="memorialbox"
                   type="text"
                   placeholder="연도-월-일"
-                  value={pet_anniv1 ? pet_anniv1.toLocaleDateString() : ""}
+                  value={petAnniv ? petAnniv.toLocaleDateString() : ""}
                   readOnly
                   required
                 />
@@ -419,11 +415,8 @@ const ManagePetAdd = ({ nickname }) => {
                 {showDatePicker1 && (
                   <A.DatePickerWrapper1 ref={datePickerRef1}>
                     <DatePicker
-                      selected={pet_anniv1}
-                      onChange={(date1) => {
-                        setPet_Anniv(date1);
-                        setShowDatePicker1(false);
-                      }}
+                      selected={petAnniv}
+                      onChange={handleAnnivChange}
                       inline
                       showYearDropdown
                       showMonthDropdown

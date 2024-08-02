@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as MW from "../styles/styledMyBookWrite";
 import axios from "axios";
@@ -7,56 +6,35 @@ import MyPageModal from "./MyPageModal";
 
 const MyBookWrite = ({ nickname }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { bookId } = location.state || {};
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
 
-  const location = useLocation();
-  const { bookId } = location.state || {};
+  const [visibility, setVisibility] = useState("public");
+  const [images, setImages] = useState([]);
+  const [body, setBody] = useState("");
+
+  const fileInputRef = useRef(null); // 파일 입력 요소에 접근하기 위한 useRef
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("로그인 되어있음");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       setIsLoggedIn(true);
-      setToken(token);
+      setToken(storedToken);
     }
   }, []);
 
-  const goHome = () => {
-    navigate(`/`);
-  };
-
-  const goLogin = () => {
-    navigate(`/login`);
-  };
-
-  const goJoin = () => {
-    navigate(`/join`);
-  };
-
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
-  };
-
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
-
-  const goMarket = () => {
-    navigate(`/market`);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  //내서재 수정
+  const goHome = () => navigate("/");
+  const goLogin = () => navigate("/login");
+  const goJoin = () => navigate("/join");
+  const goFun = () => navigate("/funeral");
+  const goMarket = () => navigate("/market");
+  const goLib = () => navigate(`/library`);
+  // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
@@ -76,24 +54,23 @@ const MyBookWrite = ({ nickname }) => {
           navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
     }
   };
 
-  const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
+  const goMyBookDetail = () => {
+    navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
   };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://13.209.13.101/accounts/logout/`,
         {},
         {
@@ -102,35 +79,21 @@ const MyBookWrite = ({ nickname }) => {
           },
         }
       );
-      console.log("로그아웃 성공:", response.data);
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
-      navigate(`/`);
+      navigate("/");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
   };
 
-  const profile = {
-    name: nickname,
-  };
-
-  const [visibility, setVisibility] = useState("public");
-
-  const handleVisibilityChange = (event) => {
-    setVisibility(event.target.value);
-  };
-
-  const [images, setImages] = useState([]);
-  const [body, setBody] = useState("");
-
-  const fileInputRef = useRef(null); // 파일 입력 요소에 접근하기 위한 useRef
+  const handleVisibilityChange = (event) => setVisibility(event.target.value);
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.slice(0, 2 - images.length); // 최대 2개의 이미지만 추가 가능
+    const newImages = files.slice(0, 2 - images.length);
     setImages((prevImages) => [...prevImages, ...newImages]);
     fileInputRef.current.value = null; // 파일 입력 요소 초기화
   };
@@ -148,27 +111,23 @@ const MyBookWrite = ({ nickname }) => {
     formData.append("isPublic", visibility === "public");
 
     images.forEach((image) => {
-      formData.append(`images`, image);
+      formData.append("images", image);
     });
 
     try {
-      const response = await axios.post(
-        `http://13.209.13.101/mybooks/${bookId}/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("페이지 작성 성공:", response.data);
+      await axios.post(`http://13.209.13.101/mybooks/${bookId}/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       goMyBookDetail();
     } catch (error) {
       console.error("페이지 작성 실패:", error);
-      console.log(error.response);
     }
   };
+
+  const profile = { name: nickname };
 
   return (
     <MW.Container>
@@ -243,7 +202,7 @@ const MyBookWrite = ({ nickname }) => {
                     multiple
                     onChange={handleImageChange}
                     style={{ display: "none" }}
-                    ref={fileInputRef} // useRef를 사용하여 파일 입력 요소에 접근
+                    ref={fileInputRef}
                   />
                   <label htmlFor="addimg" id="addBtn">
                     <img
@@ -276,7 +235,7 @@ const MyBookWrite = ({ nickname }) => {
                   value="public"
                   checked={visibility === "public"}
                   onChange={handleVisibilityChange}
-                />{" "}
+                />
                 <span>공개</span>
               </label>
               <label id="label">
@@ -287,7 +246,7 @@ const MyBookWrite = ({ nickname }) => {
                   value="private"
                   checked={visibility === "private"}
                   onChange={handleVisibilityChange}
-                />{" "}
+                />
                 <span>비공개</span>
               </label>
             </MW.PublicPrivate>

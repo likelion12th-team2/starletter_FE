@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
-import Modal from "react-modal"; // 모달
+import Modal from "react-modal";
 import * as LD from "../styles/styledLD";
 import axios from "axios";
 
-Modal.setAppElement("#root"); // 모달 설정
+Modal.setAppElement("#root");
 
 const LibraryDetail = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
-  const [isHeartClicked, setIsHeartClicked] = useState(false); // 공감하기
-  const [isOwner, setIsOwner] = useState(false); // 책 소유 여부
-
+  const [isHeartClicked, setIsHeartClicked] = useState(false);
   const [pages, setPages] = useState([]);
   const [notes, setNotes] = useState([]);
-  const [isPublic, setIsPublic] = useState([]);
   const [isMinded, setIsMinded] = useState(false);
   const location = useLocation();
   const { bookId } = location.state || {};
@@ -28,23 +25,22 @@ const LibraryDetail = ({ nickname }) => {
       setToken(storedToken);
       setIsLoggedIn(true);
     }
-  }, []);
+    ShowBookDetail(storedToken);
+  }, [bookId]);
 
   useEffect(() => {
     if (bookId && token) {
-      checkHeartState();
+      checkHeartState(token);
     }
   }, [bookId, token]);
 
-  const key = localStorage.getItem("token");
-
-  const checkHeartState = async () => {
+  const checkHeartState = async (token) => {
     try {
       const response = await axios.get(
         `http://13.209.13.101/bookshelf/${bookId}`,
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
@@ -54,29 +50,18 @@ const LibraryDetail = ({ nickname }) => {
     }
   };
 
-  const goLogin = () => {
-    navigate(`/login`);
-  };
-
-  const goJoin = () => {
-    navigate(`/join`);
-  };
-
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
-      console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate(`/`);
@@ -85,48 +70,59 @@ const LibraryDetail = ({ nickname }) => {
     }
   };
 
-  const goHome = () => {
-    navigate(`/`);
+  const ShowBookDetail = async (token) => {
+    const config = token
+      ? {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      : {};
+
+    try {
+      const response = await axios.get(
+        `http://13.209.13.101/bookshelf/${bookId}/`,
+        config
+      );
+      setPages(response.data.pages);
+      setNotes(response.data.notes);
+      setIsMinded(response.data.isMinded);
+    } catch (error) {
+      console.error("책 상세정보 불러오기 실패:", error);
+    }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
+  const goHome = () => navigate(`/`);
+  const goLogin = () => navigate(`/login`);
+  const goJoin = () => navigate(`/join`);
+  const goFun = () => navigate(`/funeral`);
+  const goMarket = () => navigate(`/market`);
 
-  const goMarket = () => {
-    navigate(`/market`);
-  };
-
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        // 동물 있는지 없는지 판별
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
         ) {
-          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+          navigate(`/mybook/make`);
         } else {
-          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+          navigate(`/mybook/addpet`);
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
     }
   };
 
-  const goLib = async () => {
-    navigate("/library");
-  };
+  const goLib = () => navigate("/library");
 
   const profile = {
     name: nickname,
@@ -146,13 +142,12 @@ const LibraryDetail = ({ nickname }) => {
     }
   };
 
-  // 모달창 상태
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedPostitContent, setSelectedPostitContent] = useState(""); // 포스트잇 선택시 해당 내용 보임
+  const [selectedPostitContent, setSelectedPostitContent] = useState("");
   const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
-  const [isAddPostitModalOpen, setIsAddPostitModalOpen] = useState(false); // 추가된 상태 변수
+  const [isAddPostitModalOpen, setIsAddPostitModalOpen] = useState(false);
   const [newPostitContent, setNewPostitContent] = useState("");
-  const [postitTextLength, setPostitTextLength] = useState(0); // 추가된 상태 변수
+  const [postitTextLength, setPostitTextLength] = useState(0);
 
   const openPostitModal = (content) => {
     setSelectedPostitContent(content);
@@ -186,12 +181,10 @@ const LibraryDetail = ({ nickname }) => {
     setPostitTextLength(content.length);
   };
 
-  // 책 공감하기
   const handleHeartClick = async () => {
-    if (!key) {
+    if (!token) {
       alert("로그인이 필요합니다.");
       navigate("/login");
-      console.error("로그인 되어있지 않습니다.");
       return;
     }
     const previousState = isHeartClicked;
@@ -204,7 +197,7 @@ const LibraryDetail = ({ nickname }) => {
   };
 
   const handleAddHeart = async () => {
-    if (!key) {
+    if (!token) {
       console.error("로그인 되어있지 않습니다.");
       return;
     }
@@ -213,7 +206,7 @@ const LibraryDetail = ({ nickname }) => {
         `http://13.209.13.101/bookshelf/${bookId}/mind/`,
         {},
         {
-          headers: { Authorization: `Token ${key}` },
+          headers: { Authorization: `Token ${token}` },
         }
       );
       console.log(response.data.message);
@@ -223,11 +216,10 @@ const LibraryDetail = ({ nickname }) => {
     }
   };
 
-  // 포스트잇 붙이기
   const handleAddPostit = async (event) => {
     event.preventDefault();
 
-    if (!key) {
+    if (!token) {
       console.error("토큰이 없습니다.");
       return;
     }
@@ -239,7 +231,7 @@ const LibraryDetail = ({ nickname }) => {
           body: newPostitContent,
         },
         {
-          headers: { Authorization: `Token ${key}` },
+          headers: { Authorization: `Token ${token}` },
         }
       );
       const newNote = response.data;
@@ -249,37 +241,6 @@ const LibraryDetail = ({ nickname }) => {
       closeAddPostitModal();
     } catch (error) {
       console.error("포스트잇 추가 실패:", error);
-      console.log(error.response);
-    }
-  };
-
-  // 책 구현
-  useEffect(() => {
-    if (bookId) {
-      ShowBookDetail();
-    } else {
-      console.error("No bookId provided");
-    }
-  }, [bookId]);
-
-  const ShowBookDetail = async () => {
-    console.log(`Fetching details for bookId: ${bookId}`);
-    try {
-      const response = await axios.get(
-        `http://13.209.13.101/bookshelf/${bookId}/`,
-        {
-          headers: key ? { Authorization: `Token ${key}` } : {},
-        }
-      );
-      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
-
-      setPages(response.data.pages);
-      setNotes(response.data.notes);
-      setIsMinded(response.data.isMinded);
-      setIsPublic(response.data.isPublic);
-    } catch (error) {
-      console.error("책 상세정보 불러오기 실패:", error);
-      console.log(error.response); // 에러 응답 로그 추가
     }
   };
 
@@ -336,14 +297,12 @@ const LibraryDetail = ({ nickname }) => {
           </LD.NavContent>
         </LD.Nav>
       </header>
-      {/* 마이페이지 모달창 추가 */}
       <MyPageModal
         isOpen={isMyPageModalOpen}
         onClose={closeMyPageModal}
         profile={profile}
         anchorRef={myPageRef}
       />
-      {/* 포스트잇 모달창 추가 */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closePostitModal}
@@ -366,8 +325,7 @@ const LibraryDetail = ({ nickname }) => {
       >
         <LD.ModalContent>{selectedPostitContent}</LD.ModalContent>
       </Modal>
-      {/* 추가 포스트잇 모달창 추가 */}
-      {token && ( // 토큰이 있는 경우에만 모달을 표시
+      {token && (
         <Modal
           isOpen={isAddPostitModalOpen}
           onRequestClose={closeAddPostitModal}
@@ -410,7 +368,6 @@ const LibraryDetail = ({ nickname }) => {
           </LD.ModalContent>
         </Modal>
       )}
-      {/*  */}
       <LD.Body>
         <LD.Book>
           <LD.PageTitle>{pages.book}</LD.PageTitle>

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as E from "../styles/StyledEdit";
@@ -27,9 +26,10 @@ const EditProfile = () => {
 
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       console.log("로그인 되어있음");
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -56,18 +56,12 @@ const EditProfile = () => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
-          navigate("/login");
-          return;
-        }
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
-            Authorization: `Token ${storedToken}`,
+            Authorization: `Token ${key}`,
           },
         });
         console.log("API 응답:", response.data);
@@ -179,7 +173,7 @@ const EditProfile = () => {
     };
 
     fetchName();
-  }, []);
+  }, [key]);
 
   return (
     <E.Container>

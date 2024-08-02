@@ -15,10 +15,10 @@ const MyBookAddPet = ({ nickname }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
 
-  const [petName, setPet_Name] = useState("");
+  const [petName, setPetName] = useState("");
   const [petType, setPetType] = useState("");
-  const [pet_birth1, setPet_Birth] = useState(null);
-  const [pet_anniv1, setPet_Anniv] = useState(null);
+  const [petBirth, setPetBirth] = useState(null);
+  const [petAnniv, setPetAnniv] = useState(null);
   const [token, setToken] = useState("");
 
   useEffect(() => {
@@ -47,19 +47,19 @@ const MyBookAddPet = ({ nickname }) => {
   };
 
   const handleDateChange = (date) => {
-    setPet_Birth(date);
+    setPetBirth(date);
     setShowDatePicker(false); // 날짜 선택 시 달력 닫기
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!petName || !selectedType || !pet_birth1 || !pet_anniv1) {
+    if (!petName || !petType || !petBirth || !petAnniv) {
       alert("모든 필드를 작성해 주세요.");
       return;
     }
 
-    const petBirth = pet_birth1
-      ? pet_birth1
+    const formattedPetBirth = petBirth
+      ? petBirth
           .toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "2-digit",
@@ -70,8 +70,8 @@ const MyBookAddPet = ({ nickname }) => {
           .replace(/-$/, "")
       : "";
 
-    const petAnniv = pet_anniv1
-      ? pet_anniv1
+    const formattedPetAnniv = petAnniv
+      ? petAnniv
           .toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "2-digit",
@@ -85,8 +85,8 @@ const MyBookAddPet = ({ nickname }) => {
     try {
       const formData = new FormData();
       formData.append("petName", petName);
-      formData.append("petBirth", petBirth);
-      formData.append("petAnniv", petAnniv);
+      formData.append("petBirth", formattedPetBirth);
+      formData.append("petAnniv", formattedPetAnniv);
       formData.append("petType", petType);
       if (file) {
         formData.append("petImage", file);
@@ -134,7 +134,7 @@ const MyBookAddPet = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  //내서재 수정
+  // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
@@ -154,7 +154,7 @@ const MyBookAddPet = ({ nickname }) => {
           navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
@@ -330,7 +330,7 @@ const MyBookAddPet = ({ nickname }) => {
                   type="text"
                   placeholder="반려동물의 이름을 입력해 주세요"
                   value={petName}
-                  onChange={(e) => setPet_Name(e.target.value)}
+                  onChange={(e) => setPetName(e.target.value)}
                   required
                 />
               </AP.NameBox>
@@ -345,6 +345,7 @@ const MyBookAddPet = ({ nickname }) => {
                   value={selectedType}
                   onChange={(e) => setPetType(e.target.value)}
                   readOnly
+                  required
                 />
                 <img
                   id="plustype"
@@ -374,8 +375,9 @@ const MyBookAddPet = ({ nickname }) => {
                   id="birthbox"
                   type="text"
                   placeholder="연도-월-일"
-                  value={pet_birth1 ? pet_birth1.toLocaleDateString() : ""}
+                  value={petBirth ? petBirth.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="birthcal"
@@ -386,7 +388,7 @@ const MyBookAddPet = ({ nickname }) => {
                 {showDatePicker && (
                   <AP.DatePickerWrapper ref={datePickerRef}>
                     <DatePicker
-                      selected={pet_birth1}
+                      selected={petBirth}
                       onChange={handleDateChange}
                       inline
                       showYearDropdown
@@ -404,8 +406,9 @@ const MyBookAddPet = ({ nickname }) => {
                   id="memorialbox"
                   type="text"
                   placeholder="연도-월-일"
-                  value={pet_anniv1 ? pet_anniv1.toLocaleDateString() : ""}
+                  value={petAnniv ? petAnniv.toLocaleDateString() : ""}
                   readOnly
+                  required
                 />
                 <img
                   id="memcal"
@@ -416,9 +419,9 @@ const MyBookAddPet = ({ nickname }) => {
                 {showDatePicker1 && (
                   <AP.DatePickerWrapper1 ref={datePickerRef1}>
                     <DatePicker
-                      selected={pet_anniv1}
+                      selected={petAnniv}
                       onChange={(date1) => {
-                        setPet_Anniv(date1);
+                        setPetAnniv(date1);
                         setShowDatePicker1(false);
                       }}
                       inline

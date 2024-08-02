@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as MP from "../styles/StyledMP";
 import axios from "axios";
@@ -11,21 +10,17 @@ const Managepet = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
     if (token) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [token]);
 
   const [pets, setPets] = useState([]);
-
-  const key = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -34,7 +29,7 @@ const Managepet = () => {
           `http://13.209.13.101/accounts/pets/`,
           {
             headers: {
-              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+              Authorization: `Token ${token}`,
             },
           }
         );
@@ -49,7 +44,7 @@ const Managepet = () => {
     };
 
     fetchPets();
-  }, []);
+  }, [token, navigate]);
 
   const goLogin = () => {
     navigate("/login");
@@ -81,7 +76,7 @@ const Managepet = () => {
         }
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
-            Authorization: `Token ${key}`,
+            Authorization: `Token ${storedToken}`,
           },
         });
         console.log("API 응답:", response.data);
@@ -120,14 +115,12 @@ const Managepet = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate("/");
@@ -135,16 +128,16 @@ const Managepet = () => {
       console.error("로그아웃 실패:", error);
     }
   };
+
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [selectedPet, setSelectedPet] = useState(null);
 
   const openModal1 = (petId) => {
-    // 특정 펫의 세부 정보를 가져오기 위해 API 요청
     console.log(`Opening modal for pet id: ${petId}`);
     axios
       .get(`http://13.209.13.101/accounts/pets/${petId}/`, {
         headers: {
-          Authorization: `Token ${key}`, // 인증 헤더 추가
+          Authorization: `Token ${token}`,
         },
       })
       .then((response) => {

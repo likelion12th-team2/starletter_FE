@@ -1,12 +1,11 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as F from "../styles/StyledFuneral";
 import FuneralModal from "./FuneralModal";
 import axios from "axios";
 
-const Funeral = ({}) => {
+const Funeral = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,10 +27,10 @@ const Funeral = ({}) => {
   };
 
   useEffect(() => {
-    // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
       console.log("로그인 되어있음");
+      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -80,18 +79,12 @@ const Funeral = ({}) => {
     setIsModalOpen(false);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
-          navigate("/login");
-          return;
-        }
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
-            Authorization: `Token ${storedToken}`,
+            Authorization: `Token ${token}`,
           },
         });
         console.log("API 응답:", response.data);
@@ -115,8 +108,6 @@ const Funeral = ({}) => {
     navigate("/library");
   };
 
-  const key = localStorage.getItem("token");
-
   const handleLogout = async () => {
     try {
       const response = await axios.post(
@@ -124,7 +115,7 @@ const Funeral = ({}) => {
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );

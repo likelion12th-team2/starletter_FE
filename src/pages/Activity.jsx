@@ -115,7 +115,7 @@ const Activity = () => {
 
   const [mindBooks, setMindBooks] = useState([]);
   const [myNotes, setMyNotes] = useState([]);
-  const [setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,7 +142,7 @@ const Activity = () => {
     };
 
     fetchData();
-  }, []);
+  }, [key]);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(null);

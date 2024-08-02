@@ -103,10 +103,7 @@ const Pluspet = ({ nickname }) => {
         }
       );
 
-      // 토큰을 로컬 스토리지에 저장합니다.
       localStorage.setItem("token", token);
-
-      // 토큰을 상태로 전달하면서 페이지를 이동합니다.
       navigate(`/mypage/managepet`, { state: { token } });
     } catch (error) {
       console.log(`추가 실패: ${error.message}`);
@@ -134,11 +131,9 @@ const Pluspet = ({ nickname }) => {
     navigate(`/join`);
   };
 
-  //내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        // 동물 있는지 없는지 판별
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
             Authorization: `Token ${token}`,
@@ -149,9 +144,9 @@ const Pluspet = ({ nickname }) => {
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
         ) {
-          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+          navigate(`/mybook/make`);
         } else {
-          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+          navigate(`/mybook/addpet`);
         }
       } catch (error) {
         console.error("동물 기록 확인 실패:");
@@ -180,12 +175,11 @@ const Pluspet = ({ nickname }) => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);

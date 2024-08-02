@@ -25,12 +25,10 @@ const MyBookMake = ({ nickname }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      console.log("로그인 되어있음");
       setIsLoggedIn(true);
       setToken(storedToken);
-      fetchPets(storedToken); // 등록된 동물 불러오기
+      fetchPets(storedToken);
     } else if (token) {
-      console.log("로그인 되어있음 (토큰 전달받음)");
       setIsLoggedIn(true);
       localStorage.setItem("token", token);
       fetchPets(token);
@@ -41,43 +39,29 @@ const MyBookMake = ({ nickname }) => {
     try {
       const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
         headers: {
-          Authorization: `Token ${token}`, // 토큰 헤더 포함
+          Authorization: `Token ${token}`,
         },
       });
-      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
       setBooks(response.data.books);
       setPetsNoBook(response.data.petsNoBook);
     } catch (error) {
       console.error("동물 기록 확인 실패:", error);
-      console.log(error.response); // 에러 응답 로그 추가//
     }
   };
 
-  const goHome = () => {
-    navigate(`/`);
+  const navigateTo = (path) => {
+    navigate(path);
   };
 
-  const goLogin = () => {
-    navigate(`/login`);
-  };
-
-  const goJoin = () => {
-    navigate(`/join`);
-  };
-
-  const goMyBookDetail = (bookId) => {
+  const goHome = () => navigateTo(`/`);
+  const goLogin = () => navigateTo(`/login`);
+  const goJoin = () => navigateTo(`/join`);
+  const goFun = () => navigateTo(`/funeral`);
+  const goMarket = () => navigateTo(`/market`);
+  const goMyBookDetail = (bookId) =>
     navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
-  };
-
-  const goFun = () => {
-    navigate(`/funeral`);
-  };
-
-  const goMarket = () => {
-    navigate(`/market`);
-  };
-
-  //내서재 수정
+  const goLib = () => navigateTo(`/library`);
+  // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
@@ -97,35 +81,24 @@ const MyBookMake = ({ nickname }) => {
           navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
         }
       } catch (error) {
-        console.error("동물 기록 확인 실패:");
+        console.error("동물 기록 확인 실패:", error);
       }
     } else {
       navigate("/login");
     }
   };
-
-  const goLib = () => {
-    if (isLoggedIn) {
-      navigate("/library");
-    } else {
-      navigate("/login");
-    }
-  };
-
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
-      console.log("로그아웃 성공:", response.data);
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate(`/`);
@@ -180,32 +153,15 @@ const MyBookMake = ({ nickname }) => {
     name: nickname,
   };
 
-  //책 만들기
-  const handleMakeBook = async (event) => {
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("CoverImg", coverImage);
-    console.log("keyword", selectedKeyword);
-    console.log("Pet ID:", selectedPetId);
-
+  const handleMakeBook = async () => {
     const token = localStorage.getItem("token");
-    console.log("사용할 토큰:", token);
-
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("pet", selectedPetId);
       formData.append("description", description || "");
-      if (coverImage) {
-        formData.append("cover", coverImage);
-      } else {
-        formData.append("cover", null);
-      }
+      formData.append("cover", coverImage || null);
       formData.append("keywordTag", selectedKeyword);
-
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
 
       const response = await axios.post(
         `http://13.209.13.101/mybooks/list/`,
@@ -218,14 +174,10 @@ const MyBookMake = ({ nickname }) => {
         }
       );
 
-      console.log("책 생성 성공:", response.data);
       closeBookModal();
-      fetchPets(token); // 책 목록 갱신
+      fetchPets(token);
     } catch (error) {
       console.error("책 생성 실패:", error);
-      if (error.response) {
-        console.log("서버 응답 데이터:", error.response.data);
-      }
     }
   };
 
@@ -353,12 +305,10 @@ const MyBookMake = ({ nickname }) => {
                       (books.length + petsNoBook.length);
                   const hidden = !(large || small);
 
-                  // 데이터가 2개일 때 두 번째 데이터를 next 위치에 오도록 설정
                   const updatedNext =
                     books.length + petsNoBook.length === 2 && position === 1;
 
                   return (
-                    //책 있는 경우
                     <MM.Book
                       key={book.id}
                       large={large}
@@ -399,12 +349,10 @@ const MyBookMake = ({ nickname }) => {
                       (books.length + petsNoBook.length);
                   const hidden = !(large || small);
 
-                  // 데이터가 2개일 때 두 번째 데이터를 next 위치에 오도록 설정
                   const updatedNext =
                     books.length + petsNoBook.length === 2 && position === 1;
 
                   return (
-                    //책 없는 경우
                     <MM.NoBook
                       key={pet.id}
                       large={large}
@@ -572,10 +520,7 @@ const MyBookMake = ({ nickname }) => {
                       <img
                         src={URL.createObjectURL(coverImage)}
                         alt="Cover Preview"
-                        style={{
-                          maxWidth: "320px",
-                          maxHeight: "70px",
-                        }}
+                        style={{ maxWidth: "320px", maxHeight: "70px" }}
                       />
                     )}
                   </button>
