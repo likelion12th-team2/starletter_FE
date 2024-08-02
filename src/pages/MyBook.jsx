@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as M from "../styles/styledMyBook";
 import axios from "axios";
@@ -21,23 +21,23 @@ const MyBook = ({ nickname }) => {
   }, []);
 
   useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setBooks(response.data.books);
+      } catch (error) {
+        console.error("책 목록을 불러오는 데 실패했습니다:", error);
+      }
+    };
+
     if (token) {
       fetchBooks();
     }
   }, [token]);
-
-  const fetchBooks = async () => {
-    try {
-      const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-      setBooks(response.data.books);
-    } catch (error) {
-      console.error("책 목록을 불러오는 데 실패했습니다:", error);
-    }
-  };
 
   const goHome = () => {
     navigate(`/`);
@@ -129,10 +129,6 @@ const MyBook = ({ nickname }) => {
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
-  };
-
-  const profile = {
-    name: nickname,
   };
 
   return (

@@ -9,7 +9,6 @@ const EditProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
-  const [token, setToken] = useState("");
   const [name, setName] = useState("");
   const [name1, setName1] = useState("");
   const [nickname, setNickname] = useState("");
@@ -29,7 +28,6 @@ const EditProfile = () => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       console.log("로그인 되어있음");
-      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -103,9 +101,7 @@ const EditProfile = () => {
       console.log("로그아웃 성공:", response.data);
       // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
-      setToken("");
       navigate(`/`);
     } catch (error) {
       console.error("로그아웃 실패:", error);
@@ -127,8 +123,8 @@ const EditProfile = () => {
       const response = await axios.put(
         `http://13.209.13.101/accounts/myinfo/`,
         {
-          name: name,
-          nickname: nickname,
+          name: name || name1,
+          nickname: nickname || slr,
         },
         {
           headers: {

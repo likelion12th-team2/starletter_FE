@@ -92,16 +92,12 @@ const Pluspet = ({ nickname }) => {
         formData.append("petImage", file);
       }
 
-      const response = await axios.post(
-        `http://13.209.13.101/accounts/pets/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`http://13.209.13.101/accounts/pets/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       localStorage.setItem("token", token);
       navigate(`/mypage/managepet`, { state: { token } });

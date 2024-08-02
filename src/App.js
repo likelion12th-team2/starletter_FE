@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react"; // useState 제거
 import GlobalStyle from "./pages/GlobalStyles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -22,15 +22,7 @@ import Library from "./pages/Library";
 import LibraryDetail from "./pages/LibraryDetail";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const handleLogin = () => {
-  //   setIsLoggedIn(true);
-  // };
-
-  // const handleLogout = () => {
-  //   setIsLoggedIn(false);
-  // };
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); // 사용되지 않는 변수 제거
 
   return (
     <BrowserRouter>

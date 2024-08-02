@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import Modal from "react-modal";
@@ -15,9 +15,51 @@ const LibraryDetail = ({ nickname }) => {
   const [isHeartClicked, setIsHeartClicked] = useState(false);
   const [pages, setPages] = useState([]);
   const [notes, setNotes] = useState([]);
-  const [isMinded, setIsMinded] = useState(false);
   const location = useLocation();
   const { bookId } = location.state || {};
+
+  const ShowBookDetail = useCallback(
+    async (token) => {
+      const config = token
+        ? {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        : {};
+
+      try {
+        const response = await axios.get(
+          `http://13.209.13.101/bookshelf/${bookId}/`,
+          config
+        );
+        setPages(response.data.pages);
+        setNotes(response.data.notes);
+      } catch (error) {
+        console.error("책 상세정보 불러오기 실패:", error);
+      }
+    },
+    [bookId]
+  );
+
+  const checkHeartState = useCallback(
+    async (token) => {
+      try {
+        const response = await axios.get(
+          `http://13.209.13.101/bookshelf/${bookId}`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setIsHeartClicked(response.data.isMinded);
+      } catch (error) {
+        console.error("Error checking heart state:", error);
+      }
+    },
+    [bookId]
+  );
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -26,29 +68,13 @@ const LibraryDetail = ({ nickname }) => {
       setIsLoggedIn(true);
     }
     ShowBookDetail(storedToken);
-  }, [bookId]);
+  }, [ShowBookDetail]);
 
   useEffect(() => {
     if (bookId && token) {
       checkHeartState(token);
     }
-  }, [bookId, token]);
-
-  const checkHeartState = async (token) => {
-    try {
-      const response = await axios.get(
-        `http://13.209.13.101/bookshelf/${bookId}`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
-      setIsHeartClicked(response.data.isMinded);
-    } catch (error) {
-      console.error("Error checking heart state:", error);
-    }
-  };
+  }, [bookId, token, checkHeartState]);
 
   const handleLogout = async () => {
     try {
@@ -67,28 +93,6 @@ const LibraryDetail = ({ nickname }) => {
       navigate(`/`);
     } catch (error) {
       console.error("로그아웃 실패:", error);
-    }
-  };
-
-  const ShowBookDetail = async (token) => {
-    const config = token
-      ? {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      : {};
-
-    try {
-      const response = await axios.get(
-        `http://13.209.13.101/bookshelf/${bookId}/`,
-        config
-      );
-      setPages(response.data.pages);
-      setNotes(response.data.notes);
-      setIsMinded(response.data.isMinded);
-    } catch (error) {
-      console.error("책 상세정보 불러오기 실패:", error);
     }
   };
 

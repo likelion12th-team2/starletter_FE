@@ -7,7 +7,6 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const [name1, setName1] = useState("");
-  const [slr, setSlr] = useState("");
 
   const key = localStorage.getItem("token");
 
@@ -23,7 +22,6 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           }
         );
         setName1(response.data.name);
-        setSlr(response.data.nickname);
       } catch (error) {
         console.error("Error fetching name:", error);
       }

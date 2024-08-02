@@ -59,10 +59,6 @@ const MyBookDetail = () => {
     navigate(`/join`);
   };
 
-  const goMyBookDetail = () => {
-    navigate(`/mybook/detail`);
-  };
-
   const goFun = () => {
     navigate(`/funeral`);
   };

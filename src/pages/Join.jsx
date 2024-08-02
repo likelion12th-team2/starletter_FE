@@ -26,29 +26,26 @@ const Join = () => {
     console.log("name:", name);
     console.log("nickname:", nickname);
     try {
-      const response = await axios.post(
-        `http://13.209.13.101/accounts/register/`,
-        {
-          username: username,
-          password: password,
-          name: name,
-          nickname: nickname,
-        }
-      );
+      await axios.post(`http://13.209.13.101/accounts/register/`, {
+        username: username,
+        password: password,
+        name: name,
+        nickname: nickname,
+      });
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.data) {
         if (error.response.data.username) {
-          setMessage(error.response.data.message);
+          setMessage(error.response.data.username[0]);
         }
         if (error.response.data.nickname) {
-          setMessage(error.response.data.message);
+          setMessage(error.response.data.nickname[0]);
         }
         if (!error.response.data.username && !error.response.data.nickname) {
           setMessage(error.response.data.message);
         }
       } else {
-        setMessage(error.response.data.message);
+        setMessage("회원가입 중 오류가 발생했습니다.");
       }
     }
   };

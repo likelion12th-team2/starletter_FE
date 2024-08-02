@@ -92,16 +92,12 @@ const MyBookAddPet = ({ nickname }) => {
         formData.append("petImage", file);
       }
 
-      const response = await axios.post(
-        `http://13.209.13.101/accounts/pets/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`http://13.209.13.101/accounts/pets/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // 토큰을 로컬 스토리지에 저장합니다.
       localStorage.setItem("token", token);

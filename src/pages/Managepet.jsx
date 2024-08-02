@@ -11,7 +11,6 @@ const Managepet = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (token) {
@@ -39,7 +38,6 @@ const Managepet = () => {
         }
       } catch (error) {
         console.error("Error fetching pets:", error);
-        setErrorMessage("펫 목록을 불러오는 중 오류가 발생했습니다.");
       }
     };
 
@@ -164,7 +162,7 @@ const Managepet = () => {
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/images/logo.png`}
-                alt="logo"
+                alt="홈으로 이동"
               />
             </MP.Logo>
             <MP.Menu>
@@ -224,7 +222,7 @@ const Managepet = () => {
                   pet.petImage ||
                   `${process.env.PUBLIC_URL}/images/default_pet_image.png`
                 }
-                alt="photo"
+                alt={`${pet.petName} 사진`}
                 onClick={() => openModal1(pet.id)}
               />
               <div id="name">{pet.petName}</div>
@@ -244,7 +242,7 @@ const Managepet = () => {
           <img
             id="logo"
             src={`${process.env.PUBLIC_URL}/images/logo.png`}
-            alt="logo"
+            alt="로고"
           />
           <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
           <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>

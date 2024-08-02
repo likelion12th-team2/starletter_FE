@@ -163,16 +163,12 @@ const MyBookMake = ({ nickname }) => {
       formData.append("cover", coverImage || null);
       formData.append("keywordTag", selectedKeyword);
 
-      const response = await axios.post(
-        `http://13.209.13.101/mybooks/list/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`http://13.209.13.101/mybooks/list/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       closeBookModal();
       fetchPets(token);

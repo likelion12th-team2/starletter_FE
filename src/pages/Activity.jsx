@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as A from "../styles/StyledMB";
@@ -13,15 +12,14 @@ const Activity = () => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("Stored Token:", token);
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    console.log("Stored Token:", storedToken);
+    if (storedToken) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
+      setToken(storedToken);
     }
   }, []);
-
-  const key = localStorage.getItem("token");
 
   const goHome = () => {
     navigate(`/`);
@@ -50,7 +48,7 @@ const Activity = () => {
         }
         const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
           headers: {
-            Authorization: `Token ${key}`,
+            Authorization: `Token ${storedToken}`,
           },
         });
         console.log("API 응답:", response.data);
@@ -97,14 +95,13 @@ const Activity = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
       // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate(`/`);
@@ -115,12 +112,11 @@ const Activity = () => {
 
   const [mindBooks, setMindBooks] = useState([]);
   const [myNotes, setMyNotes] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!key) {
-        setErrorMessage("토큰이 필요합니다.");
+      if (!token) {
+        console.error("토큰이 필요합니다.");
         return;
       }
 
@@ -129,7 +125,7 @@ const Activity = () => {
           `http://13.209.13.101/accounts/activity/`,
           {
             headers: {
-              Authorization: `Token ${key}`,
+              Authorization: `Token ${token}`,
             },
           }
         );
@@ -142,7 +138,7 @@ const Activity = () => {
     };
 
     fetchData();
-  }, [key]);
+  }, [token]);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
@@ -158,7 +154,7 @@ const Activity = () => {
         `http://13.209.13.101/accounts/activity/`,
         {
           headers: {
-            Authorization: `Token ${key}`,
+            Authorization: `Token ${token}`,
           },
           data: {
             note_id: selectedNoteId,
