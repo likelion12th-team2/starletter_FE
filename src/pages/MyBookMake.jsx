@@ -49,7 +49,7 @@ const MyBookMake = ({ nickname }) => {
       setPetsNoBook(response.data.petsNoBook);
     } catch (error) {
       console.error("동물 기록 확인 실패:", error);
-      console.log(error.response); // 에러 응답 로그 추가
+      console.log(error.response); // 에러 응답 로그 추가//
     }
   };
 
