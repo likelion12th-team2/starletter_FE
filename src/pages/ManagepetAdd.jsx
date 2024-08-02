@@ -21,9 +21,6 @@ const ManagePetAdd = ({ nickname }) => {
   const [pet_anniv1, setPet_Anniv] = useState(null);
   const [token, setToken] = useState("");
 
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {

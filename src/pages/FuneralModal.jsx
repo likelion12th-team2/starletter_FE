@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+
 import * as FM from "../styles/StyledFM";
 
 const FuneralModal = ({ show, handleClose, funeral }) => {

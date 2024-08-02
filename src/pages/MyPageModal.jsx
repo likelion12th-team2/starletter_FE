@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as P from "../styles/StyledMyPage";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
@@ -10,9 +10,6 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const [slr, setSlr] = useState("");
 
   const key = localStorage.getItem("token");
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchName = async () => {

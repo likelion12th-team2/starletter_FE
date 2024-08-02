@@ -1,12 +1,12 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as F from "../styles/StyledFuneral";
 import FuneralModal from "./FuneralModal";
 import axios from "axios";
 
-const Funeral = ({ nickname }) => {
+const Funeral = ({}) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +16,6 @@ const Funeral = ({ nickname }) => {
   const [show, setShow] = useState(false);
   const [selectedFuneral, setSelectedFuneral] = useState(null);
   const [funerals, setFunerals] = useState([]);
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   const showModal = (funeral) => {
     setSelectedFuneral(funeral);
@@ -152,7 +149,6 @@ const Funeral = ({ nickname }) => {
   };
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
   const [showAd, setShowAd] = useState(true);
   const [searchMessage, setSearchMessage] = useState("");
 

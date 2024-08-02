@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as A from "../styles/StyledMB";
 import axios from "axios";
@@ -11,9 +11,6 @@ const Activity = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -96,7 +93,7 @@ const Activity = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${API_URL}/accounts/logout/`,
+        `http://13.209.13.101/accounts/logout/`,
         {},
         {
           headers: {
@@ -118,7 +115,7 @@ const Activity = () => {
 
   const [mindBooks, setMindBooks] = useState([]);
   const [myNotes, setMyNotes] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {

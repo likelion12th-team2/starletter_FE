@@ -5,15 +5,12 @@ import MyPageModal from "./MyPageModal";
 import * as M from "../styles/StyledMarket";
 import axios from "axios";
 
-const Market = ({ nickname }) => {
+const Market = ({}) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     // 로그인 상태 확인 (예시: localStorage에 토큰이 있는지 확인)

@@ -10,11 +10,7 @@ const Join = () => {
   const [nickname, setNickname] = useState("");
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
-  const [message1, setMessage1] = useState("");
   const [message, setMessage] = useState("");
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();

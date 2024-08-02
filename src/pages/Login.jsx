@@ -10,9 +10,6 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("폼 제출됨");

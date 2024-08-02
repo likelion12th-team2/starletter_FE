@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyPageModal from "./MyPageModal";
 import * as H from "../styles/StyledHome";
 import axios from "axios";
@@ -11,9 +11,6 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const myPageRef = useRef(null);
   const [token, setToken] = useState("");
-
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

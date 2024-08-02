@@ -27,9 +27,6 @@ const Library = ({ nickname }) => {
   const [recentSearches, setRecentSearches] = useState([]); // 최근 검색어
   const [selectedKeyword, setSelectedKeyword] = useState(""); // 키워드 선택
 
-  // 환경 변수에서 API URL을 가져옵니다.
-  const API_URL = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
