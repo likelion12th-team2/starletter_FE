@@ -232,7 +232,7 @@ const MyBookMake = ({ nickname }) => {
       </header>
 
       <MM.Body>
-        <MM.bodyContainer>
+        <MM.BodyContainer>
           <MM.Slider>
             <MM.Button onClick={prevBook} show={showButtons}>
               <img
@@ -385,7 +385,7 @@ const MyBookMake = ({ nickname }) => {
               />
             </MM.Button>
           </MM.Slider>
-        </MM.bodyContainer>
+        </MM.BodyContainer>
       </MM.Body>
       <footer>
         <MM.Footer>

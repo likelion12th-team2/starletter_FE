@@ -12,6 +12,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
 
   useEffect(() => {
     const fetchName = async () => {
+      if (!key) return; // key가 없으면 API 호출을 하지 않음
       try {
         const response = await axios.get(
           `http://13.209.13.101/accounts/myinfo/`,
@@ -28,7 +29,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
     };
 
     fetchName();
-  }, []);
+  }, [key]);
 
   const goPlus = () => {
     navigate(`/mypage/pluspet`);
@@ -67,7 +68,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           alt="닫기"
         />
       </P.CloseButton>
-      <P.Content>
+      <P.Content ref={modalRef}>
         <P.ProfileImage>
           <img
             src={`${process.env.PUBLIC_URL}/images/Myprofile.svg`}

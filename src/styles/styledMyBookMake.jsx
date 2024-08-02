@@ -121,7 +121,7 @@ export const Body = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const bodyContainer = styled.div`
+export const BodyContainer = styled.div`
   background: #002951;
 `;
 
