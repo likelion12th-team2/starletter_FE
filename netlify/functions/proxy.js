@@ -2,9 +2,12 @@ const axios = require("axios");
 
 exports.handler = async function (event, context) {
   const { path, queryStringParameters, httpMethod, body, headers } = event;
-  const apiUrl = `http://13.209.13.101${path}`;
+  const apiUrl = `http://13.209.13.101${path.replace(
+    "/.netlify/functions/proxy",
+    ""
+  )}`;
   const params = new URLSearchParams(queryStringParameters).toString();
-  const url = `${apiUrl}?${params}`;
+  const url = params ? `${apiUrl}?${params}` : apiUrl;
 
   let axiosConfig = {
     method: httpMethod.toLowerCase(),
