@@ -92,16 +92,12 @@ const Pluspet = ({ nickname }) => {
         formData.append("petImage", file);
       }
 
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`/api/accounts/pets/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       localStorage.setItem("token", token);
       navigate(`/mypage/managepet`, { state: { token } });
@@ -134,14 +130,11 @@ const Pluspet = ({ nickname }) => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/api/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -174,7 +167,7 @@ const Pluspet = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/api/accounts/logout/`,
         {},
         {
           headers: {

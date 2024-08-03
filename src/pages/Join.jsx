@@ -26,7 +26,7 @@ const Join = () => {
     console.log("name:", name);
     console.log("nickname:", nickname);
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/accounts/register/`, {
+      await axios.post(`/api/accounts/register/`, {
         username: username,
         password: password,
         name: name,

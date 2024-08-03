@@ -4,3 +4,9 @@
 
 [build.environment]
   REACT_APP_API_URL = "https://13.209.13.101"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://13.209.13.101/:splat"
+  status = 200
+  force = true

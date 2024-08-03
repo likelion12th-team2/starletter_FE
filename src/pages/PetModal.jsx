@@ -14,14 +14,11 @@ const PetModal = ({ isOpen, onClose, pet }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/${pet.id}/`,
-        {
-          headers: {
-            Authorization: `Token ${key}`,
-          },
-        }
-      );
+      await axios.delete(`/api/accounts/pets/${pet.id}/`, {
+        headers: {
+          Authorization: `Token ${key}`,
+        },
+      });
       onClose();
       navigate("/mypage/managepet", { replace: true });
       window.location.reload(); // 페이지 새로고침

@@ -41,9 +41,7 @@ const Funeral = () => {
 
   const fetchInitialFunerals = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/`
-      );
+      const response = await axios.get(`/api/funeralhalls/`);
       setFunerals(response.data);
     } catch (error) {
       console.error("Error fetching initial funeral data:", error);
@@ -52,12 +50,9 @@ const Funeral = () => {
 
   const fetchFunerals = async (query) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/`,
-        {
-          params: { search: query },
-        }
-      );
+      const response = await axios.get(`/api/funeralhalls/`, {
+        params: { search: query },
+      });
       setFunerals(response.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -87,14 +82,11 @@ const Funeral = () => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/api/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -119,7 +111,7 @@ const Funeral = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/api/accounts/logout/`,
         {},
         {
           headers: {

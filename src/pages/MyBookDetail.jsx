@@ -19,14 +19,11 @@ const MyBookDetail = () => {
   const fetchBookDetail = useCallback(
     async (token) => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/api/mybooks/${bookId}/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
 
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         setBook(response.data.book);
@@ -75,14 +72,11 @@ const MyBookDetail = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/api/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -115,7 +109,7 @@ const MyBookDetail = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/api/accounts/logout/`,
         {},
         {
           headers: {
