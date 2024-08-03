@@ -29,7 +29,10 @@ const LibraryDetail = ({ nickname }) => {
         : {};
 
       try {
-        const response = await axios.get(`/bookshelf/${bookId}/`, config);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
+          config
+        );
         setPages(response.data.pages);
         setNotes(response.data.notes);
       } catch (error) {
@@ -42,11 +45,14 @@ const LibraryDetail = ({ nickname }) => {
   const checkHeartState = useCallback(
     async (token) => {
       try {
-        const response = await axios.get(`/bookshelf/${bookId}`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         setIsHeartClicked(response.data.isMinded);
       } catch (error) {
         console.error("Error checking heart state:", error);
@@ -73,7 +79,7 @@ const LibraryDetail = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -99,11 +105,14 @@ const LibraryDetail = ({ nickname }) => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(`/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -201,7 +210,7 @@ const LibraryDetail = ({ nickname }) => {
     }
     try {
       const response = await axios.post(
-        `/bookshelf/${bookId}/mind/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/mind/`,
         {},
         {
           headers: { Authorization: `Token ${token}` },
@@ -224,7 +233,7 @@ const LibraryDetail = ({ nickname }) => {
 
     try {
       const response = await axios.post(
-        `/bookshelf/${bookId}/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
         {
           body: newPostitContent,
         },

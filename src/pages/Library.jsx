@@ -65,7 +65,9 @@ const Library = ({ nickname }) => {
 
   const LibraryBooks = async () => {
     try {
-      const response = await axios.get(`/bookshelf/`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/bookshelf/`
+      );
       console.log("API 응답:", response.data); // 응답 데이터 로그 출력
       setBooksMostMinds(response.data.booksMostMinds);
       setBooksRecent(response.data.booksRecent);
@@ -112,11 +114,14 @@ const Library = ({ nickname }) => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(`/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -141,7 +146,7 @@ const Library = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -181,7 +186,9 @@ const Library = ({ nickname }) => {
     if (searchValue) {
       saveRecentSearch(searchValue);
       try {
-        const response = await axios.get(`$/bookshelf/?search=${searchValue}`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/bookshelf/?search=${searchValue}`
+        );
         console.log("검색 결과:", response.data); // 검색 결과 로그 출력
         setSearchResults(response.data.searchedBooks); // 검색 결과를 상태에 저장
         setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트

@@ -179,7 +179,7 @@ const ManagePetAdd = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {

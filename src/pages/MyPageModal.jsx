@@ -14,11 +14,14 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
     const fetchName = async () => {
       if (!key) return; // key가 없으면 API 호출을 하지 않음
       try {
-        const response = await axios.get(`/accounts/myinfo/`, {
-          headers: {
-            Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/accounts/myinfo/`,
+          {
+            headers: {
+              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+            },
+          }
+        );
         setName1(response.data.name);
       } catch (error) {
         console.error("Error fetching name:", error);

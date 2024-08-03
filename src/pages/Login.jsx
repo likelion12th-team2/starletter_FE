@@ -15,10 +15,13 @@ const Login = () => {
     console.log("폼 제출됨");
 
     try {
-      const response = await axios.post(`/accounts/login/`, {
-        username: username,
-        password: password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/accounts/login/`,
+        {
+          username: username,
+          password: password,
+        }
+      );
       console.log("로그인 성공!");
 
       // 서버의 응답 데이터 출력
