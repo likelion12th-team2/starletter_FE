@@ -46,14 +46,11 @@ const Activity = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -94,7 +91,7 @@ const Activity = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/accounts/logout/`,
         {},
         {
           headers: {
@@ -124,14 +121,11 @@ const Activity = () => {
       }
 
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/activity/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/accounts/activity/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("Fetched data:", response.data);
         setMindBooks(response.data.mindBooks);
         setMyNotes(response.data.myNotes);
@@ -153,17 +147,14 @@ const Activity = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/accounts/activity/`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-          data: {
-            note_id: selectedNoteId,
-          },
-        }
-      );
+      const response = await axios.delete(`/accounts/activity/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        data: {
+          note_id: selectedNoteId,
+        },
+      });
       console.log(response.data);
       window.location.reload();
     } catch (error) {

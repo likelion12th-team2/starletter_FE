@@ -37,14 +37,11 @@ const MyBookMake = ({ nickname }) => {
 
   const fetchPets = async (token) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`/mybooks/list/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
       setBooks(response.data.books);
       setPetsNoBook(response.data.petsNoBook);
     } catch (error) {
@@ -69,14 +66,11 @@ const MyBookMake = ({ nickname }) => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -96,7 +90,7 @@ const MyBookMake = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/accounts/logout/`,
         {},
         {
           headers: {
@@ -169,16 +163,12 @@ const MyBookMake = ({ nickname }) => {
       formData.append("cover", coverImage || null);
       formData.append("keywordTag", selectedKeyword);
 
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`/mybooks/list/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       closeBookModal();
       fetchPets(token);

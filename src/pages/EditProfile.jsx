@@ -57,14 +57,11 @@ const EditProfile = () => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${key}`,
-            },
-          }
-        );
+        const response = await axios.get(`/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${key}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -93,7 +90,7 @@ const EditProfile = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `/accounts/logout/`,
         {},
         {
           headers: {
@@ -124,7 +121,7 @@ const EditProfile = () => {
     console.log("Form submitted"); // 폼 제출 로그 추가
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/accounts/myinfo/`,
+        `/accounts/myinfo/`,
         {
           name: name || name1,
           nickname: nickname || slr,
@@ -155,14 +152,11 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/myinfo/`,
-          {
-            headers: {
-              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
-            },
-          }
-        );
+        const response = await axios.get(`/accounts/myinfo/`, {
+          headers: {
+            Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+          },
+        });
         setName1(response.data.name);
         setSlr(response.data.nickname);
       } catch (error) {
