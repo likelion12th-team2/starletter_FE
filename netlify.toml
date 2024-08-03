@@ -3,10 +3,10 @@
   publish = "build"
 
 [build.environment]
-  REACT_APP_API_URL = "http://13.209.13.101"
+  REACT_APP_API_URL = "/api"
 
 [[redirects]]
   from = "/api/*"
-  to = "http://13.209.13.101/:splat"
+  to = "https://13.209.13.101/:splat"
   status = 200
   force = true
