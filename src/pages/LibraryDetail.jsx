@@ -30,7 +30,7 @@ const LibraryDetail = ({ nickname }) => {
 
       try {
         const response = await axios.get(
-          `http://13.209.13.101/bookshelf/${bookId}/`,
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
           config
         );
         setPages(response.data.pages);
@@ -46,7 +46,7 @@ const LibraryDetail = ({ nickname }) => {
     async (token) => {
       try {
         const response = await axios.get(
-          `http://13.209.13.101/bookshelf/${bookId}`,
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -79,7 +79,7 @@ const LibraryDetail = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `http://13.209.13.101/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -105,11 +105,14 @@ const LibraryDetail = ({ nickname }) => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -207,7 +210,7 @@ const LibraryDetail = ({ nickname }) => {
     }
     try {
       const response = await axios.post(
-        `http://13.209.13.101/bookshelf/${bookId}/mind/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/mind/`,
         {},
         {
           headers: { Authorization: `Token ${token}` },
@@ -230,7 +233,7 @@ const LibraryDetail = ({ nickname }) => {
 
     try {
       const response = await axios.post(
-        `http://13.209.13.101/bookshelf/${bookId}/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
         {
           body: newPostitContent,
         },

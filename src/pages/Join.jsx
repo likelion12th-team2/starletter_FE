@@ -26,7 +26,7 @@ const Join = () => {
     console.log("name:", name);
     console.log("nickname:", nickname);
     try {
-      await axios.post(`http://13.209.13.101/accounts/register/`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/accounts/register/`, {
         username: username,
         password: password,
         name: name,

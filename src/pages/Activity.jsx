@@ -46,11 +46,14 @@ const Activity = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${storedToken}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${storedToken}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -91,7 +94,7 @@ const Activity = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `http://13.209.13.101/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -122,7 +125,7 @@ const Activity = () => {
 
       try {
         const response = await axios.get(
-          `http://13.209.13.101/accounts/activity/`,
+          `${process.env.REACT_APP_API_URL}/accounts/activity/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -151,7 +154,7 @@ const Activity = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://13.209.13.101/accounts/activity/`,
+        `${process.env.REACT_APP_API_URL}/accounts/activity/`,
         {
           headers: {
             Authorization: `Token ${token}`,
