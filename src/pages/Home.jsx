@@ -39,7 +39,7 @@ const Home = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `/api/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -76,11 +76,14 @@ const Home = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(`/api/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||

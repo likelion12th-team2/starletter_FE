@@ -39,11 +39,14 @@ const MyBookWrite = ({ nickname }) => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(`/api/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -71,7 +74,7 @@ const MyBookWrite = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `/api/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -115,12 +118,16 @@ const MyBookWrite = ({ nickname }) => {
     });
 
     try {
-      await axios.post(`/api/mybooks/${bookId}/`, formData, {
-        headers: {
-          Authorization: `Token ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       goMyBookDetail();
     } catch (error) {
       console.error("페이지 작성 실패:", error);
