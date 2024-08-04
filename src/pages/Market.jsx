@@ -115,7 +115,8 @@ const Market = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/market/`
+        `${process.env.REACT_APP_API_URL}/market/` ||
+          `http://127.0.0.1:8000/market/`
       ); // 실제 API 엔드포인트로 변경
       console.log("Fetched product data:", response.data); // 콘솔에 데이터 출력
       setProducts(response.data);

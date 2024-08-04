@@ -494,8 +494,8 @@ export const Introduction = styled.div`
 
   #logo {
     margin-top: 5px;
-    width: 51px;
-    height: 15px;
+    width: 80px;
+    height: 25px;
   }
 
   #team {

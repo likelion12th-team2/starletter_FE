@@ -40,7 +40,8 @@ const MyBookWrite = ({ nickname }) => {
       try {
         // 동물 있는지 없는지 판별
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -74,7 +75,8 @@ const MyBookWrite = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {
@@ -119,7 +121,8 @@ const MyBookWrite = ({ nickname }) => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/`,
+        `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/` ||
+          `http://127.0.0.1:8000/mybooks/${bookId}/`,
         formData,
         {
           headers: {

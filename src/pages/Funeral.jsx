@@ -42,7 +42,8 @@ const Funeral = () => {
   const fetchInitialFunerals = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/`
+        `${process.env.REACT_APP_API_URL}/funeralhalls/` ||
+          `http://127.0.0.1:8000/funeralhalls/`
       );
       setFunerals(response.data);
     } catch (error) {
@@ -53,7 +54,8 @@ const Funeral = () => {
   const fetchFunerals = async (query) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/`,
+        `${process.env.REACT_APP_API_URL}/funeralhalls/` ||
+          `http://127.0.0.1:8000/funeralhalls/`,
         {
           params: { search: query },
         }
@@ -88,7 +90,8 @@ const Funeral = () => {
     if (isLoggedIn) {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -119,7 +122,8 @@ const Funeral = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {

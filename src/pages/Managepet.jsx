@@ -25,7 +25,8 @@ const Managepet = () => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/pets/`,
+          `${process.env.REACT_APP_API_URL}/accounts/pets/` ||
+            `http://127.0.0.1:8000/accounts/pets/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -73,7 +74,8 @@ const Managepet = () => {
           return;
         }
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
           {
             headers: {
               Authorization: `Token ${storedToken}`,
@@ -112,7 +114,8 @@ const Managepet = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {
@@ -136,11 +139,15 @@ const Managepet = () => {
   const openModal1 = (petId) => {
     console.log(`Opening modal for pet id: ${petId}`);
     axios
-      .get(`${process.env.REACT_APP_API_URL}/accounts/pets/${petId}/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_URL}/accounts/pets/${petId}/` ||
+          `http://127.0.0.1:8000/accounts/pets/${petId}`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      )
       .then((response) => {
         console.log("Pet details fetched:", response.data);
         setSelectedPet(response.data);

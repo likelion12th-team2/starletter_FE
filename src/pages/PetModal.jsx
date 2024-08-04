@@ -15,7 +15,8 @@ const PetModal = ({ isOpen, onClose, pet }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/${pet.id}/`,
+        `${process.env.REACT_APP_API_URL}/accounts/pets/${pet.id}/` ||
+          `http://127.0.0.1:8000/accounts/pets/${pet.id}/`,
         {
           headers: {
             Authorization: `Token ${key}`,

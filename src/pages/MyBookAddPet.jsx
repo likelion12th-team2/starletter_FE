@@ -93,7 +93,8 @@ const MyBookAddPet = ({ nickname }) => {
       }
 
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/`,
+        `${process.env.REACT_APP_API_URL}/accounts/pets/` ||
+          `http://127.0.0.1:8000/accounts/pets/`,
         formData,
         {
           headers: {
@@ -140,7 +141,8 @@ const MyBookAddPet = ({ nickname }) => {
       try {
         // 동물 있는지 없는지 판별
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -179,7 +181,8 @@ const MyBookAddPet = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {

@@ -30,7 +30,8 @@ const LibraryDetail = ({ nickname }) => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/` ||
+            `http://127.0.0.1:8000/bookshelf/${bookId}/`,
           config
         );
         setPages(response.data.pages);
@@ -46,7 +47,8 @@ const LibraryDetail = ({ nickname }) => {
     async (token) => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}`,
+          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}` ||
+            `http://127.0.0.1:8000/bookshelf/${bookId}/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -79,7 +81,8 @@ const LibraryDetail = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {
@@ -106,7 +109,8 @@ const LibraryDetail = ({ nickname }) => {
     if (isLoggedIn) {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -210,7 +214,8 @@ const LibraryDetail = ({ nickname }) => {
     }
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/mind/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/mind/` ||
+          `http://127.0.0.1:8000/bookshelf/${bookId}/mind/`,
         {},
         {
           headers: { Authorization: `Token ${token}` },
@@ -233,7 +238,8 @@ const LibraryDetail = ({ nickname }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/`,
+        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/` ||
+          `http://127.0.0.1:8000/bookshelf/${bookId}/`,
         {
           body: newPostitContent,
         },

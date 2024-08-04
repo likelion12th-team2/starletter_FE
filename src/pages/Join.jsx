@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as J from "../styles/StyledJoin";
 import axios from "axios";
-
 const Join = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -10,66 +9,102 @@ const Join = () => {
   const [nickname, setNickname] = useState("");
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState("");
+  const [message1, setMessage1] = useState("");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      setIsLoggedIn(true);
+    }
+  }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (password !== password2) {
       setMessage("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
       return;
     }
-
     console.log("username:", username);
     console.log("Password:", password);
     console.log("Password2:", password2);
     console.log("name:", name);
     console.log("nickname:", nickname);
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/accounts/register/`, {
-        username: username,
-        password: password,
-        name: name,
-        nickname: nickname,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/accounts/register` ||
+          `http://127.0.0.1:8000/accounts/register/`,
+        {
+          username: username,
+          password: password,
+          name: name,
+          nickname: nickname,
+        }
+      );
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.data) {
         if (error.response.data.username) {
-          setMessage(error.response.data.username[0]);
+          setMessage(error.response.data.message);
         }
         if (error.response.data.nickname) {
-          setMessage(error.response.data.nickname[0]);
+          setMessage(error.response.data.message);
         }
         if (!error.response.data.username && !error.response.data.nickname) {
           setMessage(error.response.data.message);
         }
       } else {
-        setMessage("회원가입 중 오류가 발생했습니다.");
+        setMessage(error.response.data.message);
       }
     }
   };
-
   const goLogin = () => {
     navigate(`/login`);
   };
-
   const goHome = () => {
     navigate(`/`);
   };
-
   const goFun = () => {
     navigate(`/funeral`);
   };
-
   const goMarket = () => {
     navigate(`/market`);
   };
-
+  //내서재 수정
+  const goMyBook = async () => {
+    if (isLoggedIn) {
+      try {
+        // 동물 있는지 없는지 판별
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        if (
+          response.data.books.length > 0 ||
+          response.data.petsNoBook.length > 0
+        ) {
+          navigate(`/mybook/make`); // 동물은 있는데 책이 없거나, 책도 있는 경우
+        } else {
+          navigate(`/mybook/addpet`); // 동물 없으면 동물 추가
+        }
+      } catch (error) {
+        console.error("동물 기록 확인 실패:");
+      }
+    } else {
+      navigate("/login");
+    }
+  };
   const goLib = () => {
     navigate("/library");
   };
-
   return (
     <J.Container>
       <header>
@@ -84,7 +119,9 @@ const Join = () => {
             </J.Logo>
             <J.Menu>
               <J.MovingContent>
-                <div id="library">내 서재</div>
+                <div id="library" onClick={goMyBook}>
+                  내 서재
+                </div>
                 <div id="bookroom" onClick={goLib}>
                   책방
                 </div>
@@ -225,5 +262,4 @@ const Join = () => {
     </J.Container>
   );
 };
-
 export default Join;

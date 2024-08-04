@@ -16,7 +16,8 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/login/`,
+        `${process.env.REACT_APP_API_URL}/accounts/login/` ||
+          `http://127.0.0.1:8000/accounts/login/`,
         {
           username: username,
           password: password,
