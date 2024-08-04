@@ -41,10 +41,9 @@ const Funeral = () => {
 
   const fetchInitialFunerals = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/` ||
-          `http://127.0.0.1:8000/funeralhalls/`
-      );
+      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+      const response = await axios.get(`${apiUrl}/funeralhalls/`);
+      console.log("Fetched funeral data:", response.data); // 콘솔에 데이터 출력
       setFunerals(response.data);
     } catch (error) {
       console.error("Error fetching initial funeral data:", error);
@@ -53,9 +52,9 @@ const Funeral = () => {
 
   const fetchFunerals = async (query) => {
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/funeralhalls/` ||
-          `http://127.0.0.1:8000/funeralhalls/`,
+        `${apiUrl}/funeralhalls/` || `http://127.0.0.1:8000/funeralhalls/`,
         {
           params: { search: query },
         }
@@ -172,6 +171,10 @@ const Funeral = () => {
       handleSearch();
     }
   };
+  useEffect(() => {
+    fetchInitialFunerals();
+    console.log(funerals);
+  }, []);
 
   return (
     <F.Container>
