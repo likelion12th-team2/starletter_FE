@@ -7,6 +7,9 @@ import axios from "axios";
 
 Modal.setAppElement("#root");
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const LibraryDetail = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,8 +33,7 @@ const LibraryDetail = ({ nickname }) => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/` ||
-            `http://127.0.0.1:8000/bookshelf/${bookId}/`,
+          `${BACKEND_URL}/bookshelf/${bookId}/`,
           config
         );
         setPages(response.data.pages);
@@ -46,15 +48,11 @@ const LibraryDetail = ({ nickname }) => {
   const checkHeartState = useCallback(
     async (token) => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}` ||
-            `http://127.0.0.1:8000/bookshelf/${bookId}/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/bookshelf/${bookId}`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         setIsHeartClicked(response.data.isMinded);
       } catch (error) {
         console.error("Error checking heart state:", error);
@@ -81,8 +79,7 @@ const LibraryDetail = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -108,15 +105,11 @@ const LibraryDetail = ({ nickname }) => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -214,8 +207,7 @@ const LibraryDetail = ({ nickname }) => {
     }
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/mind/` ||
-          `http://127.0.0.1:8000/bookshelf/${bookId}/mind/`,
+        `${BACKEND_URL}/bookshelf/${bookId}/mind/`,
         {},
         {
           headers: { Authorization: `Token ${token}` },
@@ -238,8 +230,7 @@ const LibraryDetail = ({ nickname }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bookshelf/${bookId}/` ||
-          `http://127.0.0.1:8000/bookshelf/${bookId}/`,
+        `${BACKEND_URL}/bookshelf/${bookId}/`,
         {
           body: newPostitContent,
         },

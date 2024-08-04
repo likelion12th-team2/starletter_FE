@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as J from "../styles/StyledJoin";
 import axios from "axios";
+
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Join = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -33,16 +37,12 @@ const Join = () => {
     console.log("name:", name);
     console.log("nickname:", nickname);
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/register` ||
-          `http://127.0.0.1:8000/accounts/register/`,
-        {
-          username: username,
-          password: password,
-          name: name,
-          nickname: nickname,
-        }
-      );
+      await axios.post(`${BACKEND_URL}/accounts/register`, {
+        username: username,
+        password: password,
+        name: name,
+        nickname: nickname,
+      });
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.data) {
@@ -77,15 +77,11 @@ const Join = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
