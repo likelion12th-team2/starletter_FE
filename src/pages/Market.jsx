@@ -39,11 +39,12 @@ const Market = () => {
     setIsModalOpen(false);
   };
 
+  const key = localStorage.getItem("key");
+
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
+        if (!key) {
           navigate("/login");
           return;
         }
@@ -51,7 +52,7 @@ const Market = () => {
           `${process.env.REACT_APP_API_URL}/mybooks/list/`,
           {
             headers: {
-              Authorization: `Token ${storedToken}`,
+              Authorization: `Token ${key}`,
             },
           }
         );
@@ -83,7 +84,7 @@ const Market = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );
@@ -114,10 +115,8 @@ const Market = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/market/` ||
-          `http://127.0.0.1:8000/market/`
-      ); // 실제 API 엔드포인트로 변경
+      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+      const response = await axios.get(`${apiUrl}/market/`);
       console.log("Fetched product data:", response.data); // 콘솔에 데이터 출력
       setProducts(response.data);
     } catch (error) {
