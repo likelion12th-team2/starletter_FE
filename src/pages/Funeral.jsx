@@ -4,8 +4,12 @@ import MyPageModal from "./MyPageModal";
 import * as F from "../styles/StyledFuneral";
 import FuneralModal from "./FuneralModal";
 import axios from "axios";
+import { BackButton } from "../styles/styledMyBookMake";
 
-const Funeral = () => {
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
+const Funeral = ({ nickname }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,10 +31,9 @@ const Funeral = () => {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
+    const token = localStorage.getItem("token");
+    if (token) {
       console.log("로그인 되어있음");
-      setToken(storedToken);
       setIsLoggedIn(true);
     }
   }, []);
@@ -41,27 +44,36 @@ const Funeral = () => {
 
   const fetchInitialFunerals = async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
-      const response = await axios.get(`${apiUrl}/funeralhalls/`);
-      console.log("Fetched funeral data:", response.data); // 콘솔에 데이터 출력
+
+      console.log(
+        "Fetching initial funerals data from URL:",
+        BACKEND_URL,
+        "/funeralhalls/"
+      );
+      const response = await axios.get(`${BACKEND_URL}/funeralhalls/`);
+      console.log("Response data:", response.data);
       setFunerals(response.data);
     } catch (error) {
-      console.error("Error fetching initial funeral data:", error);
+      console.error("초기 장례식장 데이터를 불러오는 중 오류 발생:", error);
     }
   };
 
   const fetchFunerals = async (query) => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
-      const response = await axios.get(
-        `${apiUrl}/funeralhalls/` || `http://127.0.0.1:8000/funeralhalls/`,
-        {
-          params: { search: query },
-        }
+
+      console.log(
+        "Fetching funerals with query:",
+        query,
+        "from URL:",
+        BACKEND_URL
       );
+      const response = await axios.get(`${BACKEND_URL}/funeralhalls/`, {
+        params: { search: query },
+      });
+      console.log("Response data:", response.data);
       setFunerals(response.data);
     } catch (error) {
-      console.error("Error fetching search results:", error);
+      console.error("검색 결과를 불러오는 중 오류 발생:", error);
     }
   };
 
@@ -88,15 +100,17 @@ const Funeral = () => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const storedToken = token || localStorage.getItem("token");
+        if (!storedToken) {
+          navigate("/login");
+          return;
+        }
+        console.log("Fetching my book list from URL:", BACKEND_URL);
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -118,20 +132,21 @@ const Funeral = () => {
     navigate("/library");
   };
 
+  const key = localStorage.getItem("token");
+
   const handleLogout = async () => {
     try {
+      console.log("Logging out from URL:", BACKEND_URL);
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`,
           },
         }
       );
       console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -151,6 +166,7 @@ const Funeral = () => {
   };
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState([]);
   const [showAd, setShowAd] = useState(true);
   const [searchMessage, setSearchMessage] = useState("");
 

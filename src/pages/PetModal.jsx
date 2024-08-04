@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPetModal";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const PetModal = ({ isOpen, onClose, pet }) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const navigate = useNavigate();
@@ -14,15 +17,11 @@ const PetModal = ({ isOpen, onClose, pet }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/${pet.id}/` ||
-          `http://127.0.0.1:8000/accounts/pets/${pet.id}/`,
-        {
-          headers: {
-            Authorization: `Token ${key}`,
-          },
-        }
-      );
+      await axios.delete(`${BACKEND_URL}/accounts/pets/${pet.id}/`, {
+        headers: {
+          Authorization: `Token ${key}`,
+        },
+      });
       onClose();
       navigate("/mypage/managepet", { replace: true });
       window.location.reload(); // 페이지 새로고침

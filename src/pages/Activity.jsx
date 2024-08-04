@@ -4,6 +4,9 @@ import MyPageModal from "./MyPageModal";
 import * as A from "../styles/StyledMB";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Activity = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,15 +49,11 @@ const Activity = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -95,8 +94,7 @@ const Activity = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -126,15 +124,11 @@ const Activity = () => {
       }
 
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/activity/` ||
-            `http://127.0.0.1:8000/accounts/activity/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/accounts/activity/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("Fetched data:", response.data);
         setMindBooks(response.data.mindBooks);
         setMyNotes(response.data.myNotes);
@@ -156,18 +150,14 @@ const Activity = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/accounts/activity/` ||
-          `http://127.0.0.1:8000/accounts/activity/`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-          data: {
-            note_id: selectedNoteId,
-          },
-        }
-      );
+      const response = await axios.delete(`${BACKEND_URL}/accounts/activity/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        data: {
+          note_id: selectedNoteId,
+        },
+      });
       console.log(response.data);
       window.location.reload();
     } catch (error) {

@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import * as L from "../styles/StyledLogin";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,14 +18,10 @@ const Login = () => {
     console.log("폼 제출됨");
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/login/` ||
-          `http://127.0.0.1:8000/accounts/login/`,
-        {
-          username: username,
-          password: password,
-        }
-      );
+      const response = await axios.post(`${BACKEND_URL}/accounts/login/`, {
+        username: username,
+        password: password,
+      });
       console.log("로그인 성공!");
 
       // 서버의 응답 데이터 출력

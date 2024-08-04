@@ -5,6 +5,9 @@ import Modal from "react-modal";
 import axios from "axios";
 import MyPageModal from "./MyPageModal";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const MyBookDetail = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,15 +22,11 @@ const MyBookDetail = () => {
   const fetchBookDetail = useCallback(
     async (token) => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/` ||
-            `http://127.0.0.1:8000/mybooks/${bookId}/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/${bookId}/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
 
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         setBook(response.data.book);
@@ -76,15 +75,11 @@ const MyBookDetail = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -117,8 +112,7 @@ const MyBookDetail = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {

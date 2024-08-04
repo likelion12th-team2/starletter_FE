@@ -3,6 +3,9 @@ import * as P from "../styles/StyledMyPage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
@@ -14,15 +17,11 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
     const fetchName = async () => {
       if (!key) return; // key가 없으면 API 호출을 하지 않음
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/myinfo/` ||
-            `http://127.0.0.1:8000/accounts/myinfo/`,
-          {
-            headers: {
-              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/accounts/myinfo/`, {
+          headers: {
+            Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+          },
+        });
         setName1(response.data.name);
       } catch (error) {
         console.error("Error fetching name:", error);
@@ -54,7 +53,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
       const modal = modalRef.current;
       modal.style.top = `${anchorRect.bottom + window.scrollY}px`;
       modal.style.left = `${anchorRect.left}px`;
-      modal.style.width = `${anchorRect.width}px`;
+      // modal.style.width = `${anchorRect.width}px`;
     }
   }, [isOpen, anchorRef]);
 

@@ -5,6 +5,9 @@ import * as MP from "../styles/StyledMP";
 import axios from "axios";
 import PetModal from "./PetModal";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Managepet = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,15 +27,11 @@ const Managepet = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accounts/pets/` ||
-            `http://127.0.0.1:8000/accounts/pets/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/accounts/pets/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         setPets(response.data);
         if (response.data.length === 0) {
           navigate("/mypage/managepet/pluspet");
@@ -73,15 +72,11 @@ const Managepet = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${storedToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${storedToken}`,
+          },
+        });
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -114,8 +109,7 @@ const Managepet = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -139,15 +133,11 @@ const Managepet = () => {
   const openModal1 = (petId) => {
     console.log(`Opening modal for pet id: ${petId}`);
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/${petId}/` ||
-          `http://127.0.0.1:8000/accounts/pets/${petId}`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      )
+      .get(`${BACKEND_URL}/accounts/pets/${petId}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
       .then((response) => {
         console.log("Pet details fetched:", response.data);
         setSelectedPet(response.data);

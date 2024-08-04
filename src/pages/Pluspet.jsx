@@ -6,6 +6,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Pluspet = ({ nickname }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showDatePicker1, setShowDatePicker1] = useState(false);
@@ -48,7 +51,7 @@ const Pluspet = ({ nickname }) => {
 
   const handleDateChange = (date) => {
     setPet_Birth(date);
-    setShowDatePicker(false); // 날짜 선택 시 달력 닫기
+    setShowDatePicker(false); // 날짜 선택 시 달력 닫기//
   };
 
   const handleSubmit = async (event) => {
@@ -92,17 +95,12 @@ const Pluspet = ({ nickname }) => {
         formData.append("petImage", file);
       }
 
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/pets/` ||
-          `http://127.0.0.1:8000/accounts/pets/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`${BACKEND_URL}/accounts/pets/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       localStorage.setItem("token", token);
       navigate(`/mypage/managepet`, { state: { token } });
@@ -135,15 +133,11 @@ const Pluspet = ({ nickname }) => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
-            `http://127.0.0.1:8000/mybooks/list/`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -176,8 +170,7 @@ const Pluspet = ({ nickname }) => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
-          `http://127.0.0.1:8000/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {

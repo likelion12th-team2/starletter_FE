@@ -4,6 +4,9 @@ import MyPageModal from "./MyPageModal";
 import * as M from "../styles/StyledMarket";
 import axios from "axios";
 
+// 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+
 const Market = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -80,7 +83,7 @@ const Market = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/accounts/logout/`,
+        `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
@@ -115,8 +118,7 @@ const Market = () => {
 
   const fetchProducts = async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
-      const response = await axios.get(`${apiUrl}/market/`);
+      const response = await axios.get(`${BACKEND_URL}/market/`); // 실제 API 엔드포인트로 변경
       console.log("Fetched product data:", response.data); // 콘솔에 데이터 출력
       setProducts(response.data);
     } catch (error) {
