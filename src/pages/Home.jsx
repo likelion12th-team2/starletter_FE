@@ -78,7 +78,7 @@ const Home = () => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        // 동물 있는지 없는지 판별
+        // 동물 있는지 없는지 판별//
         const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
           headers: {
             Authorization: `Token ${token}`,
