@@ -42,19 +42,23 @@ const Market = () => {
     setIsModalOpen(false);
   };
 
+  const key = localStorage.getItem("key");
+
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) {
+        if (!key) {
           navigate("/login");
           return;
         }
-        const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${storedToken}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${key}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -83,7 +87,7 @@ const Market = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${key}`, // 헤더에 저장된 토큰 사용
           },
         }
       );

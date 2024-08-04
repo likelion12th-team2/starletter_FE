@@ -44,6 +44,7 @@ const Funeral = ({ nickname }) => {
 
   const fetchInitialFunerals = async () => {
     try {
+
       console.log(
         "Fetching initial funerals data from URL:",
         BACKEND_URL,
@@ -59,6 +60,7 @@ const Funeral = ({ nickname }) => {
 
   const fetchFunerals = async (query) => {
     try {
+
       console.log(
         "Fetching funerals with query:",
         query,
@@ -185,6 +187,10 @@ const Funeral = ({ nickname }) => {
       handleSearch();
     }
   };
+  useEffect(() => {
+    fetchInitialFunerals();
+    console.log(funerals);
+  }, []);
 
   return (
     <F.Container>
