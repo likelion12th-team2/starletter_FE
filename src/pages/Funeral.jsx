@@ -181,7 +181,7 @@ const Funeral = () => {
             <F.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </F.Logo>
@@ -243,7 +243,7 @@ const Funeral = () => {
           />
           <img
             id="search"
-            src={`${process.env.PUBLIC_URL}/images/Search.svg`}
+            src={`${process.env.PUBLIC_URL}/static/images/Search.svg`}
             alt="검색"
             onClick={handleSearch}
           />
@@ -251,7 +251,7 @@ const Funeral = () => {
         {showAd && (
           <F.Ad>
             <img
-              src={`${process.env.PUBLIC_URL}/images/Advertisement.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Advertisement.svg`}
               alt="광고내용"
             />
           </F.Ad>
@@ -278,7 +278,7 @@ const Funeral = () => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -286,7 +286,7 @@ const Funeral = () => {
             <F.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a

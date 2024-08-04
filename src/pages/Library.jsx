@@ -225,7 +225,7 @@ const Library = ({ nickname }) => {
             <L.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </L.Logo>
@@ -278,7 +278,7 @@ const Library = ({ nickname }) => {
             <Search isAbsolute={isSearchAbsolute}>
               <img
                 id="searchImg"
-                src={`${process.env.PUBLIC_URL}/images/libSearch.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/libSearch.png`}
                 alt="search"
               />
               <input
@@ -346,7 +346,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               bookMostMinds.cover ||
-                              `${process.env.PUBLIC_URL}/images/bookCover.png`
+                              `${process.env.PUBLIC_URL}/static/images/bookCover.png`
                             }
                             alt="Mycover1"
                           />
@@ -378,7 +378,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               bookRecent.cover ||
-                              `${process.env.PUBLIC_URL}/images/bookCover.png`
+                              `${process.env.PUBLIC_URL}/static/images/bookCover.png`
                             }
                             alt="Mycover1"
                           />
@@ -413,7 +413,7 @@ const Library = ({ nickname }) => {
                             id="MycoverImg"
                             src={
                               book.cover ||
-                              `${process.env.PUBLIC_URL}/images/bookCover.png`
+                              `${process.env.PUBLIC_URL}/static/images/bookCover.png`
                             }
                             alt="Mycover"
                           />
@@ -448,7 +448,7 @@ const Library = ({ nickname }) => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -456,7 +456,7 @@ const Library = ({ nickname }) => {
             <L.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a

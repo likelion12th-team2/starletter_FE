@@ -65,14 +65,14 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
       <P.CloseButton onClick={onClose}>
         <img
           id="close"
-          src={`${process.env.PUBLIC_URL}/images/CloseModal.svg`}
+          src={`${process.env.PUBLIC_URL}/static/images/CloseModal.svg`}
           alt="닫기"
         />
       </P.CloseButton>
       <P.Content ref={modalRef}>
         <P.ProfileImage>
           <img
-            src={`${process.env.PUBLIC_URL}/images/Myprofile.svg`}
+            src={`${process.env.PUBLIC_URL}/static/images/Myprofile.svg`}
             alt="Profile"
           />
         </P.ProfileImage>
@@ -81,7 +81,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           <P.Information onClick={goEdit}>
             <img
               id="information"
-              src={`${process.env.PUBLIC_URL}/images/Information.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Information.svg`}
               alt="정보수정"
             />
             <div id="detinf">내 프로필 수정</div>
@@ -89,7 +89,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           <P.Pluspet onClick={goPlus}>
             <img
               id="plus"
-              src={`${process.env.PUBLIC_URL}/images/Pluspet.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Pluspet.svg`}
               alt="펫추가"
             />
             <div id="detplus">반려동물 추가</div>
@@ -97,7 +97,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           <P.Managepet onClick={goManage}>
             <img
               id="manage"
-              src={`${process.env.PUBLIC_URL}/images/Mypet.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Mypet.svg`}
               alt="펫관리"
             />
             <div id="detman">나의 반려동물 관리</div>
@@ -105,7 +105,7 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
           <P.Bookact onClick={goBook}>
             <img
               id="bookact"
-              src={`${process.env.PUBLIC_URL}/images/Bookroom.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Bookroom.svg`}
               alt="책방활동"
             />
             <div id="manact">책방 활동 관리</div>

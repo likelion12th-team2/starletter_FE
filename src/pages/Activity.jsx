@@ -185,7 +185,7 @@ const Activity = () => {
             <A.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </A.Logo>
@@ -242,7 +242,7 @@ const Activity = () => {
             <A.Heart>
               <img
                 id="img"
-                src={`${process.env.PUBLIC_URL}/images/Heart.svg`}
+                src={`${process.env.PUBLIC_URL}/static/images/Heart.svg`}
                 alt="이미지"
               />
               <div id="heart">공감</div>
@@ -260,7 +260,7 @@ const Activity = () => {
                         id="bookcover"
                         src={
                           book.cover ||
-                          `${process.env.PUBLIC_URL}/images/Bookcover.svg`
+                          `${process.env.PUBLIC_URL}/static/images/Bookcover.svg`
                         }
                         alt="표지"
                       />
@@ -286,7 +286,7 @@ const Activity = () => {
             <A.Detail>
               <img
                 id="img"
-                src={`${process.env.PUBLIC_URL}/images/Comment.svg`}
+                src={`${process.env.PUBLIC_URL}/static/images/Comment.svg`}
                 alt="이미지"
               />
               <div id="comment">댓글</div>
@@ -342,7 +342,7 @@ const Activity = () => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -350,7 +350,7 @@ const Activity = () => {
             <A.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a
