@@ -57,11 +57,15 @@ const EditProfile = () => {
   const goMyBook = async () => {
     if (isLoggedIn) {
       try {
-        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${key}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${key}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
@@ -90,7 +94,8 @@ const EditProfile = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `http://13.209.13.101/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {
@@ -121,7 +126,8 @@ const EditProfile = () => {
     console.log("Form submitted"); // 폼 제출 로그 추가
     try {
       const response = await axios.put(
-        `http://13.209.13.101/accounts/myinfo/`,
+        `${process.env.REACT_APP_API_URL}/accounts/myinfo/` ||
+          `http://127.0.0.1:8000/accounts/myinfo/`,
         {
           name: name || name1,
           nickname: nickname || slr,
@@ -153,7 +159,8 @@ const EditProfile = () => {
     const fetchName = async () => {
       try {
         const response = await axios.get(
-          `http://13.209.13.101/accounts/myinfo/`,
+          `${process.env.REACT_APP_API_URL}/accounts/myinfo/` ||
+            `http://127.0.0.1:8000/accounts/myinfo/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가

@@ -20,7 +20,8 @@ const MyBookDetail = () => {
     async (token) => {
       try {
         const response = await axios.get(
-          `http://13.209.13.101/mybooks/${bookId}/`,
+          `${process.env.REACT_APP_API_URL}/mybooks/${bookId}/` ||
+            `http://127.0.0.1:8000/mybooks/${bookId}/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -75,11 +76,15 @@ const MyBookDetail = () => {
     if (isLoggedIn) {
       try {
         // 동물 있는지 없는지 판별
-        const response = await axios.get(`http://13.209.13.101/mybooks/list/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/mybooks/list/` ||
+            `http://127.0.0.1:8000/mybooks/list/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
         console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
@@ -112,7 +117,8 @@ const MyBookDetail = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `http://13.209.13.101/accounts/logout/`,
+        `${process.env.REACT_APP_API_URL}/accounts/logout/` ||
+          `http://127.0.0.1:8000/accounts/logout/`,
         {},
         {
           headers: {

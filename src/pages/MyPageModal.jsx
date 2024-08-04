@@ -15,7 +15,8 @@ const MyPageModal = ({ isOpen, onClose, anchorRef }) => {
       if (!key) return; // key가 없으면 API 호출을 하지 않음
       try {
         const response = await axios.get(
-          `http://13.209.13.101/accounts/myinfo/`,
+          `${process.env.REACT_APP_API_URL}/accounts/myinfo/` ||
+            `http://127.0.0.1:8000/accounts/myinfo/`,
           {
             headers: {
               Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
