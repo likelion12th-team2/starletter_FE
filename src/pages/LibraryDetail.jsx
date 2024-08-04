@@ -265,7 +265,7 @@ const LibraryDetail = ({ nickname }) => {
             <LD.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </LD.Logo>
@@ -396,7 +396,7 @@ const LibraryDetail = ({ nickname }) => {
                           {!pages[currentPage - 1]?.isPublic && (
                             <img
                               id="public"
-                              src={`${process.env.PUBLIC_URL}/images/public.png`}
+                              src={`${process.env.PUBLIC_URL}/static/images/public.png`}
                               alt="공개 페이지"
                             />
                           )}
@@ -429,7 +429,7 @@ const LibraryDetail = ({ nickname }) => {
                       {!pages[currentPage]?.isPublic && (
                         <img
                           id="public"
-                          src={`${process.env.PUBLIC_URL}/images/public.png`}
+                          src={`${process.env.PUBLIC_URL}/static/images/public.png`}
                           alt="공개 페이지"
                         />
                       )}
@@ -454,7 +454,7 @@ const LibraryDetail = ({ nickname }) => {
         <LD.HeartBtn onClick={handleHeartClick}>
           <img
             id="heart"
-            src={`${process.env.PUBLIC_URL}/images/${
+            src={`${process.env.PUBLIC_URL}/static/images/${
               isHeartClicked ? "heartBtnClicked.png" : "heartBtn.png"
             }`}
             alt="heartBtn"
@@ -479,7 +479,7 @@ const LibraryDetail = ({ nickname }) => {
               <LD.Postit id="plusmodal" onClick={openAddPostitModal}>
                 <img
                   id="postitPlus"
-                  src={`${process.env.PUBLIC_URL}/images/postitPlus.png`}
+                  src={`${process.env.PUBLIC_URL}/static/images/postitPlus.png`}
                   alt="plus"
                 />
               </LD.Postit>
@@ -493,7 +493,7 @@ const LibraryDetail = ({ nickname }) => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -501,7 +501,7 @@ const LibraryDetail = ({ nickname }) => {
             <LD.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a

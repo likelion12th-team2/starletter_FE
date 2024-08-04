@@ -199,7 +199,7 @@ const MyBookMake = ({ nickname }) => {
             <MM.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </MM.Logo>
@@ -250,7 +250,7 @@ const MyBookMake = ({ nickname }) => {
           <MM.Slider>
             <MM.Button onClick={prevBook} show={showButtons}>
               <img
-                src={`${process.env.PUBLIC_URL}/images/beforebook.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/beforebook.png`}
                 alt="prevpage"
               />
             </MM.Button>
@@ -266,7 +266,7 @@ const MyBookMake = ({ nickname }) => {
                       id="img"
                       src={
                         books[0].cover ||
-                        `${process.env.PUBLIC_URL}/images/default_cover.png`
+                        `${process.env.PUBLIC_URL}/static/images/default_cover.png`
                       }
                       alt="cover"
                     />
@@ -278,7 +278,7 @@ const MyBookMake = ({ nickname }) => {
                       id="img"
                       src={
                         petsNoBook[0].petImage ||
-                        `${process.env.PUBLIC_URL}/images/default_pet.png`
+                        `${process.env.PUBLIC_URL}/static/images/default_pet.png`
                       }
                       alt="pet"
                     />
@@ -287,7 +287,7 @@ const MyBookMake = ({ nickname }) => {
                     <MM.AddBtn onClick={() => openBookModal(petsNoBook[0].id)}>
                       <img
                         id="addbtn"
-                        src={`${process.env.PUBLIC_URL}/images/BookAddBtn.svg`}
+                        src={`${process.env.PUBLIC_URL}/static/images/BookAddBtn.svg`}
                         alt="add"
                       />
                     </MM.AddBtn>
@@ -332,7 +332,7 @@ const MyBookMake = ({ nickname }) => {
                         id="img"
                         src={
                           book.cover ||
-                          `${process.env.PUBLIC_URL}/images/default_cover.png`
+                          `${process.env.PUBLIC_URL}/static/images/default_cover.png`
                         }
                         alt="cover"
                       />
@@ -375,7 +375,7 @@ const MyBookMake = ({ nickname }) => {
                         id="img"
                         src={
                           pet.petImage ||
-                          `${process.env.PUBLIC_URL}/images/default_pet.png`
+                          `${process.env.PUBLIC_URL}/static/images/default_pet.png`
                         }
                         alt="pet"
                       />
@@ -384,7 +384,7 @@ const MyBookMake = ({ nickname }) => {
                       <MM.AddBtn onClick={() => openBookModal(pet.id)}>
                         <img
                           id="addbtn"
-                          src={`${process.env.PUBLIC_URL}/images/BookAddBtn.svg`}
+                          src={`${process.env.PUBLIC_URL}/static/images/BookAddBtn.svg`}
                           alt="add"
                         />
                       </MM.AddBtn>
@@ -394,7 +394,7 @@ const MyBookMake = ({ nickname }) => {
             </MM.BookContainer>
             <MM.Button onClick={nextBook} show={showButtons}>
               <img
-                src={`${process.env.PUBLIC_URL}/images/nextbook.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/nextbook.png`}
                 alt="nextbook"
               />
             </MM.Button>
@@ -407,7 +407,7 @@ const MyBookMake = ({ nickname }) => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -415,7 +415,7 @@ const MyBookMake = ({ nickname }) => {
             <MM.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a
@@ -468,7 +468,7 @@ const MyBookMake = ({ nickname }) => {
           <MM.BackButton>
             <button id="backbtn" onClick={closeBookModal}>
               <img
-                src={`${process.env.PUBLIC_URL}/images/deletModal.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/deletModal.png`}
                 alt="back"
               />
             </button>
@@ -481,7 +481,7 @@ const MyBookMake = ({ nickname }) => {
                   src={
                     coverImage
                       ? URL.createObjectURL(coverImage)
-                      : `${process.env.PUBLIC_URL}/images/modal_cover.png`
+                      : `${process.env.PUBLIC_URL}/static/images/modal_cover.png`
                   }
                   alt="no-preview"
                 />
@@ -522,7 +522,7 @@ const MyBookMake = ({ nickname }) => {
                     {!coverImage && (
                       <img
                         id="addimg"
-                        src={`${process.env.PUBLIC_URL}/images/coverImgAdd.png`}
+                        src={`${process.env.PUBLIC_URL}/static/images/coverImgAdd.png`}
                         alt="Add cover"
                       />
                     )}

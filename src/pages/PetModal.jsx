@@ -37,7 +37,7 @@ const PetModal = ({ isOpen, onClose, pet }) => {
       <P.Close onClick={onClose}>
         <img
           id="img"
-          src={`${process.env.PUBLIC_URL}/images/Close.svg`}
+          src={`${process.env.PUBLIC_URL}/static/images/Close.svg`}
           alt="close"
         />
       </P.Close>
@@ -46,7 +46,7 @@ const PetModal = ({ isOpen, onClose, pet }) => {
           id="img"
           src={
             pet.petImage ||
-            `${process.env.PUBLIC_URL}/images/default_pet_image.png`
+            `${process.env.PUBLIC_URL}/static/images/default_pet_image.png`
           }
           alt={pet.petName}
         />

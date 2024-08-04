@@ -12,7 +12,7 @@ const FuneralModal = ({ show, handleClose, funeral }) => {
       <FM.Close onClick={handleClose}>
         <img
           id="img"
-          src={`${process.env.PUBLIC_URL}/images/Close.svg`}
+          src={`${process.env.PUBLIC_URL}/static/images/Close.svg`}
           alt="close"
         />
       </FM.Close>

@@ -115,7 +115,7 @@ const Home = () => {
             <H.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </H.Logo>
@@ -172,7 +172,7 @@ const Home = () => {
           <H.Lib onClick={goMyBook}>
             <img
               id="library"
-              src={`${process.env.PUBLIC_URL}/images/Lib.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Lib.svg`}
               alt="서재"
             />
             <div id="detlib">내 서재</div>
@@ -180,7 +180,7 @@ const Home = () => {
           <H.Book onClick={goLib}>
             <img
               id="bookroom"
-              src={`${process.env.PUBLIC_URL}/images/Book.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Book.svg`}
               alt="책방"
             />
             <div id="detbook">책방</div>
@@ -188,7 +188,7 @@ const Home = () => {
           <H.Fun onClick={goFun}>
             <img
               id="funeral"
-              src={`${process.env.PUBLIC_URL}/images/Funeral.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Funeral.svg`}
               alt="장례식장"
             />
             <div id="detfun">장례식장</div>
@@ -196,7 +196,7 @@ const Home = () => {
           <H.Mar onClick={goMarket}>
             <img
               id="market"
-              src={`${process.env.PUBLIC_URL}/images/Market.svg`}
+              src={`${process.env.PUBLIC_URL}/static/images/Market.svg`}
               alt="마켓"
             />
             <div id="detmar">마켓</div>
@@ -204,7 +204,7 @@ const Home = () => {
         </H.List>
         <img
           id="main"
-          src={`${process.env.PUBLIC_URL}/images/Main.svg`}
+          src={`${process.env.PUBLIC_URL}/static/images/Main.svg`}
           alt="메인"
         />
       </H.Body>
@@ -214,7 +214,7 @@ const Home = () => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -222,7 +222,7 @@ const Home = () => {
             <H.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a

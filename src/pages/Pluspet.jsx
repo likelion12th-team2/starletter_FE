@@ -30,7 +30,7 @@ const Pluspet = ({ nickname }) => {
   }, []);
 
   const [profileImage, setProfileImage] = useState(
-    `${process.env.PUBLIC_URL}/images/ProfileImg.svg`
+    `${process.env.PUBLIC_URL}/static/images/ProfileImg.svg`
   );
   const [file, setFile] = useState(null);
 
@@ -251,7 +251,7 @@ const Pluspet = ({ nickname }) => {
             <P.Logo onClick={goHome}>
               <img
                 id="logo"
-                src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
             </P.Logo>
@@ -310,7 +310,7 @@ const Pluspet = ({ nickname }) => {
             <label htmlFor="fileInput">
               <img
                 id="edit"
-                src={`${process.env.PUBLIC_URL}/images/EditProfile.svg`}
+                src={`${process.env.PUBLIC_URL}/static/images/EditProfile.svg`}
                 alt="편집"
               />
             </label>
@@ -349,7 +349,7 @@ const Pluspet = ({ nickname }) => {
                 />
                 <img
                   id="plustype"
-                  src={`${process.env.PUBLIC_URL}/images/Plustype.svg`}
+                  src={`${process.env.PUBLIC_URL}/static/images/Plustype.svg`}
                   alt="더보기"
                   onClick={toggleTypeList}
                 />
@@ -381,7 +381,7 @@ const Pluspet = ({ nickname }) => {
                 />
                 <img
                   id="birthcal"
-                  src={`${process.env.PUBLIC_URL}/images/Calender.svg`}
+                  src={`${process.env.PUBLIC_URL}/static/images/Calender.svg`}
                   alt="달력"
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
@@ -412,7 +412,7 @@ const Pluspet = ({ nickname }) => {
                 />
                 <img
                   id="memcal"
-                  src={`${process.env.PUBLIC_URL}/images/Calender.svg`}
+                  src={`${process.env.PUBLIC_URL}/static/images/Calender.svg`}
                   alt="달력"
                   onClick={() => setShowDatePicker1(!showDatePicker1)}
                 />
@@ -447,7 +447,7 @@ const Pluspet = ({ nickname }) => {
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
-              src={`${process.env.PUBLIC_URL}/images/logo.png`}
+              src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
               alt="logo"
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
@@ -455,7 +455,7 @@ const Pluspet = ({ nickname }) => {
             <P.Git>
               <img
                 id="github"
-                src={`${process.env.PUBLIC_URL}/images/Github.png`}
+                src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
                 alt="깃허브"
               />
               <a
