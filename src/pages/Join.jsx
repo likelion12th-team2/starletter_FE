@@ -31,11 +31,11 @@ const Join = () => {
       setMessage("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
       return;
     }
-    console.log("username:", username);
-    console.log("Password:", password);
-    console.log("Password2:", password2);
-    console.log("name:", name);
-    console.log("nickname:", nickname);
+    // console.log("username:", username);
+    // console.log("Password:", password);
+    // console.log("Password2:", password2);
+    // console.log("name:", name);
+    // console.log("nickname:", nickname);
     try {
       await axios.post(`${BACKEND_URL}/accounts/register/`, {
         username: username,
@@ -82,7 +82,7 @@ const Join = () => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0

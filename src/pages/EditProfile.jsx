@@ -65,7 +65,7 @@ const EditProfile = () => {
             Authorization: `Token ${key}`,
           },
         });
-        console.log("API 응답:", response.data);
+        // console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -121,7 +121,6 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // 폼 제출의 기본 동작 방지
-    console.log("Form submitted"); // 폼 제출 로그 추가
     try {
       const response = await axios.put(
         `${BACKEND_URL}/accounts/myinfo/`,
@@ -135,7 +134,7 @@ const EditProfile = () => {
           },
         }
       );
-      console.log("Profile updated:", response.data);
+      // console.log("Profile updated:", response.data);
       setErrorMessage(""); // 성공적으로 업데이트된 경우 에러 메시지 초기화
       navigate(`/`);
     } catch (error) {

@@ -143,7 +143,7 @@ const ManagePetAdd = ({ nickname }) => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0

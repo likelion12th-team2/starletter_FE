@@ -15,7 +15,7 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("폼 제출됨");
+    // console.log("폼 제출됨");
 
     try {
       const response = await axios.post(`${BACKEND_URL}/accounts/login/`, {
@@ -25,12 +25,11 @@ const Login = () => {
       console.log("로그인 성공!");
 
       // 서버의 응답 데이터 출력
-      console.log("서버 응답:", response.data);
+      // console.log("서버 응답:", response.data);
 
       const token = response.data.key || response.data.data?.key;
       if (token) {
         localStorage.setItem("token", response.data.key);
-        console.log("토큰 저장 성공:", token);
 
         // 메인 페이지로 이동
         navigate("/");

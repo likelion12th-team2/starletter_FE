@@ -76,7 +76,7 @@ const MyBookMake = ({ nickname }) => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -173,7 +173,6 @@ const MyBookMake = ({ nickname }) => {
       formData.append("pet", selectedPetId);
       formData.append("description", description || "");
       formData.append("keywordTag", selectedKeyword);
-
       const imageFile =
         coverImage instanceof File
           ? coverImage

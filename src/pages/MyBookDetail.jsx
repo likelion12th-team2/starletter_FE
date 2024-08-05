@@ -28,7 +28,7 @@ const MyBookDetail = () => {
           },
         });
 
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         setBook(response.data.book);
         setPages(response.data.pages);
         setNotes(response.data.notes);
@@ -43,7 +43,7 @@ const MyBookDetail = () => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      console.log("로그인 되어있음");
+      // console.log("로그인 되어있음");
       setIsLoggedIn(true);
       setToken(storedToken);
       fetchBookDetail(storedToken);
@@ -80,7 +80,7 @@ const MyBookDetail = () => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
