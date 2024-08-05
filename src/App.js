@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import React from "react"; // useState 제거
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
 import GlobalStyle from "./pages/GlobalStyles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -22,10 +22,8 @@ import Library from "./pages/Library";
 import LibraryDetail from "./pages/LibraryDetail";
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false); // 사용되지 않는 변수 제거
-
   return (
-    <BrowserRouter>
+    <Router>
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -38,17 +36,16 @@ function App() {
         <Route path="/market" element={<Market />} />
         <Route path="/mypage/edit" element={<EditProfile />} />
         <Route path="/mypage/managepet/pluspet" element={<ManagePetAdd />} />
-
         <Route path="/mybook" element={<MyBook />} />
         <Route path="/mybook/addpet" element={<MyBookAddPet />} />
         <Route path="/mybook/make" element={<MyBookMake />} />
         <Route path="/mybook/detail/:id" element={<MyBookDetail />} />
         <Route path="/mybook/write" element={<MyBookWrite />} />
-
         <Route path="/library" element={<Library />} />
         <Route path="/library/:id" element={<LibraryDetail />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
 export default App;

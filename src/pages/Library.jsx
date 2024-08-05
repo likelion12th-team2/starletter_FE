@@ -11,7 +11,7 @@ const Search = styled(({ isAbsolute, ...props }) => <L.Search {...props} />)`
 `;
 
 // 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
-const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://3.34.187.40";
 
 const Library = ({ nickname }) => {
   const navigate = useNavigate();

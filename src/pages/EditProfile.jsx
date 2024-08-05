@@ -5,7 +5,7 @@ import * as E from "../styles/StyledEdit";
 import axios from "axios";
 
 // 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
-const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://3.34.187.40";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -126,8 +126,8 @@ const EditProfile = () => {
       const response = await axios.put(
         `${BACKEND_URL}/accounts/myinfo/`,
         {
-          name: name || name1,
-          nickname: nickname || slr,
+          name: name,
+          nickname: nickname,
         },
         {
           headers: {
@@ -155,13 +155,17 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/accounts/myinfo/`, {
-          headers: {
-            Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/accounts/myinfo/",
+          {
+            headers: {
+              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+            },
+          }
+        );
+        setName(response.data.name);
         setName1(response.data.name);
-        setSlr(response.data.nickname);
+        setNickname(response.data.nickname);
       } catch (error) {
         console.error("Error fetching name:", error);
         setErrorMessage("사용자 이름을 불러오는 중 오류가 발생했습니다.");
@@ -169,7 +173,7 @@ const EditProfile = () => {
     };
 
     fetchName();
-  }, [key]);
+  }, []);
 
   return (
     <E.Container>
@@ -239,7 +243,7 @@ const EditProfile = () => {
                 <input
                   id="inname"
                   type="text"
-                  value={name || name1}
+                  value={name}
                   onChange={handleNameChange}
                 />
               </E.DetName>
@@ -250,7 +254,7 @@ const EditProfile = () => {
                 <input
                   id="innick"
                   type="text"
-                  value={nickname || slr}
+                  value={nickname}
                   onChange={handleNicknameChange}
                 />
               </E.DetNick>
