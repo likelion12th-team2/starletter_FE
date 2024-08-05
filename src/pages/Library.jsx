@@ -33,7 +33,7 @@ const Library = ({ nickname }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      console.log("로그인 되어있음");
+      // console.log("로그인 되어있음");
       setIsLoggedIn(true);
       setToken(token);
     }
@@ -69,7 +69,7 @@ const Library = ({ nickname }) => {
   const LibraryBooks = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/bookshelf/`);
-      console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+      // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
       setBooksMostMinds(response.data.booksMostMinds);
       setBooksRecent(response.data.booksRecent);
     } catch (error) {
@@ -120,7 +120,7 @@ const Library = ({ nickname }) => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("API 응답:", response.data); // 응답 데이터 로그 출력
+        // console.log("API 응답:", response.data); // 응답 데이터 로그 출력
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -187,7 +187,7 @@ const Library = ({ nickname }) => {
         const response = await axios.get(
           `${BACKEND_URL}/bookshelf/?search=${searchValue}`
         );
-        console.log("검색 결과:", response.data); // 검색 결과 로그 출력
+        // console.log("검색 결과:", response.data); // 검색 결과 로그 출력
         setSearchResults(response.data.searchedBooks); // 검색 결과를 상태에 저장
         setIsSearchExecuted(true); // 검색 실행 여부 상태 업데이트
         setIsSearchModalOpen(false); // 검색 후 모달 닫기
@@ -200,7 +200,7 @@ const Library = ({ nickname }) => {
   };
 
   useEffect(() => {
-    console.log("검색 결과 state 변경:", searchResults);
+    // console.log("검색 결과 state 변경:", searchResults);
   }, [searchResults]);
 
   const handleKeywordClick = (keyword) => {

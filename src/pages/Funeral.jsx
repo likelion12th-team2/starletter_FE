@@ -44,13 +44,8 @@ const Funeral = ({ nickname }) => {
 
   const fetchInitialFunerals = async () => {
     try {
-      console.log(
-        "Fetching initial funerals data from URL:",
-        BACKEND_URL,
-        "/funeralhalls/"
-      );
       const response = await axios.get(`${BACKEND_URL}/funeralhalls/`);
-      console.log("Response data:", response.data);
+      // console.log("Response data:", response.data);
       setFunerals(response.data);
     } catch (error) {
       console.error("초기 장례식장 데이터를 불러오는 중 오류 발생:", error);
@@ -59,16 +54,10 @@ const Funeral = ({ nickname }) => {
 
   const fetchFunerals = async (query) => {
     try {
-      console.log(
-        "Fetching funerals with query:",
-        query,
-        "from URL:",
-        BACKEND_URL
-      );
       const response = await axios.get(`${BACKEND_URL}/funeralhalls/`, {
         params: { search: query },
       });
-      console.log("Response data:", response.data);
+      // console.log("Response data:", response.data);
       setFunerals(response.data);
     } catch (error) {
       console.error("검색 결과를 불러오는 중 오류 발생:", error);
@@ -103,13 +92,12 @@ const Funeral = ({ nickname }) => {
           navigate("/login");
           return;
         }
-        console.log("Fetching my book list from URL:", BACKEND_URL);
         const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
           headers: {
             Authorization: `Token ${storedToken}`,
           },
         });
-        console.log("API 응답:", response.data);
+        // console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -134,7 +122,6 @@ const Funeral = ({ nickname }) => {
 
   const handleLogout = async () => {
     try {
-      console.log("Logging out from URL:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/accounts/logout/`,
         {},
@@ -144,7 +131,7 @@ const Funeral = ({ nickname }) => {
           },
         }
       );
-      console.log("로그아웃 성공:", response.data);
+      // console.log("로그아웃 성공:", response.data);
       localStorage.removeItem("token");
       localStorage.removeItem("key");
       setIsLoggedIn(false);
@@ -187,7 +174,7 @@ const Funeral = ({ nickname }) => {
   };
   useEffect(() => {
     fetchInitialFunerals();
-    console.log(funerals);
+    // console.log(funerals);
   }, []);
 
   return (

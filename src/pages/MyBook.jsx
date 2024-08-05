@@ -87,7 +87,7 @@ const MyBook = ({ nickname }) => {
             Authorization: `Token ${storedToken}`,
           },
         });
-        console.log("API 응답:", response.data);
+        // console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0

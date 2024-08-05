@@ -77,7 +77,7 @@ const Managepet = () => {
             Authorization: `Token ${storedToken}`,
           },
         });
-        console.log("API 응답:", response.data);
+        // console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -131,7 +131,7 @@ const Managepet = () => {
   const [selectedPet, setSelectedPet] = useState(null);
 
   const openModal1 = (petId) => {
-    console.log(`Opening modal for pet id: ${petId}`);
+    // console.log(`Opening modal for pet id: ${petId}`);
     axios
       .get(`${BACKEND_URL}/accounts/pets/${petId}/`, {
         headers: {
@@ -139,7 +139,7 @@ const Managepet = () => {
         },
       })
       .then((response) => {
-        console.log("Pet details fetched:", response.data);
+        // console.log("Pet details fetched:", response.data);
         setSelectedPet(response.data);
         setModalIsOpen1(true);
       })

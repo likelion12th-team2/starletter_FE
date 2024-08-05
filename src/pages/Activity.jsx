@@ -16,7 +16,7 @@ const Activity = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    console.log("Stored Token:", storedToken);
+    // console.log("Stored Token:", storedToken);
     if (storedToken) {
       console.log("로그인 되어있음");
       setIsLoggedIn(true);
@@ -54,7 +54,7 @@ const Activity = () => {
             Authorization: `Token ${storedToken}`,
           },
         });
-        console.log("API 응답:", response.data);
+        // console.log("API 응답:", response.data);
         if (
           response.data.books.length > 0 ||
           response.data.petsNoBook.length > 0
@@ -129,7 +129,7 @@ const Activity = () => {
             Authorization: `Token ${token}`,
           },
         });
-        console.log("Fetched data:", response.data);
+        // console.log("Fetched data:", response.data);
         setMindBooks(response.data.mindBooks);
         setMyNotes(response.data.myNotes);
       } catch (error) {
@@ -158,7 +158,7 @@ const Activity = () => {
           note_id: selectedNoteId,
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
       window.location.reload();
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
