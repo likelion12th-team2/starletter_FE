@@ -155,14 +155,11 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/accounts/myinfo/",
-          {
-            headers: {
-              Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/accounts/myinfo/`, {
+          headers: {
+            Authorization: `Token ${key}`, // 필요한 경우 인증 헤더 추가
+          },
+        });
         setName(response.data.name);
         setName1(response.data.name);
         setNickname(response.data.nickname);
