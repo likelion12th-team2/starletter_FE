@@ -6,7 +6,7 @@ import axios from "axios";
 import MyPageModal from "./MyPageModal";
 
 // 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
-const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://3.34.187.40";
 
 const MyBookMake = ({ nickname }) => {
   const navigate = useNavigate();
@@ -21,7 +21,9 @@ const MyBookMake = ({ nickname }) => {
   const [current, setCurrent] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(
+    `${process.env.PUBLIC_URL}/static/images/bookCover.png`
+  );
   const [selectedKeyword, setSelectedKeyword] = useState("");
   const [selectedPetId, setSelectedPetId] = useState(null);
 
@@ -158,13 +160,25 @@ const MyBookMake = ({ nickname }) => {
 
   const handleMakeBook = async () => {
     const token = localStorage.getItem("token");
+
+    const getImageFileFromUrl = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new File([blob], "coverImage.png", { type: blob.type });
+    };
+
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("pet", selectedPetId);
       formData.append("description", description || "");
-      formData.append("cover", coverImage || null);
       formData.append("keywordTag", selectedKeyword);
+
+      const imageFile =
+        coverImage instanceof File
+          ? coverImage
+          : await getImageFileFromUrl(coverImage);
+      formData.append("cover", imageFile);
 
       await axios.post(`${BACKEND_URL}/mybooks/list/`, formData, {
         headers: {
@@ -468,9 +482,9 @@ const MyBookMake = ({ nickname }) => {
                 <img
                   id="adding"
                   src={
-                    coverImage
+                    coverImage instanceof File
                       ? URL.createObjectURL(coverImage)
-                      : `${process.env.PUBLIC_URL}/static/images/modal_cover.png`
+                      : coverImage
                   }
                   alt="no-preview"
                 />
@@ -508,16 +522,21 @@ const MyBookMake = ({ nickname }) => {
                       document.getElementById("file-input").click()
                     }
                   >
-                    {!coverImage && (
+                    {!coverImage ||
+                    coverImage ===
+                      `${process.env.PUBLIC_URL}/static/images/bookCover.png` ? (
                       <img
                         id="addimg"
                         src={`${process.env.PUBLIC_URL}/static/images/coverImgAdd.png`}
                         alt="Add cover"
                       />
-                    )}
-                    {coverImage && (
+                    ) : (
                       <img
-                        src={URL.createObjectURL(coverImage)}
+                        src={
+                          coverImage instanceof File
+                            ? URL.createObjectURL(coverImage)
+                            : coverImage
+                        }
                         alt="Cover Preview"
                         style={{ maxWidth: "320px", maxHeight: "70px" }}
                       />

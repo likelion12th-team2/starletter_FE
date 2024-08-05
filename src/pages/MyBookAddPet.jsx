@@ -1,138 +1,71 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import MyPageModal from "./MyPageModal";
-import * as AP from "../styles/styledMyBookAddPet";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate, useLocation } from "react-router-dom";
+import * as MM from "../styles/styledMyBookMake";
+import Modal from "react-modal";
 import axios from "axios";
+import MyPageModal from "./MyPageModal";
 
 // 환경 변수나 다른 방법으로 백엔드 URL을 설정하는 부분입니다.
-const BACKEND_URL = "http://127.0.0.1:8000" || "http://13.209.13.101";
+const BACKEND_URL = "http://127.0.0.1:8000" || "http://3.34.187.40";
 
-const MyBookAddPet = ({ nickname }) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showDatePicker1, setShowDatePicker1] = useState(false);
-
+const MyBookMake = ({ nickname }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false);
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const myPageRef = useRef(null);
-
-  const [petName, setPetName] = useState("");
-  const [petType, setPetType] = useState("");
-  const [petBirth, setPetBirth] = useState(null);
-  const [petAnniv, setPetAnniv] = useState(null);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(location.state?.token || "");
+  const [books, setBooks] = useState([]);
+  const [petsNoBook, setPetsNoBook] = useState([]);
+  const [current, setCurrent] = useState(0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [coverImage, setCoverImage] = useState(
+    `${process.env.PUBLIC_URL}/static/images/bookCover.png`
+  );
+  const [selectedKeyword, setSelectedKeyword] = useState("");
+  const [selectedPetId, setSelectedPetId] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      setToken(storedToken);
       setIsLoggedIn(true);
+      setToken(storedToken);
+      fetchPets(storedToken);
+    } else if (token) {
+      setIsLoggedIn(true);
+      localStorage.setItem("token", token);
+      fetchPets(token);
     }
-  }, []);
+  }, [token]);
 
-  const [profileImage, setProfileImage] = useState(
-    `${process.env.PUBLIC_URL}/static/images/ProfileImg.svg`
-  );
-  const [file, setFile] = useState(null);
-
-  const handleImageChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(selectedFile);
-      setFile(selectedFile);
-    }
-  };
-
-  const handleDateChange = (date) => {
-    setPetBirth(date);
-    setShowDatePicker(false); // 날짜 선택 시 달력 닫기
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!petName || !petType || !petBirth || !petAnniv) {
-      alert("모든 필드를 작성해 주세요.");
-      return;
-    }
-
-    const formattedPetBirth = petBirth
-      ? petBirth
-          .toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          })
-          .replace(/\./g, "-")
-          .replace(/ /g, "")
-          .replace(/-$/, "")
-      : "";
-
-    const formattedPetAnniv = petAnniv
-      ? petAnniv
-          .toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          })
-          .replace(/\./g, "-")
-          .replace(/ /g, "")
-          .replace(/-$/, "")
-      : "";
-
+  const fetchPets = async (token) => {
     try {
-      const formData = new FormData();
-      formData.append("petName", petName);
-      formData.append("petBirth", formattedPetBirth);
-      formData.append("petAnniv", formattedPetAnniv);
-      formData.append("petType", petType);
-      if (file) {
-        formData.append("petImage", file);
-      }
-
-      await axios.post(`${BACKEND_URL}/accounts/pets/`, formData, {
+      const response = await axios.get(`${BACKEND_URL}/mybooks/list/`, {
         headers: {
           Authorization: `Token ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       });
-
-      // 토큰을 로컬 스토리지에 저장합니다.
-      localStorage.setItem("token", token);
-
-      // 토큰을 상태로 전달하면서 페이지를 이동합니다.
-      navigate(`/mybook/make`, { state: { token } });
+      setBooks(response.data.books);
+      setPetsNoBook(response.data.petsNoBook);
     } catch (error) {
-      console.log(`추가 실패: ${error.message}`);
-      console.log(error.response.data);
+      console.error("동물 기록 확인 실패:", error);
     }
   };
 
-  const goFun = () => {
-    navigate(`/funeral`);
+  const navigateTo = (path) => {
+    navigate(path);
   };
 
-  const goMarket = () => {
-    navigate(`/market`);
-  };
-
-  const goHome = () => {
-    navigate(`/`);
-  };
-
-  const goLogin = () => {
-    navigate(`/login`);
-  };
-
-  const goJoin = () => {
-    navigate(`/join`);
-  };
-
+  const goHome = () => navigateTo(`/`);
+  const goLogin = () => navigateTo(`/login`);
+  const goJoin = () => navigateTo(`/join`);
+  const goFun = () => navigateTo(`/funeral`);
+  const goMarket = () => navigateTo(`/market`);
+  const goMyBookDetail = (bookId) =>
+    navigate(`/mybook/detail/${bookId}`, { state: { bookId } });
+  const goLib = () => navigateTo(`/library`);
   // 내서재 수정
   const goMyBook = async () => {
     if (isLoggedIn) {
@@ -159,34 +92,18 @@ const MyBookAddPet = ({ nickname }) => {
       navigate("/login");
     }
   };
-
-  const goLib = () => {
-    navigate(`/library`);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `${BACKEND_URL}/accounts/logout/`,
         {},
         {
           headers: {
-            Authorization: `Token ${token}`, // 헤더에 저장된 토큰 사용
+            Authorization: `Token ${token}`,
           },
         }
       );
-      console.log("로그아웃 성공:", response.data);
-      // 로그아웃 성공 시 토큰 삭제 및 상태 업데이트
       localStorage.removeItem("token");
-      localStorage.removeItem("key");
       setIsLoggedIn(false);
       setToken("");
       navigate(`/`);
@@ -195,67 +112,101 @@ const MyBookAddPet = ({ nickname }) => {
     }
   };
 
+  const nextBook = () => {
+    setCurrent((prev) => (prev + 1) % (books.length + petsNoBook.length));
+  };
+
+  const prevBook = () => {
+    setCurrent(
+      (prev) =>
+        (prev - 1 + books.length + petsNoBook.length) %
+        (books.length + petsNoBook.length)
+    );
+  };
+
+  const showButtons = books.length + petsNoBook.length > 1;
+
+  const openMyPageModal = () => {
+    setIsMyPageModalOpen(true);
+  };
+
+  const closeMyPageModal = () => {
+    setIsMyPageModalOpen(false);
+  };
+
+  const openBookModal = (petId) => {
+    setSelectedPetId(petId);
+    setIsBookModalOpen(true);
+  };
+
+  const closeBookModal = () => {
+    setIsBookModalOpen(false);
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setCoverImage(file);
+    }
+  };
+
+  const handleKeywordClick = (keyword) => {
+    setSelectedKeyword(keyword);
+  };
+
   const profile = {
     name: nickname,
   };
 
-  const [showTypeList, setShowTypeList] = useState(false);
-  const [selectedType, setSelectedType] = useState("");
+  const handleMakeBook = async () => {
+    const token = localStorage.getItem("token");
 
-  const toggleTypeList = () => {
-    setShowTypeList(!showTypeList);
-  };
-
-  const selectType = (type) => {
-    setSelectedType(type);
-    setPetType(type);
-    setShowTypeList(false);
-  };
-
-  const datePickerRef = useRef(null);
-  const datePickerRef1 = useRef(null);
-
-  const handleClickOutside = (event) => {
-    if (
-      datePickerRef.current &&
-      !datePickerRef.current.contains(event.target)
-    ) {
-      setShowDatePicker(false);
-    }
-    if (
-      datePickerRef1.current &&
-      !datePickerRef1.current.contains(event.target)
-    ) {
-      setShowDatePicker1(false);
-    }
-  };
-
-  useEffect(() => {
-    if (showDatePicker || showDatePicker1) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    const getImageFileFromUrl = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new File([blob], "coverImage.png", { type: blob.type });
     };
-  }, [showDatePicker, showDatePicker1]);
+
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("pet", selectedPetId);
+      formData.append("description", description || "");
+      formData.append("keywordTag", selectedKeyword);
+      const imageFile =
+        coverImage instanceof File
+          ? coverImage
+          : await getImageFileFromUrl(coverImage);
+      formData.append("cover", imageFile);
+
+      await axios.post(`${BACKEND_URL}/mybooks/list/`, formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      closeBookModal();
+      fetchPets(token);
+    } catch (error) {
+      console.error("책 생성 실패:", error);
+    }
+  };
 
   return (
-    <AP.Container>
+    <MM.Container>
       <header>
-        <AP.Nav>
-          <AP.NavContent>
-            <AP.Logo onClick={goHome}>
+        <MM.Nav>
+          <MM.NavContent>
+            <MM.Logo onClick={goHome}>
               <img
                 id="logo"
                 src={`${process.env.PUBLIC_URL}/static/images/logo.png`}
                 alt="logo"
               />
-            </AP.Logo>
-            <AP.Menu>
-              <AP.MovingContent>
+            </MM.Logo>
+            <MM.Menu>
+              <MM.MovingContent>
                 <div id="library" onClick={goMyBook}>
                   내 서재
                 </div>
@@ -268,12 +219,12 @@ const MyBookAddPet = ({ nickname }) => {
                 <div id="market" onClick={goMarket}>
                   마켓
                 </div>
-              </AP.MovingContent>
+              </MM.MovingContent>
               <div id="bar"> | </div>
-              <AP.Account>
+              <MM.Account>
                 {isLoggedIn ? (
                   <>
-                    <div id="mypage" onClick={openModal} ref={myPageRef}>
+                    <div id="mypage" onClick={openMyPageModal} ref={myPageRef}>
                       마이페이지
                     </div>
                     <div id="logout" onClick={handleLogout}>
@@ -290,159 +241,171 @@ const MyBookAddPet = ({ nickname }) => {
                     </div>
                   </>
                 )}
-              </AP.Account>
-            </AP.Menu>
-          </AP.NavContent>
-        </AP.Nav>
+              </MM.Account>
+            </MM.Menu>
+          </MM.NavContent>
+        </MM.Nav>
       </header>
-      <MyPageModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        profile={profile}
-        anchorRef={myPageRef}
-      />
-      <form onSubmit={handleSubmit}>
-        <AP.Body>
-          <AP.Title>아직 등록한 반려동물이 없어요</AP.Title>
-          <AP.ProImg>
-            <img id="profile" src={profileImage} alt="프로필" />
-            <label htmlFor="fileInput">
+
+      <MM.Body>
+        <MM.BodyContainer>
+          <MM.Slider>
+            <MM.Button onClick={prevBook} show={showButtons}>
               <img
-                id="edit"
-                src={`${process.env.PUBLIC_URL}/static/images/EditProfile.svg`}
-                alt="편집"
+                src={`${process.env.PUBLIC_URL}/static/images/beforebook.png`}
+                alt="prevpage"
               />
-            </label>
-            <input
-              type="file"
-              id="fileInput"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </AP.ProImg>
-          <AP.Profile>
-            <AP.Name>
-              <div id="name">이름</div>
-              <AP.NameBox>
-                <input
-                  id="namebox"
-                  type="text"
-                  placeholder="반려동물의 이름을 입력해 주세요"
-                  value={petName}
-                  onChange={(e) => setPetName(e.target.value)}
-                  required
-                />
-              </AP.NameBox>
-            </AP.Name>
-            <AP.Type>
-              <div id="type">타입</div>
-              <AP.TypeBox>
-                <input
-                  id="typebox"
-                  type="text"
-                  placeholder="반려동물의 종을 선택해 주세요"
-                  value={selectedType}
-                  onChange={(e) => setPetType(e.target.value)}
-                  readOnly
-                  required
-                />
-                <img
-                  id="plustype"
-                  src={`${process.env.PUBLIC_URL}/static/images/Plustype.svg`}
-                  alt="더보기"
-                  onClick={toggleTypeList}
-                />
-                {showTypeList && (
-                  <AP.TypeList>
-                    {["강아지", "고양이", "소동물", "기타"].map((type) => (
-                      <label key={type}>
-                        <input
-                          type="checkbox"
-                          onClick={() => selectType(type)}
+            </MM.Button>
+            <MM.BookContainer>
+              {books.length + petsNoBook.length === 1 &&
+                (books.length === 1 ? (
+                  <MM.Book
+                    key={books[0].id}
+                    large
+                    onClick={() => goMyBookDetail(books[0].id)}
+                  >
+                    <img
+                      id="img"
+                      src={
+                        books[0].cover ||
+                        `${process.env.PUBLIC_URL}/static/images/default_cover.png`
+                      }
+                      alt="cover"
+                    />
+                    <div id="title">{books[0].title}</div>
+                  </MM.Book>
+                ) : (
+                  <MM.NoBook key={petsNoBook[0].id} large>
+                    <img
+                      id="img"
+                      src={
+                        petsNoBook[0].petImage ||
+                        `${process.env.PUBLIC_URL}/static/images/default_pet.png`
+                      }
+                      alt="pet"
+                    />
+                    <div id="title">{petsNoBook[0].petName}</div>
+                    <div id="author">{petsNoBook[0].petUser}</div>
+                    <MM.AddBtn onClick={() => openBookModal(petsNoBook[0].id)}>
+                      <img
+                        id="addbtn"
+                        src={`${process.env.PUBLIC_URL}/static/images/BookAddBtn.svg`}
+                        alt="add"
+                      />
+                    </MM.AddBtn>
+                  </MM.NoBook>
+                ))}
+
+              {books.length + petsNoBook.length > 1 &&
+                books.map((book, index) => {
+                  const position =
+                    (index + petsNoBook.length) %
+                    (books.length + petsNoBook.length);
+                  const large = position === current;
+                  const small =
+                    position ===
+                      (current + 1) % (books.length + petsNoBook.length) ||
+                    position ===
+                      (current - 1 + books.length + petsNoBook.length) %
+                        (books.length + petsNoBook.length);
+                  const next =
+                    position ===
+                    (current + 1) % (books.length + petsNoBook.length);
+                  const prev =
+                    position ===
+                    (current - 1 + books.length + petsNoBook.length) %
+                      (books.length + petsNoBook.length);
+                  const hidden = !(large || small);
+
+                  const updatedNext =
+                    books.length + petsNoBook.length === 2 && position === 1;
+
+                  return (
+                    <MM.Book
+                      key={book.id}
+                      large={large}
+                      small={small}
+                      next={next || updatedNext}
+                      prev={!updatedNext && prev}
+                      hidden={hidden}
+                      onClick={() => goMyBookDetail(book.id)}
+                    >
+                      <img
+                        id="img"
+                        src={
+                          book.cover ||
+                          `${process.env.PUBLIC_URL}/static/images/default_cover.png`
+                        }
+                        alt="cover"
+                      />
+                      <div id="title">{book.title}</div>
+                    </MM.Book>
+                  );
+                })}
+              {books.length + petsNoBook.length > 1 &&
+                petsNoBook.map((pet, index) => {
+                  const position = index;
+                  const large = position === current;
+                  const small =
+                    position ===
+                      (current + 1) % (books.length + petsNoBook.length) ||
+                    position ===
+                      (current - 1 + books.length + petsNoBook.length) %
+                        (books.length + petsNoBook.length);
+                  const next =
+                    position ===
+                    (current + 1) % (books.length + petsNoBook.length);
+                  const prev =
+                    position ===
+                    (current - 1 + books.length + petsNoBook.length) %
+                      (books.length + petsNoBook.length);
+                  const hidden = !(large || small);
+
+                  const updatedNext =
+                    books.length + petsNoBook.length === 2 && position === 1;
+
+                  return (
+                    <MM.NoBook
+                      key={pet.id}
+                      large={large}
+                      small={small}
+                      next={next || updatedNext}
+                      prev={!updatedNext && prev}
+                      hidden={hidden}
+                    >
+                      <img
+                        id="img"
+                        src={
+                          pet.petImage ||
+                          `${process.env.PUBLIC_URL}/static/images/default_pet.png`
+                        }
+                        alt="pet"
+                      />
+                      <div id="title">{pet.petName}</div>
+                      <div id="author">{pet.petUser}</div>
+                      <MM.AddBtn onClick={() => openBookModal(pet.id)}>
+                        <img
+                          id="addbtn"
+                          src={`${process.env.PUBLIC_URL}/static/images/BookAddBtn.svg`}
+                          alt="add"
                         />
-                        {type}
-                      </label>
-                    ))}
-                  </AP.TypeList>
-                )}
-              </AP.TypeBox>
-            </AP.Type>
-            <AP.Birth>
-              <div id="birthday">생일</div>
-              <AP.BirthBox>
-                <input
-                  id="birthbox"
-                  type="text"
-                  placeholder="연도-월-일"
-                  value={petBirth ? petBirth.toLocaleDateString() : ""}
-                  readOnly
-                  required
-                />
-                <img
-                  id="birthcal"
-                  src={`${process.env.PUBLIC_URL}/static/images/Calender.svg`}
-                  alt="달력"
-                  onClick={() => setShowDatePicker(!showDatePicker)}
-                />
-                {showDatePicker && (
-                  <AP.DatePickerWrapper ref={datePickerRef}>
-                    <DatePicker
-                      selected={petBirth}
-                      onChange={handleDateChange}
-                      inline
-                      showYearDropdown
-                      showMonthDropdown
-                      dropdownMode="select"
-                    />
-                  </AP.DatePickerWrapper>
-                )}
-              </AP.BirthBox>
-            </AP.Birth>
-            <AP.Memorial>
-              <div id="memorial">기일</div>
-              <AP.MemorialBox>
-                <input
-                  id="memorialbox"
-                  type="text"
-                  placeholder="연도-월-일"
-                  value={petAnniv ? petAnniv.toLocaleDateString() : ""}
-                  readOnly
-                  required
-                />
-                <img
-                  id="memcal"
-                  src={`${process.env.PUBLIC_URL}/static/images/Calender.svg`}
-                  alt="달력"
-                  onClick={() => setShowDatePicker1(!showDatePicker1)}
-                />
-                {showDatePicker1 && (
-                  <AP.DatePickerWrapper1 ref={datePickerRef1}>
-                    <DatePicker
-                      selected={petAnniv}
-                      onChange={(date1) => {
-                        setPetAnniv(date1);
-                        setShowDatePicker1(false);
-                      }}
-                      inline
-                      showYearDropdown
-                      showMonthDropdown
-                      dropdownMode="select"
-                    />
-                  </AP.DatePickerWrapper1>
-                )}
-              </AP.MemorialBox>
-            </AP.Memorial>
-          </AP.Profile>
-          <AP.Button>
-            <button type="submit" id="btn">
-              추가하기
-            </button>
-          </AP.Button>
-        </AP.Body>
-      </form>
+                      </MM.AddBtn>
+                    </MM.NoBook>
+                  );
+                })}
+            </MM.BookContainer>
+            <MM.Button onClick={nextBook} show={showButtons}>
+              <img
+                src={`${process.env.PUBLIC_URL}/static/images/nextbook.png`}
+                alt="nextbook"
+              />
+            </MM.Button>
+          </MM.Slider>
+        </MM.BodyContainer>
+      </MM.Body>
       <footer>
-        <AP.Footer>
-          <AP.Introduction>
+        <MM.Footer>
+          <MM.Introduction>
             <div id="introduce">나의 별에게 보내는 편지</div>
             <img
               id="logo"
@@ -451,7 +414,7 @@ const MyBookAddPet = ({ nickname }) => {
             />
             <div id="team">멋쟁이사자처럼 동덕여자대학교 12기 효녀손팀</div>
             <div id="name">전지영, 하성언, 김하희, 김민주, 정세윤</div>
-            <AP.Git>
+            <MM.Git>
               <img
                 id="github"
                 src={`${process.env.PUBLIC_URL}/static/images/Github.png`}
@@ -474,12 +437,151 @@ const MyBookAddPet = ({ nickname }) => {
               >
                 FE
               </a>
-            </AP.Git>
-          </AP.Introduction>
-        </AP.Footer>
+            </MM.Git>
+          </MM.Introduction>
+        </MM.Footer>
+        <MyPageModal
+          isOpen={isMyPageModalOpen}
+          onClose={closeMyPageModal}
+          profile={profile}
+          anchorRef={myPageRef}
+        />
       </footer>
-    </AP.Container>
+      <Modal
+        isOpen={isBookModalOpen}
+        onRequestClose={closeBookModal}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            width: "911px",
+            background: "#FFF",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        <MM.ModalWrap>
+          <MM.BackButton>
+            <button id="backbtn" onClick={closeBookModal}>
+              <img
+                src={`${process.env.PUBLIC_URL}/static/images/deletModal.png`}
+                alt="back"
+              />
+            </button>
+          </MM.BackButton>
+          <MM.ModalContent>
+            <MM.BookCover>
+              <MM.BookCoverImg>
+                <img
+                  id="adding"
+                  src={
+                    coverImage instanceof File
+                      ? URL.createObjectURL(coverImage)
+                      : coverImage
+                  }
+                  alt="no-preview"
+                />
+              </MM.BookCoverImg>
+              <MM.BookCoverText>
+                <div id="title">{title || "제목"}</div>
+              </MM.BookCoverText>
+            </MM.BookCover>
+            <MM.Text>
+              <MM.ModalTitle>
+                <div id="titleText">제목</div>
+                <input
+                  id="NewTitle"
+                  type="text"
+                  placeholder="제목을 입력해 주세요"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </MM.ModalTitle>
+              <div id="line"></div>
+              <MM.Cover>
+                <MM.CoverText>표지</MM.CoverText>
+                <MM.CoverImg>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    style={{ display: "none" }}
+                    id="file-input"
+                  />
+                  <button
+                    id="addCover"
+                    type="button"
+                    onClick={() =>
+                      document.getElementById("file-input").click()
+                    }
+                  >
+                    {!coverImage ||
+                    coverImage ===
+                      `${process.env.PUBLIC_URL}/static/images/bookCover.png` ? (
+                      <img
+                        id="addimg"
+                        src={`${process.env.PUBLIC_URL}/static/images/coverImgAdd.png`}
+                        alt="Add cover"
+                      />
+                    ) : (
+                      <img
+                        src={
+                          coverImage instanceof File
+                            ? URL.createObjectURL(coverImage)
+                            : coverImage
+                        }
+                        alt="Cover Preview"
+                        style={{ maxWidth: "320px", maxHeight: "70px" }}
+                      />
+                    )}
+                  </button>
+                </MM.CoverImg>
+              </MM.Cover>
+              <MM.DescriptionTitle>
+                <span id="desTitle">책 설명</span>
+                <span id="textlength">(100자 이내)</span>
+              </MM.DescriptionTitle>
+              <MM.DescriptionText>
+                <textarea
+                  id="NewDescription"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </MM.DescriptionText>
+              <MM.Keyword>
+                <MM.KeywordTitle>#키워드 선택</MM.KeywordTitle>
+                <MM.KeywordButtons>
+                  {["위로", "공감", "일상", "편지"].map((keyword) => (
+                    <button
+                      key={keyword}
+                      className={`keyword ${
+                        selectedKeyword === keyword ? "selected" : ""
+                      }`}
+                      id={keyword}
+                      onClick={() => handleKeywordClick(keyword)}
+                    >
+                      #{keyword}
+                    </button>
+                  ))}
+                </MM.KeywordButtons>
+              </MM.Keyword>
+            </MM.Text>
+          </MM.ModalContent>
+          <MM.Create>
+            <button id="create" onClick={handleMakeBook}>
+              생성
+            </button>
+          </MM.Create>
+        </MM.ModalWrap>
+      </Modal>
+    </MM.Container>
   );
 };
 
-export default MyBookAddPet;
+export default MyBookMake;
